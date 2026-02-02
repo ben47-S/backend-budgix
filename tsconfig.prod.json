@@ -1,0 +1,30 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // Configuration pour la production
+    "outDir": "./dist",
+    "module": "ESNext",
+    "target": "ES2022",
+    "moduleResolution": "bundler",
+    
+    // Optimisations pour la production
+    "sourceMap": true,
+    "declaration": false,
+    "declarationMap": false,
+    
+    // Nettoyage
+    "removeComments": true,
+    
+    // Types
+    "types": ["node"]
+  },
+  "include": ["src/**/*"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "src/test-*.ts"
+  ]
+}
+
