@@ -59,8 +59,7 @@ export function normalizeDateFromJJMMYYYY(dateString: string): string {
  */
 export const dateSchemaJJMMYYYY = z
   .string({
-    required_error: "La date est requise",
-    invalid_type_error: "La date doit être une chaîne de caractères",
+    message: "La date doit être une chaîne de caractères",
   })
   .regex(
     /^\d{2}-\d{2}-\d{4}$/,
