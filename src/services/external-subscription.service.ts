@@ -321,8 +321,8 @@ export async function getExternalSubscriptionById(
 
 /**
  * Récupère tous les abonnements externes d'un utilisateur avec filtres
- * Désactive automatiquement les abonnements expirés
- * 
+ * Note: La désactivation automatique des abonnements expirés est gérée par le cron quotidien
+ *
  * @param userId - ID de l'utilisateur
  * @param options - Options de filtrage
  * @returns Liste des abonnements et métriques
@@ -336,7 +336,7 @@ export async function getExternalSubscriptions(
   }
 ) {
   // S'assurer que limit et offset sont des nombres
-  const limit = options?.limit !== undefined 
+  const limit = options?.limit !== undefined
     ? (typeof options.limit === 'number' ? options.limit : parseInt(String(options.limit), 10))
     : 100;
   const offset = options?.offset !== undefined
@@ -344,22 +344,9 @@ export async function getExternalSubscriptions(
     : 0;
   const isActive = options?.isActive;
 
-  // Désactiver automatiquement les abonnements expirés et marquer comme "échéance atteinte"
+  // Date du jour pour calculer le statut d'expiration
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // Date sans heure pour comparaison
-  
-  await prisma.externalSubscription.updateMany({
-    where: {
-      userId,
-      isActive: true,
-      nextBillingDate: {
-        lt: today, // Abonnements dont la date d'échéance est passée
-      },
-    },
-    data: {
-      isActive: false,
-    },
-  });
 
   const where: any = {
     userId,

@@ -339,6 +339,15 @@ export async function deleteUser(userId: string) {
     throw createError("Utilisateur non trouvé", 404, "USER_NOT_FOUND");
   }
 
+  // Bloquer la suppression des administrateurs
+  if (existingUser.role === "ADMIN") {
+    throw createError(
+      "Impossible de supprimer un administrateur",
+      403,
+      "ADMIN_DELETE_FORBIDDEN"
+    );
+  }
+
   // Supprimer l'utilisateur (cascade supprimera toutes les données associées)
   await prisma.user.delete({
     where: { id: userId },
@@ -626,12 +635,124 @@ export async function deleteGlobalCategory(categoryId: string) {
 }
 
 /**
+ * Récupère tous les abonnements externes de tous les utilisateurs (Admin)
+ *
+ * @param filters - Filtres de recherche
+ * @param pagination - Paramètres de pagination
+ * @returns Liste paginée des abonnements externes
+ */
+export async function getAllExternalSubscriptions(
+  filters: {
+    search?: string; // Recherche par nom d'abonnement ou username
+    isActive?: boolean;
+    billingCycle?: "MONTHLY" | "QUARTERLY" | "ANNUAL" | "CUSTOM";
+    minAmount?: number;
+    maxAmount?: number;
+  } = {},
+  pagination: PaginationParams = {}
+) {
+  const page = pagination.page || 1;
+  const limit = Math.min(pagination.limit || 20, 1000);
+  const skip = (page - 1) * limit;
+
+  // Construire les conditions de filtrage
+  const where: Prisma.ExternalSubscriptionWhereInput = {};
+
+  // Filtre de recherche (nom d'abonnement ou username)
+  if (filters.search) {
+    where.OR = [
+      { name: { contains: filters.search, mode: "insensitive" } },
+      { user: { username: { contains: filters.search, mode: "insensitive" } } },
+    ];
+  }
+
+  // Filtre par statut actif
+  if (filters.isActive !== undefined) {
+    where.isActive = filters.isActive;
+  }
+
+  // Filtre par cycle de facturation
+  if (filters.billingCycle) {
+    where.billingCycle = filters.billingCycle;
+  }
+
+  // Filtre par montant
+  if (filters.minAmount !== undefined || filters.maxAmount !== undefined) {
+    where.amount = {};
+    if (filters.minAmount !== undefined) {
+      where.amount.gte = filters.minAmount;
+    }
+    if (filters.maxAmount !== undefined) {
+      where.amount.lte = filters.maxAmount;
+    }
+  }
+
+  // Récupérer les abonnements avec le nombre total
+  const [subscriptions, total] = await Promise.all([
+    prisma.externalSubscription.findMany({
+      where,
+      skip,
+      take: limit,
+      orderBy: { nextBillingDate: "asc" }, // Prochaines échéances en premier
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+            phone: true,
+            email: true,
+            isPremium: true,
+          },
+        },
+        category: {
+          select: {
+            id: true,
+            name: true,
+            type: true,
+          },
+        },
+      },
+    }),
+    prisma.externalSubscription.count({ where }),
+  ]);
+
+  // Ajouter le statut d'expiration pour chaque abonnement
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  const subscriptionsWithStatus = subscriptions.map((sub) => {
+    const nextBillingDateOnly = new Date(
+      sub.nextBillingDate.getFullYear(),
+      sub.nextBillingDate.getMonth(),
+      sub.nextBillingDate.getDate()
+    );
+
+    const isExpired = nextBillingDateOnly <= today;
+
+    return {
+      ...sub,
+      expirationStatus: isExpired ? "échéance atteinte" : null,
+    };
+  });
+
+  return {
+    subscriptions: subscriptionsWithStatus,
+    pagination: {
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit),
+    },
+  };
+}
+
+/**
  * Envoie une notification push à un utilisateur depuis l'admin
- * 
+ *
  * Cette fonction permet aux administrateurs d'envoyer des notifications push
  * directement à un utilisateur spécifique, en contournant les préférences de notification
  * (pour les notifications importantes de l'admin).
- * 
+ *
  * @param userId - ID de l'utilisateur destinataire
  * @param title - Titre de la notification
  * @param body - Corps de la notification

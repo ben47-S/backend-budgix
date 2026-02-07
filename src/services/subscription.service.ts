@@ -14,9 +14,9 @@ import { createError } from "../middleware/errorHandler";
 import { getUserById } from "./auth.service";
 import type { SubscriptionPlan } from "../../generated/prisma/client";
 
-// Prix de base des abonnements (en USD)
-export const MONTHLY_PRICE = 1.09; // Prix mensuel en USD
-export const ANNUAL_PRICE = 10.99; // Prix annuel en USD (réduction par rapport à 12 mois)
+// Prix de base des abonnements (en XOF - FCFA)
+export const MONTHLY_PRICE = 450; // Prix mensuel en XOF
+export const ANNUAL_PRICE = 4200; // Prix annuel en XOF (réduction par rapport à 12 mois)
 
 /**
  * Calcule le prix d'un abonnement selon le plan

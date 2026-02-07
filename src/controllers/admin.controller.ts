@@ -19,9 +19,11 @@ import {
   updateGlobalCategory,
   deleteGlobalCategory,
   sendNotificationToUserFromAdmin,
+  getAllExternalSubscriptions,
   type UserFilters,
   type PaginationParams,
 } from "../services/admin.service";
+import { formatDatesInObject } from "../utils/date-formatter";
 
 /**
  * Récupère la liste des utilisateurs avec pagination et filtres
@@ -318,7 +320,7 @@ export async function deleteGlobalCategoryController(
 
 /**
  * Envoie une notification push à un utilisateur depuis l'admin
- * 
+ *
  * POST /api/admin/users/:userId/send-notification
  * Body: { title: string, body: string, data?: object }
  */
@@ -341,6 +343,64 @@ export async function sendNotificationToUserController(
         tokens: result.tokens,
       },
     });
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * Récupère tous les abonnements externes de tous les utilisateurs (Admin)
+ *
+ * GET /api/admin/external-subscriptions
+ * Query params: page, limit, search, isActive, billingCycle, minAmount, maxAmount
+ */
+export async function getAllExternalSubscriptionsController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    // Extraire les paramètres de pagination
+    const pagination: PaginationParams = {};
+    if (req.query.page) {
+      pagination.page = parseInt(req.query.page as string, 10);
+    }
+    if (req.query.limit) {
+      pagination.limit = parseInt(req.query.limit as string, 10);
+    }
+
+    // Extraire les filtres
+    const filters: {
+      search?: string;
+      isActive?: boolean;
+      billingCycle?: "MONTHLY" | "QUARTERLY" | "ANNUAL" | "CUSTOM";
+      minAmount?: number;
+      maxAmount?: number;
+    } = {};
+
+    if (req.query.search) {
+      filters.search = req.query.search as string;
+    }
+    if (req.query.isActive !== undefined) {
+      filters.isActive = req.query.isActive === "true";
+    }
+    if (req.query.billingCycle) {
+      filters.billingCycle = req.query.billingCycle as "MONTHLY" | "QUARTERLY" | "ANNUAL" | "CUSTOM";
+    }
+    if (req.query.minAmount) {
+      filters.minAmount = parseInt(req.query.minAmount as string, 10);
+    }
+    if (req.query.maxAmount) {
+      filters.maxAmount = parseInt(req.query.maxAmount as string, 10);
+    }
+
+    const result = await getAllExternalSubscriptions(filters, pagination);
+
+    res.json(formatDatesInObject({
+      success: true,
+      message: "Abonnements externes récupérés avec succès",
+      data: result,
+    }));
   } catch (error) {
     next(error);
   }

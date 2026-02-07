@@ -449,7 +449,7 @@ async function saveNotificationToDatabase(options: {
   const { userId, type, title, body, data } = options;
 
   // Mapper le type de notification au type Prisma
-  let notificationType: 'BUDGET_WARNING' | 'BUDGET_ALERT' | 'TRANSACTION_REMINDER' | 'WEEKLY_SUMMARY' | 'SUBSCRIPTION_RENEWAL_REMINDER';
+  let notificationType: 'BUDGET_WARNING' | 'BUDGET_ALERT' | 'TRANSACTION_REMINDER' | 'WEEKLY_SUMMARY' | 'SUBSCRIPTION_RENEWAL_REMINDER' | 'PAYMENT_PENDING_VERIFICATION' | 'PAYMENT_APPROVED' | 'PAYMENT_REJECTED';
   
   switch (type) {
     case 'BUDGET_WARNING':
@@ -467,6 +467,15 @@ async function saveNotificationToDatabase(options: {
     case 'SUBSCRIPTION_RENEWAL_REMINDER':
       notificationType = 'SUBSCRIPTION_RENEWAL_REMINDER';
       break;
+    case 'PAYMENT_PENDING_VERIFICATION':
+      notificationType = 'PAYMENT_PENDING_VERIFICATION';
+      break;
+    case 'PAYMENT_APPROVED':
+      notificationType = 'PAYMENT_APPROVED';
+      break;
+    case 'PAYMENT_REJECTED':
+      notificationType = 'PAYMENT_REJECTED';
+      break;
     default:
       // Pour les types inconnus, on utilise BUDGET_WARNING par défaut
       notificationType = 'BUDGET_WARNING';
@@ -481,7 +490,7 @@ async function saveNotificationToDatabase(options: {
     const notification = await prisma.notification.create({
       data: {
         userId,
-        type: notificationType,
+        type: notificationType as any,
         title,
         body,
         data: data as any,

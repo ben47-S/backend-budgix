@@ -38,10 +38,23 @@ export const NotificationType = {
   BUDGET_ALERT: 'BUDGET_ALERT',
   TRANSACTION_REMINDER: 'TRANSACTION_REMINDER',
   WEEKLY_SUMMARY: 'WEEKLY_SUMMARY',
-  SUBSCRIPTION_RENEWAL_REMINDER: 'SUBSCRIPTION_RENEWAL_REMINDER'
+  SUBSCRIPTION_RENEWAL_REMINDER: 'SUBSCRIPTION_RENEWAL_REMINDER',
+  PAYMENT_PENDING_VERIFICATION: 'PAYMENT_PENDING_VERIFICATION',
+  PAYMENT_APPROVED: 'PAYMENT_APPROVED',
+  PAYMENT_REJECTED: 'PAYMENT_REJECTED'
 } as const
 
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
+
+export const PaymentStatus = {
+  PENDING: 'PENDING',
+  PENDING_VERIFICATION: 'PENDING_VERIFICATION',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
 
 
 export const BillingCycle = {

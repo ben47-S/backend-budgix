@@ -33,6 +33,10 @@ router.use("/profile", profileRoutes);
 import subscriptionRoutes from "./subscription.routes";
 router.use("/subscriptions", subscriptionRoutes);
 
+// Routes de paiements d'abonnement
+import paymentRoutes from "./payment.routes";
+router.use("/payments", paymentRoutes);
+
 // Routes de dettes (premium uniquement)
 import debtRoutes from "./debt.routes";
 router.use("/debts", debtRoutes);

@@ -43,3 +43,5 @@ tests/results/
 # Other
 test-admin-login.ps1
 *.ps1
+
+git config core.autocrlf false

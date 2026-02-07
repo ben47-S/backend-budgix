@@ -52,6 +52,7 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  SubscriptionPayment: 'SubscriptionPayment',
   OtpCode: 'OtpCode',
   EmailVerificationCode: 'EmailVerificationCode',
   Category: 'Category',
@@ -97,6 +98,27 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const SubscriptionPaymentScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  plan: 'plan',
+  amount: 'amount',
+  status: 'status',
+  waveTransactionId: 'waveTransactionId',
+  senderName: 'senderName',
+  transferDate: 'transferDate',
+  rejectionReason: 'rejectionReason',
+  approvedAt: 'approvedAt',
+  rejectedAt: 'rejectedAt',
+  approvedById: 'approvedById',
+  rejectedById: 'rejectedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SubscriptionPaymentScalarFieldEnum = (typeof SubscriptionPaymentScalarFieldEnum)[keyof typeof SubscriptionPaymentScalarFieldEnum]
 
 
 export const OtpCodeScalarFieldEnum = {

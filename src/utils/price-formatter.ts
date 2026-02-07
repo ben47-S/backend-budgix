@@ -1,21 +1,24 @@
 /**
  * Utilitaires de formatage des prix
  * 
- * - Les prix d'abonnement premium sont formatés en USD (dollars)
+ * - Les prix d'abonnement premium sont formatés en XOF (FCFA)
  * - Tous les autres prix sont formatés en FCFA
  */
 
 /**
- * Formate un prix d'abonnement premium en USD
+ * Formate un prix d'abonnement premium en XOF (FCFA)
  * 
- * @param price - Prix en dollars (ex: 1.09, 10.99)
- * @returns Prix formaté avec devise USD (ex: "1.09 USD" ou "$1.09")
+ * @param price - Prix en XOF (ex: 450, 4200)
+ * @returns Prix formaté avec devise XOF (ex: "450 XOF" ou "4 200 XOF")
  */
 export function formatSubscriptionPrice(price: number | string): string {
   const numPrice = typeof price === "string" ? parseFloat(price) : price;
   
-  // Formater avec 2 décimales et ajouter USD
-  return `${numPrice.toFixed(2)} USD`;
+  // Formater avec séparateurs de milliers et ajouter XOF
+  return `${numPrice.toLocaleString("fr-FR", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  })} XOF`;
 }
 
 /**
@@ -54,9 +57,9 @@ export function formatSubscriptionPlan(plan: "MONTHLY" | "ANNUAL"): string {
 /**
  * Calcule les économies réalisées avec l'abonnement annuel
  * 
- * @param monthlyPrice - Prix mensuel en USD
- * @param annualPrice - Prix annuel en USD
- * @returns Pourcentage d'économies formaté (ex: "16%")
+ * @param monthlyPrice - Prix mensuel en XOF
+ * @param annualPrice - Prix annuel en XOF
+ * @returns Pourcentage d'économies formaté (ex: "6%")
  */
 export function calculateSavings(monthlyPrice: number, annualPrice: number): string {
   // Prix annuel si on payait mensuellement pendant 12 mois

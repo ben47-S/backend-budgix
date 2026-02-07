@@ -126,3 +126,47 @@ export const sendNotificationToUserSchema = {
   }),
 };
 
+/**
+ * Schéma pour récupérer tous les abonnements externes (Admin)
+ */
+export const getAllExternalSubscriptionsSchema = {
+  query: z.object({
+    page: z
+      .string()
+      .optional()
+      .transform((val) => (val ? parseInt(val, 10) : undefined))
+      .refine((val) => val === undefined || (val > 0 && val <= 1000), {
+        message: "La page doit être un nombre entre 1 et 1000",
+      }),
+    limit: z
+      .string()
+      .optional()
+      .transform((val) => (val ? parseInt(val, 10) : undefined))
+      .refine((val) => val === undefined || (val > 0 && val <= 1000), {
+        message: "La limite doit être un nombre entre 1 et 1000",
+      }),
+    search: z.string().optional(),
+    isActive: z
+      .enum(["true", "false"])
+      .optional()
+      .transform((val) => val === "true"),
+    billingCycle: z
+      .enum(["MONTHLY", "QUARTERLY", "ANNUAL", "CUSTOM"])
+      .optional(),
+    minAmount: z
+      .string()
+      .optional()
+      .transform((val) => (val ? parseInt(val, 10) : undefined))
+      .refine((val) => val === undefined || val >= 0, {
+        message: "Le montant minimum doit être positif",
+      }),
+    maxAmount: z
+      .string()
+      .optional()
+      .transform((val) => (val ? parseInt(val, 10) : undefined))
+      .refine((val) => val === undefined || val >= 0, {
+        message: "Le montant maximum doit être positif",
+      }),
+  }),
+};
+

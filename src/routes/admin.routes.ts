@@ -22,6 +22,11 @@ import {
   updateGlobalCategoryController,
   deleteGlobalCategoryController,
   sendNotificationToUserController,
+  listPendingPaymentsController,
+  listPaymentsController,
+  approvePaymentController,
+  rejectPaymentController,
+  getAllExternalSubscriptionsController,
 } from "../controllers";
 import { requireAuth, requireAdmin } from "../middleware/auth";
 import { validate } from "../middleware/validation";
@@ -32,7 +37,13 @@ import {
   createGlobalCategorySchema,
   updateGlobalCategorySchema,
   sendNotificationToUserSchema,
+  getAllExternalSubscriptionsSchema,
 } from "../validations/admin.validation";
+import {
+  approvePaymentSchema,
+  rejectPaymentSchema,
+  listPaymentsSchema,
+} from "../validations/payment.validation";
 
 const router: Router = ExpressRouter();
 
@@ -175,6 +186,171 @@ router.put("/users/:userId", generalRateLimiter, validate(updateUserSchema), upd
  *         description: Utilisateur non trouvé
  */
 router.delete("/users/:userId", generalRateLimiter, deleteUserController);
+
+/**
+ * @swagger
+ * /admin/payments:
+ *   get:
+ *     summary: Liste des paiements avec filtres et pagination
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: [PENDING_VERIFICATION, APPROVED, REJECTED]
+ *         description: Filtrer par statut
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Recherche par username, email ou phone
+ *       - in: query
+ *         name: minAmount
+ *         schema:
+ *           type: number
+ *         description: Montant minimum
+ *       - in: query
+ *         name: maxAmount
+ *         schema:
+ *           type: number
+ *         description: Montant maximum
+ *       - in: query
+ *         name: startDate
+ *         schema:
+ *           type: string
+ *           format: date-time
+ *         description: Date de début (ISO format)
+ *       - in: query
+ *         name: endDate
+ *         schema:
+ *           type: string
+ *           format: date-time
+ *         description: Date de fin (ISO format)
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Numéro de page
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 20
+ *           maximum: 100
+ *         description: Nombre d'éléments par page
+ *     responses:
+ *       200:
+ *         description: Liste des paiements avec pagination
+ */
+router.get("/payments", generalRateLimiter, validate(listPaymentsSchema), listPaymentsController);
+
+/**
+ * @swagger
+ * /admin/payments/pending:
+ *   get:
+ *     summary: Liste des paiements en attente de validation
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Liste des paiements en attente
+ */
+router.get("/payments/pending", generalRateLimiter, listPendingPaymentsController);
+
+/**
+ * @swagger
+ * /admin/payments/{paymentId}/approve:
+ *   post:
+ *     summary: Approuver un paiement
+ *     description: Approuve un paiement et active l'abonnement premium. L'admin peut choisir le plan à activer ou laisser le plan par défaut du paiement.
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: paymentId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID du paiement à approuver
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               plan:
+ *                 type: string
+ *                 enum: [MONTHLY, ANNUAL]
+ *                 description: Plan à activer (optionnel). Si non fourni, utilise le plan du paiement.
+ *           examples:
+ *             default:
+ *               summary: Approuver avec plan par défaut
+ *               value: {}
+ *             monthly:
+ *               summary: Forcer plan mensuel
+ *               value:
+ *                 plan: "MONTHLY"
+ *             annual:
+ *               summary: Forcer plan annuel
+ *               value:
+ *                 plan: "ANNUAL"
+ *     responses:
+ *       200:
+ *         description: Paiement approuvé et abonnement activé
+ *       400:
+ *         description: Paiement non éligible pour approbation
+ *       404:
+ *         description: Paiement introuvable
+ */
+router.post(
+  "/payments/:paymentId/approve",
+  generalRateLimiter,
+  validate(approvePaymentSchema),
+  approvePaymentController
+);
+
+/**
+ * @swagger
+ * /admin/payments/{paymentId}/reject:
+ *   post:
+ *     summary: Rejeter un paiement
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: paymentId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - reason
+ *             properties:
+ *               reason:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Paiement rejeté
+ */
+router.post(
+  "/payments/:paymentId/reject",
+  generalRateLimiter,
+  validate(rejectPaymentSchema),
+  rejectPaymentController
+);
 
 /**
  * @swagger
@@ -393,6 +569,74 @@ router.put("/categories/:categoryId", generalRateLimiter, validate(updateGlobalC
  *         description: Cette catégorie n'est pas une catégorie globale
  */
 router.delete("/categories/:categoryId", generalRateLimiter, deleteGlobalCategoryController);
+
+/**
+ * @swagger
+ * /admin/external-subscriptions:
+ *   get:
+ *     summary: Liste de tous les abonnements externes
+ *     description: Récupère la liste de tous les abonnements externes de tous les utilisateurs avec pagination et filtres (admin uniquement)
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *         description: Numéro de page
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 1000
+ *           default: 20
+ *         description: Nombre d'éléments par page
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Recherche par nom d'abonnement ou username
+ *       - in: query
+ *         name: isActive
+ *         schema:
+ *           type: boolean
+ *         description: Filtrer par statut actif
+ *       - in: query
+ *         name: billingCycle
+ *         schema:
+ *           type: string
+ *           enum: [MONTHLY, QUARTERLY, ANNUAL, CUSTOM]
+ *         description: Filtrer par cycle de facturation
+ *       - in: query
+ *         name: minAmount
+ *         schema:
+ *           type: integer
+ *           minimum: 0
+ *         description: Montant minimum
+ *       - in: query
+ *         name: maxAmount
+ *         schema:
+ *           type: integer
+ *           minimum: 0
+ *         description: Montant maximum
+ *     responses:
+ *       200:
+ *         description: Liste des abonnements externes récupérée avec succès
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       403:
+ *         description: Accès refusé - Droits administrateur requis
+ */
+router.get(
+  "/external-subscriptions",
+  generalRateLimiter,
+  validate(getAllExternalSubscriptionsSchema),
+  getAllExternalSubscriptionsController
+);
 
 export default router;
 

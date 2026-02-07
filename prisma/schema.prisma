@@ -34,6 +34,16 @@ enum NotificationType {
   TRANSACTION_REMINDER // Rappel de transaction
   WEEKLY_SUMMARY // Résumé hebdomadaire
   SUBSCRIPTION_RENEWAL_REMINDER // Rappel de renouvellement d'abonnement externe
+  PAYMENT_PENDING_VERIFICATION // Paiement soumis, en attente de validation admin
+  PAYMENT_APPROVED // Paiement approuvé
+  PAYMENT_REJECTED // Paiement refusé
+}
+
+enum PaymentStatus {
+  PENDING // Paiement initié
+  PENDING_VERIFICATION // Paiement soumis, en attente de validation admin
+  APPROVED // Paiement approuvé
+  REJECTED // Paiement refusé
 }
 
 enum BillingCycle {
@@ -94,8 +104,40 @@ model User {
   discussions            Discussion[] // Discussions de support client
   reviews                Review[] // Avis utilisateurs (note + commentaire)
   improvementSuggestions ImprovementSuggestion[] // Suggestions d'amélioration (plusieurs par utilisateur)
+  subscriptionPayments   SubscriptionPayment[] // Paiements d'abonnements premium
+  approvedPayments       SubscriptionPayment[] @relation("PaymentApprovedBy")
+  rejectedPayments       SubscriptionPayment[] @relation("PaymentRejectedBy")
 
   // Better Auth utilisera ce model pour l'auth
+}
+
+/// Modèle pour gérer les paiements d'abonnement premium
+model SubscriptionPayment {
+  id                String           @id @default(cuid())
+  userId            String
+  user              User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan              SubscriptionPlan // MONTHLY ou ANNUAL
+  amount            Decimal // Montant en XOF (FCFA)
+  status            PaymentStatus    @default(PENDING)
+  waveTransactionId String?
+  senderName        String?
+  transferDate      DateTime?
+  rejectionReason   String?
+
+  approvedAt  DateTime?
+  rejectedAt  DateTime?
+  approvedById String?
+  rejectedById String?
+  approvedBy  User? @relation("PaymentApprovedBy", fields: [approvedById], references: [id], onDelete: SetNull)
+  rejectedBy  User? @relation("PaymentRejectedBy", fields: [rejectedById], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+  @@index([waveTransactionId])
 }
 
 // Modèle pour gérer les codes OTP (valides 5 minutes)

@@ -27,6 +27,9 @@ export * from "./profile.controller";
 // Contrôleurs d'abonnements premium
 export * from "./subscription.controller";
 
+// Contrôleurs de paiements d'abonnement
+export * from "./payment.controller";
+
 // Contrôleurs de dettes (premium uniquement)
 export * from "./debt.controller";
 

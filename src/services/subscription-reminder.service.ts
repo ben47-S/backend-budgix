@@ -74,13 +74,10 @@ export async function checkAndSendRenewalReminders() {
   fiveDaysLater.setDate(fiveDaysLater.getDate() + 5);
 
   // Récupérer tous les abonnements actifs dont la date de renouvellement est dans exactement 5 jours
-  // Uniquement pour MONTHLY, QUARTERLY, ANNUAL (pas CUSTOM)
+  // Tous les cycles de facturation (MONTHLY, QUARTERLY, ANNUAL, CUSTOM)
   const subscriptions = await prisma.externalSubscription.findMany({
     where: {
       isActive: true,
-      billingCycle: {
-        in: ['MONTHLY', 'QUARTERLY', 'ANNUAL'],
-      },
       nextBillingDate: {
         gte: today,
         lte: fiveDaysLater,
@@ -227,9 +224,6 @@ export async function checkAndSendRenewalRemindersForUser(userId: string) {
     where: {
       userId,
       isActive: true,
-      billingCycle: {
-        in: ['MONTHLY', 'QUARTERLY', 'ANNUAL'],
-      },
       nextBillingDate: {
         gte: today,
         lte: fiveDaysLater,

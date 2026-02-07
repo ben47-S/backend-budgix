@@ -66,6 +66,22 @@ export interface CreateSubscriptionRequest {
   plan: "MONTHLY" | "ANNUAL";
 }
 
+// Types pour les paiements Wave
+export interface InitiatePaymentRequest {
+  plan: "MONTHLY" | "ANNUAL";
+}
+
+export interface ConfirmPaymentRequest {
+  paymentId: string;
+  waveTransactionId: string;
+  senderName: string;
+  transferDate: Date;
+}
+
+export interface RejectPaymentRequest {
+  reason: string;
+}
+
 // Types pour les dettes
 export interface CreateDebtRequest {
   type: "OWED_TO_ME" | "I_OWE";

@@ -23,6 +23,11 @@ export * from './enums';
  */
 export type User = Prisma.UserModel
 /**
+ * Model SubscriptionPayment
+ * Modèle pour gérer les paiements d'abonnement premium
+ */
+export type SubscriptionPayment = Prisma.SubscriptionPaymentModel
+/**
  * Model OtpCode
  * 
  */

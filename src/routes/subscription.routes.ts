@@ -134,7 +134,7 @@ router.post("/", requireAuth, createResourceRateLimiter, validate(createSubscrip
  *                     formattedPrice:
  *                       type: string
  *                       nullable: true
- *                       description: 'Prix formaté en USD (ex: "10.99 USD")'
+ *                       description: 'Prix formaté en XOF (ex: "4 200 XOF")'
  *                     formattedPlan:
  *                       type: string
  *                       nullable: true
@@ -145,10 +145,10 @@ router.post("/", requireAuth, createResourceRateLimiter, validate(createSubscrip
  *                       description: Statut de l'abonnement
  *                     monthlyPrice:
  *                       type: number
- *                       description: Prix mensuel de base en USD
+ *                       description: Prix mensuel de base en XOF
  *                     annualPrice:
  *                       type: number
- *                       description: Prix annuel de base en USD
+ *                       description: Prix annuel de base en XOF
  *                     savings:
  *                       type: string
  *                       nullable: true
