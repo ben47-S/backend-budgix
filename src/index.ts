@@ -10,6 +10,8 @@ import express from "express";
 import cors from "cors";
 import swaggerUi from "swagger-ui-express";
 import { createServer } from "http";
+import path from "path";
+import { fileURLToPath } from "url";
 import { errorHandler } from "./middleware/errorHandler";
 import { notFoundHandler } from "./middleware/notFoundHandler";
 import { requestLogger } from "./middleware/requestLogger";
@@ -21,6 +23,10 @@ import { initWebSocket } from "./services/websocket.service";
 
 // Créer l'application Express
 const app = express();
+
+// Configuration __dirname pour ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Créer le serveur HTTP pour WebSocket
 const httpServer = createServer(app);
@@ -213,6 +219,67 @@ app.get("/api-docs.json", (req, res) => {
   res.send(swaggerSpec);
 });
 
+// ============================================
+// PAGES LÉGALES (HTML)
+// ============================================
+
+/**
+ * @swagger
+ * /legal/privacy:
+ *   get:
+ *     summary: Politique de confidentialité
+ *     description: Affiche la page de politique de confidentialité
+ *     tags: [Legal]
+ *     responses:
+ *       200:
+ *         description: Page HTML de la politique de confidentialité
+ *         content:
+ *           text/html:
+ *             schema:
+ *               type: string
+ */
+app.get("/legal/privacy", (req, res) => {
+  res.sendFile(path.join(__dirname, "legal", "privacy.html"));
+});
+
+/**
+ * @swagger
+ * /legal/terms:
+ *   get:
+ *     summary: Conditions générales d'utilisation
+ *     description: Affiche la page des conditions générales
+ *     tags: [Legal]
+ *     responses:
+ *       200:
+ *         description: Page HTML des conditions générales
+ *         content:
+ *           text/html:
+ *             schema:
+ *               type: string
+ */
+app.get("/legal/terms", (req, res) => {
+  res.sendFile(path.join(__dirname, "legal", "terms.html"));
+});
+
+/**
+ * @swagger
+ * /legal/subscription:
+ *   get:
+ *     summary: Informations sur les abonnements
+ *     description: Affiche la page d'informations sur les abonnements
+ *     tags: [Legal]
+ *     responses:
+ *       200:
+ *         description: Page HTML des informations d'abonnement
+ *         content:
+ *           text/html:
+ *             schema:
+ *               type: string
+ */
+app.get("/legal/subscription", (req, res) => {
+  res.sendFile(path.join(__dirname, "legal", "subscription.html"));
+});
+
 // Routes API
 app.use("/api", apiRoutes);
 
@@ -236,6 +303,7 @@ httpServer.listen(PORT , () => {
   logger.info(`📍 Health check: http://localhost:${PORT}/health`);
   logger.info(`📍 API: http://localhost:${PORT}/api`);
   logger.info(`📚 Documentation Swagger: http://localhost:${PORT}/api-docs`);
+  logger.info(`📜 Pages légales: http://localhost:${PORT}/legal/privacy | /legal/terms | /legal/subscription`);
   logger.info(`🌍 Environnement: ${process.env.NODE_ENV || "development"}`);
   
   // Initialiser WebSocket

@@ -4,14 +4,124 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Conditions Générales d’Utilisation – Budgix</title>
+    <title>Conditions Générales d'Utilisation – Budgix</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.7;
+            color: #1a1a2e;
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f4ec 100%);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            padding: 3rem;
+        }
+        h1 {
+            color: #16a34a;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            border-bottom: 3px solid #16a34a;
+            padding-bottom: 1rem;
+        }
+        h2 {
+            color: #1a1a2e;
+            font-size: 1.3rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            padding-left: 0.75rem;
+            border-left: 4px solid #16a34a;
+        }
+        h3 {
+            color: #374151;
+            font-size: 1.1rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        p {
+            margin-bottom: 1rem;
+            color: #4b5563;
+        }
+        ul, ol {
+            margin: 1rem 0 1rem 1.5rem;
+            color: #4b5563;
+        }
+        li {
+            margin-bottom: 0.5rem;
+        }
+        hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #d1d5db, transparent);
+            margin: 2rem 0;
+        }
+        strong {
+            color: #1a1a2e;
+        }
+        .date {
+            background: #f0fdf4;
+            color: #16a34a;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+        .contact {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 1rem;
+        }
+        .contact a {
+            color: #16a34a;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .contact a:hover {
+            text-decoration: underline;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .logo span {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #16a34a;
+        }
+        @media (max-width: 640px) {
+            .container {
+                padding: 1.5rem;
+                border-radius: 12px;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+            h2 {
+                font-size: 1.15rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
+<div class="container">
+    <div class="logo"><span>Budgix</span></div>
 
-    <h1>Conditions Générales d’Utilisation (CGU) – Budgix</h1>
+    <h1>Conditions Générales d'Utilisation (CGU) – Budgix</h1>
 
-    <p><strong>Dernière mise à jour :</strong> 10 février 2026</p>
+    <p class="date"><strong>Dernière mise à jour :</strong> 10 février 2026</p>
 
     <p>
         Les présentes Conditions Générales d’Utilisation (ci-après « CGU »)
@@ -45,11 +155,6 @@
         <li>Code à usage unique (OTP) envoyé par téléphone</li>
         <li>Connexion via Google (OAuth)</li>
     </ul>
-
-    <p>
-        Un espace d’administration est réservé aux comptes autorisés,
-        protégés par identifiant et mot de passe.
-    </p>
 
     <hr />
 
@@ -95,8 +200,8 @@
     </ul>
 
     <p>
-        Les paiements sont effectués via un prestataire de paiement externe (Wave)
-        et peuvent être soumis à une validation administrative.
+        Les paiements sont effectués via un prestataire de paiement externe
+        et sont soumis à une validation administrative.
     </p>
 
     <hr />
@@ -196,13 +301,15 @@
     <hr />
 
     <h2>14. Contact</h2>
-    <p>
-        Pour toute question relative aux présentes CGU :
-    </p>
-    <p>
-        <strong>Email :</strong> support@budgix.app
-    </p>
-
+    <div class="contact">
+        <p>
+            Pour toute question relative aux présentes CGU :
+        </p>
+        <p>
+            <strong>Email :</strong> <a href="mailto:budgixci@gmail.com">budgixci@gmail.com</a>
+        </p>
+    </div>
+</div>
 </body>
 
 </html>
