@@ -12,6 +12,7 @@ import {
   adminLoginController,
   setAdminPasswordController,
   setAdminPasswordByEmailController,
+  verifyAdminTokenController,
 } from "../controllers/admin-auth.controller";
 import { requireAuth, requireAdmin } from "../middleware/auth";
 import { validate } from "../middleware/validation";
@@ -23,6 +24,47 @@ import {
 } from "../validations/admin-auth.validation";
 
 const router: Router = ExpressRouter();
+
+/**
+ * @swagger
+ * /admin/auth/verify:
+ *   get:
+ *     summary: Vérifier le token admin
+ *     description: Vérifie si le token JWT admin est valide et retourne les informations de l'admin
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Token valide
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 valid:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     userId:
+ *                       type: string
+ *                     email:
+ *                       type: string
+ *                     isPremium:
+ *                       type: boolean
+ *                     role:
+ *                       type: string
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       403:
+ *         description: Accès refusé - Droits administrateur requis
+ */
+router.get("/verify", requireAuth, requireAdmin, generalRateLimiter, verifyAdminTokenController);
 
 /**
  * @swagger

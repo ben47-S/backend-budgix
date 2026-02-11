@@ -59,7 +59,7 @@ export const updateUserSchema = {
         .min(1, "Le nom d'utilisateur ne peut pas être vide")
         .max(50, "Le nom d'utilisateur ne peut pas dépasser 50 caractères")
         .trim()
-        .optional(),
+        .nullish(), // Accepte string | null | undefined
     })
     .refine(
       (data) => Object.keys(data).length > 0,

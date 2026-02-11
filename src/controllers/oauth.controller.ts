@@ -1,13 +1,16 @@
 /**
  * Contrôleur OAuth - Gestion de l'authentification OAuth
- * 
+ *
  * Gère les requêtes HTTP liées à l'authentification OAuth :
- * - Callback Google OAuth
- * - Redirection vers Google OAuth
+ * - Authentification via Google ID Token (mobile/web)
+ * - Callback Google OAuth (web legacy)
  */
 
 import type { Request, Response, NextFunction } from "express";
-import { authenticateWithGoogle } from "../services/oauth.service";
+import {
+  authenticateWithGoogle,
+  verifyGoogleIdToken,
+} from "../services/oauth.service";
 import { createError } from "../middleware/errorHandler";
 import type { GoogleProfile } from "../services/oauth.service";
 
@@ -54,7 +57,7 @@ export async function googleCallbackController(
 
 /**
  * Route de test pour OAuth (à utiliser avec des données de test)
- * 
+ *
  * POST /api/auth/oauth/google/test
  * Body: { email: string, displayName?: string }
  */
@@ -78,11 +81,52 @@ export async function googleTestController(
     };
 
     // Authentifier ou créer l'utilisateur
-    const { user, token, isNewUser } = await authenticateWithGoogle(testProfile);
+    const { user, token, isNewUser } =
+      await authenticateWithGoogle(testProfile);
 
     res.json({
       success: true,
-      message: isNewUser ? "Inscription réussie via Google" : "Connexion réussie via Google",
+      message: isNewUser
+        ? "Inscription réussie via Google"
+        : "Connexion réussie via Google",
+      data: {
+        user,
+        token,
+        isNewUser,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * Authentification Google via ID Token
+ * Utilisé par les applications mobiles et web modernes
+ *
+ * POST /api/auth/oauth/google
+ * Body: { idToken: string }
+ */
+export async function googleAuthController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { idToken } = req.body;
+
+    if (!idToken) {
+      throw createError("Token Google requis", 400, "ID_TOKEN_REQUIRED");
+    }
+
+    // Valider le token et authentifier l'utilisateur
+    const { user, token, isNewUser } = await verifyGoogleIdToken(idToken);
+
+    res.json({
+      success: true,
+      message: isNewUser
+        ? "Inscription réussie via Google"
+        : "Connexion réussie via Google",
       data: {
         user,
         token,

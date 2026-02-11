@@ -13,6 +13,13 @@ datasource db {
   provider = "postgresql"
 }
 
+enum UserStatus {
+  PENDING_CONSENT // OTP validé mais CGU/Privacy non acceptées
+  ACTIVE          // Utilisateur actif
+  SUSPENDED       // Compte suspendu (admin)
+}
+
+
 enum CategoryType {
   INCOME
   EXPENSE
@@ -91,6 +98,13 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  status UserStatus @default(PENDING_CONSENT)
+
+  termsAcceptedAt    DateTime? // Date d'acceptation des CGU
+  privacyAcceptedAt DateTime? // Date d'acceptation de la politique de confidentialité
+  termsVersion      String? // ex: "v1.0"
+  privacyVersion    String? // ex: "v1.0" 
+
   transactions           Transaction[]
   categories             Category[]
   subscription           Subscription?
@@ -107,8 +121,6 @@ model User {
   subscriptionPayments   SubscriptionPayment[] // Paiements d'abonnements premium
   approvedPayments       SubscriptionPayment[] @relation("PaymentApprovedBy")
   rejectedPayments       SubscriptionPayment[] @relation("PaymentRejectedBy")
-
-  // Better Auth utilisera ce model pour l'auth
 }
 
 /// Modèle pour gérer les paiements d'abonnement premium

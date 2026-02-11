@@ -8,7 +8,7 @@
 
 import type { Router } from "express";
 import { Router as ExpressRouter } from "express";
-import { sendOTP, verifyOTPController, logoutController } from "../controllers";
+import { sendOTP, verifyOTPController, logoutController, acceptConsentController, getConsentStatusController } from "../controllers";
 import { validate } from "../middleware/validation";
 import { authRateLimiter, generalRateLimiter } from "../middleware/rateLimit";
 import { requireAuth } from "../middleware/auth";
@@ -16,6 +16,7 @@ import {
   sendOTPSchema,
   verifyOTPSchema,
   googleTestSchema,
+  googleAuthSchema,
 } from "../validations/auth.validation";
 
 const router: Router = ExpressRouter();
@@ -147,13 +148,81 @@ router.post("/otp/verify", authRateLimiter, validate(verifyOTPSchema), verifyOTP
 import {
   googleCallbackController,
   googleTestController,
+  googleAuthController,
 } from "../controllers";
+
+/**
+ * @swagger
+ * /auth/oauth/google:
+ *   post:
+ *     summary: Authentification Google via ID Token
+ *     description: |
+ *       Authentifie un utilisateur avec un token Google ID obtenu via Google Sign-In.
+ *       Cette route est utilisée par les applications mobiles et web modernes.
+ *       Le token est validé côté serveur avec l'API Google.
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - idToken
+ *             properties:
+ *               idToken:
+ *                 type: string
+ *                 description: Token ID Google obtenu via Google Sign-In
+ *     responses:
+ *       200:
+ *         description: Authentification Google réussie
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "Inscription réussie via Google"
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     user:
+ *                       $ref: '#/components/schemas/User'
+ *                     token:
+ *                       type: string
+ *                       description: Token JWT pour l'authentification
+ *                     isNewUser:
+ *                       type: boolean
+ *                       description: Indique si c'est une nouvelle inscription
+ *       400:
+ *         description: Token manquant ou invalide
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       401:
+ *         description: Token Google invalide ou expiré
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+router.post(
+  "/oauth/google",
+  authRateLimiter,
+  validate(googleAuthSchema),
+  googleAuthController
+);
 
 /**
  * @swagger
  * /auth/oauth/google/callback:
  *   get:
- *     summary: Callback Google OAuth
+ *     summary: Callback Google OAuth (legacy)
  *     description: Callback appelé par Google après authentification OAuth. Redirige vers le frontend avec le token JWT.
  *     tags: [Authentication]
  *     responses:
@@ -289,6 +358,126 @@ router.post("/oauth/google/test", validate(googleTestSchema), googleTestControll
  *                   description: Flag indiquant qu'une redirection vers la page de connexion est nécessaire
  */
 router.post("/logout", requireAuth, generalRateLimiter, logoutController);
+
+/**
+ * @swagger
+ * /auth/accept-consent:
+ *   post:
+ *     summary: Accepter les CGU et la politique de confidentialité
+ *     description: Permet aux utilisateurs de nouvelles inscriptions d'accepter les CGU et la politique de confidentialité. Passe le statut de PENDING_CONSENT à ACTIVE.
+ *     tags: [Authentication]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - acceptTerms
+ *               - acceptPrivacy
+ *             properties:
+ *               acceptTerms:
+ *                 type: boolean
+ *                 example: true
+ *                 description: Acceptation des CGU
+ *               acceptPrivacy:
+ *                 type: boolean
+ *                 example: true
+ *                 description: Acceptation de la politique de confidentialité
+ *     responses:
+ *       200:
+ *         description: CGU et politique de confidentialité acceptées avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "CGU et politique de confidentialité acceptées avec succès"
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     user:
+ *                       type: object
+ *                       properties:
+ *                         id:
+ *                           type: string
+ *                         phone:
+ *                           type: string
+ *                         email:
+ *                           type: string
+ *                         status:
+ *                           type: string
+ *                           example: "ACTIVE"
+ *                         termsAcceptedAt:
+ *                           type: string
+ *                           format: date-time
+ *                         privacyAcceptedAt:
+ *                           type: string
+ *                           format: date-time
+ *       400:
+ *         description: Validation incorrecte des données d'entrée
+ *       401:
+ *         description: Non authentifié
+ */
+router.post("/accept-consent", requireAuth, generalRateLimiter, acceptConsentController);
+
+/**
+ * @swagger
+ * /auth/consent-status:
+ *   get:
+ *     summary: Récupérer le statut de consentement
+ *     description: Permet aux utilisateurs de vérifier leur statut de consentement (s'ils ont accepté les CGU et la politique de confidentialité).
+ *     tags: [Authentication]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Statut de consentement récupéré avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     userId:
+ *                       type: string
+ *                     status:
+ *                       type: string
+ *                       example: "ACTIVE"
+ *                       enum: [PENDING_CONSENT, ACTIVE, SUSPENDED]
+ *                     needsConsent:
+ *                       type: boolean
+ *                       description: true si l'utilisateur a le statut PENDING_CONSENT
+ *                     hasAcceptedTerms:
+ *                       type: boolean
+ *                     hasAcceptedPrivacy:
+ *                       type: boolean
+ *                     termsAcceptedAt:
+ *                       type: string
+ *                       format: date-time
+ *                     privacyAcceptedAt:
+ *                       type: string
+ *                       format: date-time
+ *                     termsVersion:
+ *                       type: string
+ *                     privacyVersion:
+ *                       type: string
+ *       401:
+ *         description: Non authentifié
+ */
+router.get("/consent-status", requireAuth, generalRateLimiter, getConsentStatusController);
 
 export default router;
 

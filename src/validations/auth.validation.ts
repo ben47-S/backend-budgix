@@ -48,3 +48,12 @@ export const googleTestSchema = {
   }),
 };
 
+/**
+ * Schéma pour l'authentification OAuth Google via ID Token
+ */
+export const googleAuthSchema = {
+  body: z.object({
+    idToken: z.string().min(1, "Le token Google est requis"),
+  }),
+};
+

@@ -9,9 +9,11 @@
 import type { Request, Response, NextFunction } from "express";
 import { createOTP, verifyOTP } from "../services/otp.service";
 import { createUser, getUserByPhone } from "../services/auth.service";
+import { sendOTPSMS } from "../services/sms.service";
 import { isValidPhone, normalizePhone, isValidOTP } from "../utils/validation";
 import { createError } from "../middleware/errorHandler";
 import { generateToken } from "../services/jwt.service";
+import { getUserConsentStatus } from "../services/consent.service";
 import logger from "../lib/logger";
 import type { OtpRequest, OtpVerifyRequest } from "../types/index";
 
@@ -54,17 +56,15 @@ export async function sendOTP(
     // Générer et sauvegarder le code OTP
     const code = await createOTP(normalizedPhone, userId);
 
-    // TODO: Envoyer le code OTP via SMS (Twilio, etc.)
-    // Pour l'instant, on le retourne dans la réponse (à retirer en production)
-    if (process.env.NODE_ENV) {
-      console.log(`📱 Code OTP pour ${normalizedPhone}: ${code}`);
-    }
+    // Envoyer le code OTP via SMS (Texto)
+    // Le service SMS log aussi le code en développement
+    await sendOTPSMS(normalizedPhone, code);
 
     res.json({
       success: true,
       message: "Code OTP envoyé avec succès",
-      // TODO: Retirer cette ligne en production
-      ...(process.env.NODE_ENV && { code }),
+      // Retourner le code uniquement en développement pour faciliter les tests
+      ...(process.env.NODE_ENV === "development" && { code }),
     });
   } catch (error) {
     next(error);
@@ -125,6 +125,10 @@ export async function verifyOTPController(
       user = await getUserByPhone(normalizedPhone);
     }
 
+    // Vérifier le statut de consentement
+    const consentStatus = await getUserConsentStatus(user.id);
+    const needsConsent = consentStatus.needsConsent;
+
     // Générer un token JWT pour l'utilisateur
     // Construire le payload conditionnellement pour éviter undefined avec exactOptionalPropertyTypes
     const tokenPayload: {
@@ -158,6 +162,8 @@ export async function verifyOTPController(
         user,
         isNewUser,
         token, // Token JWT pour l'authentification
+        needsConsent, // Flag indiquant si l'utilisateur doit accepter les CGU/politiques
+        status: user.status, // Statut de l'utilisateur (PENDING_CONSENT ou ACTIVE)
       },
     });
   } catch (error) {
@@ -229,3 +235,104 @@ export async function logoutController(
   }
 }
 
+/**
+ * Accepte les CGU et la politique de confidentialité
+ * 
+ * POST /auth/accept-consent
+ * Headers: Authorization: Bearer <token>
+ * Body: { acceptTerms: boolean, acceptPrivacy: boolean }
+ * 
+ * Permet aux utilisateurs avec le statut PENDING_CONSENT d'accepter les conditions
+ * et de passer au statut ACTIVE.
+ */
+export async function acceptConsentController(
+  req: Request<{}, {}, { acceptTerms: boolean; acceptPrivacy: boolean }>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const userId = req.userId;
+    const { acceptTerms, acceptPrivacy } = req.body;
+
+    // S'assurer que l'utilisateur est authentifié
+    if (!userId) {
+      throw createError(
+        "Authentification requise",
+        401,
+        "UNAUTHORIZED"
+      );
+    }
+
+    // Valider les données d'entrée
+    if (
+      typeof acceptTerms !== "boolean" ||
+      typeof acceptPrivacy !== "boolean"
+    ) {
+      throw createError(
+        "acceptTerms et acceptPrivacy doivent être des booléens",
+        400,
+        "INVALID_INPUT"
+      );
+    }
+
+    // Importer la fonction pour accepter les termes
+    const { acceptConsentTerms } = await import("../services/consent.service");
+
+    // Accepter les CGU et politiques
+    const updatedUser = await acceptConsentTerms(
+      userId,
+      acceptTerms,
+      acceptPrivacy
+    );
+
+    res.json({
+      success: true,
+      message: "CGU et politique de confidentialité acceptées avec succès",
+      data: {
+        user: updatedUser,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * Récupère le statut de consentement de l'utilisateur
+ * 
+ * GET /auth/consent-status
+ * Headers: Authorization: Bearer <token>
+ * 
+ * Permet aux utilisateurs de vérifier leur statut de consentement.
+ */
+export async function getConsentStatusController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const userId = req.userId;
+
+    // S'assurer que l'utilisateur est authentifié
+    if (!userId) {
+      throw createError(
+        "Authentification requise",
+        401,
+        "UNAUTHORIZED"
+      );
+    }
+
+    // Importer la fonction pour récupérer le statut
+    const { getUserConsentStatus } = await import("../services/consent.service");
+
+    // Récupérer le statut de consentement
+    const consentStatus = await getUserConsentStatus(userId);
+
+    res.json({
+      success: true,
+      data: consentStatus,
+    });
+  } catch (error) {
+    next(error);
+  }
+}

@@ -1,16 +1,25 @@
 /**
  * Service de vérification d'email
- * 
+ *
  * Ce service gère :
  * - La génération de codes de vérification d'email sécurisés (6 chiffres)
  * - La validation des codes de vérification d'email
  * - La gestion de l'expiration (5 minutes)
  * - Le marquage des codes comme utilisés
+ * - Le hashage des codes avant stockage
  */
 
 import { prisma } from "../lib/prisma";
 import { createError } from "../middleware/errorHandler";
 import { generateOTP } from "./otp.service"; // Réutiliser la fonction de génération OTP
+import * as crypto from "crypto";
+
+/**
+ * Hashe un code de vérification avec SHA-256
+ */
+function hashCode(code: string): string {
+  return crypto.createHash("sha256").update(code).digest("hex");
+}
 
 // Durée de validité d'un code de vérification d'email en millisecondes (5 minutes)
 const EMAIL_VERIFICATION_EXPIRATION_MS = 5 * 60 * 1000;
@@ -88,10 +97,13 @@ export async function createEmailVerificationCode(
     },
   });
 
-  // Créer le nouveau code de vérification
+  // Hasher le code avant stockage
+  const hashedCode = hashCode(code);
+
+  // Créer le nouveau code de vérification avec le hash
   await prisma.emailVerificationCode.create({
     data: {
-      code,
+      code: hashedCode,
       email: normalizedEmail,
       expiresAt,
       userId,
@@ -99,9 +111,12 @@ export async function createEmailVerificationCode(
   });
 
   // TODO: Envoyer l'email avec le code (intégration avec un service d'email)
-  // Pour l'instant, on retourne le code (à retirer en production)
-  console.log(`📧 Code de vérification pour ${normalizedEmail}: ${code}`);
+  // Log uniquement en développement
+  if (process.env.NODE_ENV === "development") {
+    console.log(`📧 Code de vérification pour ${normalizedEmail}: ${code}`);
+  }
 
+  // Retourner le code en clair (sera envoyé par email)
   return code;
 }
 
@@ -122,11 +137,14 @@ export async function verifyEmailCode(
   // Normaliser l'email
   const normalizedEmail = normalizeEmail(email);
 
+  // Hasher le code fourni pour le comparer avec le hash stocké
+  const hashedCode = hashCode(code);
+
   // Rechercher le code de vérification valide
   const verificationCode = await prisma.emailVerificationCode.findFirst({
     where: {
       email: normalizedEmail,
-      code,
+      code: hashedCode,
       userId,
       used: false,
       expiresAt: {

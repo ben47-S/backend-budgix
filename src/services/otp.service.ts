@@ -1,18 +1,28 @@
 /**
  * Service OTP - Gestion des codes OTP
- * 
+ *
  * Ce service gère :
  * - La génération de codes OTP sécurisés (6 chiffres)
  * - La validation des codes OTP
  * - La gestion de l'expiration (5 minutes)
  * - Le marquage des codes comme utilisés
+ * - Le hashage des codes avant stockage
  */
 
 import { prisma } from "../lib/prisma";
 import { createError } from "../middleware/errorHandler";
+import * as crypto from "crypto";
 
 // Durée de validité d'un code OTP en millisecondes (5 minutes)
 const OTP_EXPIRATION_MS = 5 * 60 * 1000;
+
+/**
+ * Hashe un code OTP avec SHA-256
+ * Le hash est utilisé pour stocker le code de manière sécurisée
+ */
+function hashOTP(code: string): string {
+  return crypto.createHash("sha256").update(code).digest("hex");
+}
 
 /**
  * Génère un code OTP sécurisé à 6 chiffres
@@ -21,8 +31,8 @@ const OTP_EXPIRATION_MS = 5 * 60 * 1000;
 export function generateOTP(): string {
   // Générer un nombre aléatoire entre 100000 et 999999 (6 chiffres)
   const min = 100000;
-  const max = 999999;
-  return Math.floor(Math.random() * (max - min + 1) + min).toString();
+  const max = 999999 + 1; // crypto.randomInt exclut le max, donc +1
+  return crypto.randomInt(min, max).toString();
 }
 
 /**
@@ -62,16 +72,20 @@ export async function createOTP(
     },
   });
 
-  // Créer le nouveau code OTP
+  // Hasher le code avant stockage
+  const hashedCode = hashOTP(code);
+
+  // Créer le nouveau code OTP avec le hash
   await prisma.otpCode.create({
     data: {
-      code,
+      code: hashedCode,
       phone,
       expiresAt,
       userId: userId || null,
     },
   });
 
+  // Retourner le code en clair (sera envoyé par SMS)
   return code;
 }
 
@@ -89,10 +103,13 @@ export async function verifyOTP(
   code: string,
   userId?: string
 ): Promise<{ userId: string | null; isNewUser: boolean }> {
+  // Hasher le code fourni pour le comparer avec le hash stocké
+  const hashedCode = hashOTP(code);
+
   // Construire la condition where pour rechercher le code OTP
   const whereCondition: any = {
     phone,
-    code,
+    code: hashedCode,
     used: false,
     expiresAt: {
       gt: new Date(), // Code non expiré
@@ -120,7 +137,6 @@ export async function verifyOTP(
       "INVALID_OTP"
     );
   }
-
   // Marquer le code comme utilisé
   await prisma.otpCode.update({
     where: {

@@ -8,6 +8,7 @@
 // Services d'authentification
 export * from "./auth.service";
 export * from "./otp.service";
+export * from "./consent.service";
 
 // Services de catégories
 export * from "./category.service";

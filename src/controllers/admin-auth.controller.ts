@@ -56,6 +56,36 @@ export async function adminLoginController(
 }
 
 /**
+ * Vérifie si le token admin est valide
+ * 
+ * GET /api/admin/auth/verify
+ * Headers: Authorization: Bearer <token>
+ */
+export async function verifyAdminTokenController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    // Si on arrive ici, le middleware requireAuth et requireAdmin ont validé le token
+    // req.userId et req.user sont définis par le middleware
+    
+    res.json({
+      success: true,
+      valid: true,
+      data: {
+        userId: req.userId,
+        email: req.user?.email,
+        isPremium: req.user?.isPremium,
+        role: req.user?.role,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
  * Définit le mot de passe d'un administrateur (nécessite authentification admin)
  * 
  * POST /api/admin/auth/set-password

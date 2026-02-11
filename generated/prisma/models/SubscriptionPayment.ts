@@ -727,10 +727,6 @@ export type EnumPaymentStatusFieldUpdateOperationsInput = {
   set?: $Enums.PaymentStatus
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type SubscriptionPaymentCreateWithoutUserInput = {
   id?: string
   plan: $Enums.SubscriptionPlan

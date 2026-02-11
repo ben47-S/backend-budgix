@@ -26,10 +26,11 @@ export async function createUser(phone: string) {
     throw createError("Un utilisateur avec ce numéro existe déjà", 409, "USER_EXISTS");
   }
 
-  // Créer le nouvel utilisateur
+  // Créer le nouvel utilisateur avec le statut PENDING_CONSENT
   const user = await prisma.user.create({
     data: {
       phone,
+      status: "PENDING_CONSENT", // Le nouvel user doit accepter les CGU/politiques
     },
     select: {
       id: true,
@@ -37,6 +38,7 @@ export async function createUser(phone: string) {
       email: true,
       username: true,
       isPremium: true,
+      status: true,
       role: true,
       createdAt: true,
     },
@@ -61,6 +63,7 @@ export async function getUserByPhone(phone: string) {
       email: true,
       username: true,
       isPremium: true,
+      status: true,
       role: true,
       createdAt: true,
     },
@@ -89,6 +92,7 @@ export async function getUserByEmail(email: string) {
       email: true,
       username: true,
       isPremium: true,
+      status: true,
       role: true,
       createdAt: true,
     },
@@ -116,6 +120,7 @@ export async function getUserById(userId: string) {
       phone: true,
       email: true,
       username: true,
+      status: true,
       isPremium: true,
       role: true,
       createdAt: true,
