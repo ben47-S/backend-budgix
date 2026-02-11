@@ -15,6 +15,7 @@ import {
   checkAndUpdatePremiumStatus,
   cancelSubscription,
   isSubscriptionActive,
+  getSubscriptionProgress,
   MONTHLY_PRICE,
   ANNUAL_PRICE,
 } from "../services/subscription.service";
@@ -234,6 +235,35 @@ export async function cancelSubscriptionController(
       data: {
         subscription,
       },
+    }));
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * Récupère la progression de l'abonnement premium de l'utilisateur connecté
+ * 
+ * GET /api/subscriptions/progress
+ * Headers: Authorization: Bearer <token>
+ */
+export async function getSubscriptionProgressController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const userId = req.userId;
+    if (!userId) {
+      throw createError("Authentification requise", 401, "UNAUTHORIZED");
+    }
+
+    const progress = await getSubscriptionProgress(userId);
+
+    res.json(formatDatesInObject({
+      success: true,
+      message: "Progression de l'abonnement récupérée avec succès",
+      data: progress,
     }));
   } catch (error) {
     next(error);

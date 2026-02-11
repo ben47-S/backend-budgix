@@ -197,10 +197,6 @@ export async function markDiscussionAsReadController(
       return next(createError("ID de discussion invalide", 400, "INVALID_INPUT"));
     }
 
-    if (!discussionId || typeof discussionId !== "string") {
-      return next(createError("ID de discussion invalide", 400, "INVALID_INPUT"));
-    }
-
     await markDiscussionAsRead(discussionId, userId, isAdmin);
 
     res.json({

@@ -42,6 +42,26 @@ export const DebtType = {
 export type DebtType = (typeof DebtType)[keyof typeof DebtType]
 
 
+export const LogLevel = {
+  INFO: 'INFO',
+  WARN: 'WARN',
+  ERROR: 'ERROR'
+} as const
+
+export type LogLevel = (typeof LogLevel)[keyof typeof LogLevel]
+
+
+export const LogScope = {
+  USER: 'USER',
+  BUSINESS: 'BUSINESS',
+  SECURITY: 'SECURITY',
+  ADMIN: 'ADMIN',
+  SYSTEM: 'SYSTEM'
+} as const
+
+export type LogScope = (typeof LogScope)[keyof typeof LogScope]
+
+
 export const NotificationType = {
   BUDGET_WARNING: 'BUDGET_WARNING',
   BUDGET_ALERT: 'BUDGET_ALERT',

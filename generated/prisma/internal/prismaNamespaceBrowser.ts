@@ -66,7 +66,8 @@ export const ModelName = {
   Discussion: 'Discussion',
   Message: 'Message',
   Review: 'Review',
-  ImprovementSuggestion: 'ImprovementSuggestion'
+  ImprovementSuggestion: 'ImprovementSuggestion',
+  Log: 'Log'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -319,6 +320,23 @@ export const ImprovementSuggestionScalarFieldEnum = {
 } as const
 
 export type ImprovementSuggestionScalarFieldEnum = (typeof ImprovementSuggestionScalarFieldEnum)[keyof typeof ImprovementSuggestionScalarFieldEnum]
+
+
+export const LogScalarFieldEnum = {
+  id: 'id',
+  level: 'level',
+  scope: 'scope',
+  action: 'action',
+  userId: 'userId',
+  adminId: 'adminId',
+  targetId: 'targetId',
+  ip: 'ip',
+  userAgent: 'userAgent',
+  metadata: 'metadata',
+  createdAt: 'createdAt'
+} as const
+
+export type LogScalarFieldEnum = (typeof LogScalarFieldEnum)[keyof typeof LogScalarFieldEnum]
 
 
 export const SortOrder = {

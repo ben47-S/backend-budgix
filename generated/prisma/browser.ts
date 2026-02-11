@@ -99,3 +99,8 @@ export type Review = Prisma.ReviewModel
  * Un utilisateur peut avoir plusieurs suggestions
  */
 export type ImprovementSuggestion = Prisma.ImprovementSuggestionModel
+/**
+ * Model Log
+ * Logs centralisés pour audit et dashboard admin
+ */
+export type Log = Prisma.LogModel

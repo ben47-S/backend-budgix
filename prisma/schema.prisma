@@ -35,6 +35,20 @@ enum DebtType {
   I_OWE // Personne que je dois
 }
 
+enum LogLevel {
+  INFO
+  WARN
+  ERROR
+}
+
+enum LogScope {
+  USER      // Logs liés aux actions utilisateurs
+  BUSINESS  // Logs liés aux événements métiers (transactions, budgets)
+  SECURITY  // Tentatives suspectes, accès refusés
+  ADMIN     // Actions admin
+  SYSTEM    // Erreurs système
+}
+
 enum NotificationType {
   BUDGET_WARNING // Avertissement de budget (70-99%)
   BUDGET_ALERT // Alerte de budget (100% ou dépassé)
@@ -409,5 +423,26 @@ model ImprovementSuggestion {
   @@index([userId])
   @@index([createdAt])
   @@index([userId, createdAt])
+}
+
+/// Logs centralisés pour audit et dashboard admin
+model Log {
+  id        String    @id @default(cuid())
+  level     LogLevel  @default(INFO)
+  scope     LogScope  @default(USER)
+  action    String    // ex: "USER_LOGIN_SUCCESS", "TRANSACTION_CREATED"
+  userId    String?   // ID du user concerné
+  adminId   String?   // ID admin ayant effectué l'action
+  targetId  String?   // ID de l'entité impactée (transactionId, categoryId, budgetId, etc.)
+  ip        String?   // IP anonymisée
+  userAgent String?   // User agent (optionnel)
+  metadata  Json?     // Contexte minimal
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+  @@index([adminId])
+  @@index([scope])
+  @@index([action])
+  @@index([createdAt])
 }
 

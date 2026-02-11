@@ -15,6 +15,7 @@ import {
   getSubscriptionController,
   checkSubscriptionStatusController,
   cancelSubscriptionController,
+  getSubscriptionProgressController,
 } from "../controllers";
 import { requireAuth } from "../middleware/auth";
 import { validate } from "../middleware/validation";
@@ -224,6 +225,74 @@ router.post("/check-status", requireAuth, generalRateLimiter, checkSubscriptionS
  *         $ref: '#/components/responses/UnauthorizedError'
  */
 router.post("/cancel", requireAuth, generalRateLimiter, cancelSubscriptionController);
+
+/**
+ * @swagger
+ * /subscriptions/progress:
+ *   get:
+ *     summary: Récupérer la progression de l'abonnement premium
+ *     description: Récupère les informations détaillées sur la progression de l'abonnement premium (pourcentage, jours écoulés, jours restants, date de fin)
+ *     tags: [Subscriptions]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Progression de l'abonnement récupérée avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     subscription:
+ *                       $ref: '#/components/schemas/Subscription'
+ *                     isActive:
+ *                       type: boolean
+ *                       description: Si l'abonnement est actif
+ *                     progressPercentage:
+ *                       type: number
+ *                       nullable: true
+ *                       description: Pourcentage de progression (0-100), null si pas de date de fin
+ *                       example: 45.5
+ *                     daysElapsed:
+ *                       type: integer
+ *                       description: Nombre de jours écoulés depuis le début
+ *                       example: 15
+ *                     daysRemaining:
+ *                       type: integer
+ *                       nullable: true
+ *                       description: Nombre de jours restants avant expiration, null si pas de date de fin
+ *                       example: 15
+ *                     totalDays:
+ *                       type: integer
+ *                       nullable: true
+ *                       description: Durée totale de l'abonnement en jours, null si pas de date de fin
+ *                       example: 30
+ *                     startDate:
+ *                       type: string
+ *                       format: date-time
+ *                       description: Date de début de l'abonnement
+ *                     endDate:
+ *                       type: string
+ *                       format: date-time
+ *                       nullable: true
+ *                       description: Date de fin de l'abonnement
+ *                     plan:
+ *                       type: string
+ *                       enum: [MONTHLY, ANNUAL]
+ *                       description: Plan d'abonnement
+ *       404:
+ *         description: Aucun abonnement trouvé
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ */
+router.get("/progress", requireAuth, generalRateLimiter, getSubscriptionProgressController);
 
 export default router;
 

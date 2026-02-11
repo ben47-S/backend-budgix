@@ -226,3 +226,73 @@ export async function cancelSubscription(userId: string) {
   return cancelledSubscription;
 }
 
+/**
+ * Calcule la progression de l'abonnement premium d'un utilisateur
+ * 
+ * @param userId - ID de l'utilisateur
+ * @returns Les informations de progression de l'abonnement
+ */
+export async function getSubscriptionProgress(userId: string) {
+  const subscription = await getUserSubscription(userId);
+
+  if (!subscription) {
+    throw createError(
+      "Aucun abonnement trouvé pour cet utilisateur",
+      404,
+      "SUBSCRIPTION_NOT_FOUND"
+    );
+  }
+
+  const now = new Date();
+  const startDate = new Date(subscription.startDate);
+  const endDate = subscription.endDate ? new Date(subscription.endDate) : null;
+
+  if (!endDate) {
+    // Abonnement sans date de fin (actif indéfiniment)
+    return {
+      subscription,
+      isActive: true,
+      progressPercentage: null,
+      daysElapsed: Math.floor((now.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)),
+      daysRemaining: null,
+      totalDays: null,
+      startDate,
+      endDate: null,
+      plan: subscription.plan,
+    };
+  }
+
+  // Calculer la durée totale de l'abonnement en jours
+  const totalDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+  
+  // Calculer les jours écoulés
+  const daysElapsed = Math.floor((now.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+  
+  // Calculer les jours restants
+  const daysRemaining = Math.ceil((endDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+  
+  // Calculer le pourcentage de progression (0-100)
+  let progressPercentage: number;
+  if (now >= endDate) {
+    progressPercentage = 100; // Abonnement expiré
+  } else if (now <= startDate) {
+    progressPercentage = 0; // Pas encore commencé
+  } else {
+    progressPercentage = Math.min(100, Math.max(0, (daysElapsed / totalDays) * 100));
+  }
+
+  const isActive = isSubscriptionActive(subscription);
+
+  return {
+    subscription,
+    isActive,
+    progressPercentage: Math.round(progressPercentage * 100) / 100, // Arrondir à 2 décimales
+    daysElapsed: Math.max(0, daysElapsed),
+    daysRemaining: Math.max(0, daysRemaining),
+    totalDays,
+    startDate,
+    endDate,
+    plan: subscription.plan,
+  };
+}
+

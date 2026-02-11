@@ -467,6 +467,40 @@ export type EnumMessageSenderTypeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumMessageSenderTypeFilter<$PrismaModel>
 }
 
+export type EnumLogLevelFilter<$PrismaModel = never> = {
+  equals?: $Enums.LogLevel | Prisma.EnumLogLevelFieldRefInput<$PrismaModel>
+  in?: $Enums.LogLevel[] | Prisma.ListEnumLogLevelFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LogLevel[] | Prisma.ListEnumLogLevelFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLogLevelFilter<$PrismaModel> | $Enums.LogLevel
+}
+
+export type EnumLogScopeFilter<$PrismaModel = never> = {
+  equals?: $Enums.LogScope | Prisma.EnumLogScopeFieldRefInput<$PrismaModel>
+  in?: $Enums.LogScope[] | Prisma.ListEnumLogScopeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LogScope[] | Prisma.ListEnumLogScopeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLogScopeFilter<$PrismaModel> | $Enums.LogScope
+}
+
+export type EnumLogLevelWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LogLevel | Prisma.EnumLogLevelFieldRefInput<$PrismaModel>
+  in?: $Enums.LogLevel[] | Prisma.ListEnumLogLevelFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LogLevel[] | Prisma.ListEnumLogLevelFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLogLevelWithAggregatesFilter<$PrismaModel> | $Enums.LogLevel
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLogLevelFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLogLevelFilter<$PrismaModel>
+}
+
+export type EnumLogScopeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LogScope | Prisma.EnumLogScopeFieldRefInput<$PrismaModel>
+  in?: $Enums.LogScope[] | Prisma.ListEnumLogScopeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LogScope[] | Prisma.ListEnumLogScopeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLogScopeWithAggregatesFilter<$PrismaModel> | $Enums.LogScope
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLogScopeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLogScopeFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -904,6 +938,40 @@ export type NestedEnumMessageSenderTypeWithAggregatesFilter<$PrismaModel = never
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumMessageSenderTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumMessageSenderTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumLogLevelFilter<$PrismaModel = never> = {
+  equals?: $Enums.LogLevel | Prisma.EnumLogLevelFieldRefInput<$PrismaModel>
+  in?: $Enums.LogLevel[] | Prisma.ListEnumLogLevelFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LogLevel[] | Prisma.ListEnumLogLevelFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLogLevelFilter<$PrismaModel> | $Enums.LogLevel
+}
+
+export type NestedEnumLogScopeFilter<$PrismaModel = never> = {
+  equals?: $Enums.LogScope | Prisma.EnumLogScopeFieldRefInput<$PrismaModel>
+  in?: $Enums.LogScope[] | Prisma.ListEnumLogScopeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LogScope[] | Prisma.ListEnumLogScopeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLogScopeFilter<$PrismaModel> | $Enums.LogScope
+}
+
+export type NestedEnumLogLevelWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LogLevel | Prisma.EnumLogLevelFieldRefInput<$PrismaModel>
+  in?: $Enums.LogLevel[] | Prisma.ListEnumLogLevelFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LogLevel[] | Prisma.ListEnumLogLevelFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLogLevelWithAggregatesFilter<$PrismaModel> | $Enums.LogLevel
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLogLevelFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLogLevelFilter<$PrismaModel>
+}
+
+export type NestedEnumLogScopeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LogScope | Prisma.EnumLogScopeFieldRefInput<$PrismaModel>
+  in?: $Enums.LogScope[] | Prisma.ListEnumLogScopeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LogScope[] | Prisma.ListEnumLogScopeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLogScopeWithAggregatesFilter<$PrismaModel> | $Enums.LogScope
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLogScopeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLogScopeFilter<$PrismaModel>
 }
 
 
