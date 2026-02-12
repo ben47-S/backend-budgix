@@ -14,6 +14,7 @@ import { isValidPhone, normalizePhone, isValidOTP } from "../utils/validation";
 import { createError } from "../middleware/errorHandler";
 import { generateToken } from "../services/jwt.service";
 import { getUserConsentStatus } from "../services/consent.service";
+import { logEvent } from "../services/log.service";
 import logger from "../lib/logger";
 import type { OtpRequest, OtpVerifyRequest } from "../types/index";
 
@@ -154,6 +155,22 @@ export async function verifyOTPController(
     }
 
     const token = generateToken(tokenPayload);
+
+    // Logger l'événement de connexion réussie
+    logEvent({
+      level: "INFO",
+      scope: "SECURITY",
+      action: isNewUser ? "USER_REGISTER_SUCCESS" : "USER_LOGIN_SUCCESS",
+      userId: user.id,
+      metadata: {
+        phone: normalizedPhone,
+        isNewUser,
+        needsConsent,
+        userAgent: req.headers["user-agent"],
+      },
+      ip: req.ip || undefined,
+      userAgent: req.headers["user-agent"] || undefined,
+    });
 
     res.json({
       success: true,

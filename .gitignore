@@ -30,15 +30,9 @@ yarn-error.log*
 .DS_Store
 
 # OS
-.env.example
 .expo/
 
-# Documentation - Keep only DOCUMENTATION.md
-/docs
 
-# Test results
-tests/results/
-*.test-results
 
 # Other
 test-admin-login.ps1

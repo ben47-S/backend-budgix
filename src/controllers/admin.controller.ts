@@ -23,6 +23,7 @@ import {
   type UserFilters,
   type PaginationParams,
 } from "../services/admin.service";
+import { logEvent } from "../services/log.service";
 import { formatDatesInObject } from "../utils/date-formatter";
 
 /**
@@ -169,8 +170,22 @@ export async function deleteUserController(
 ) {
   try {
     const { userId } = req.params;
+    const adminId = req.userId; // ID de l'admin qui fait l'action
 
     await deleteUser(userId);
+
+    // Logger l'action admin
+    logEvent({
+      level: "INFO",
+      scope: "ADMIN",
+      action: "USER_DELETED",
+      adminId: adminId || undefined,
+      targetId: userId,
+      metadata: {
+        deletedBy: adminId,
+        deletedAt: new Date().toISOString(),
+      },
+    });
 
     res.json({
       success: true,

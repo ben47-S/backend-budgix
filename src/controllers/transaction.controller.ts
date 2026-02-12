@@ -15,6 +15,7 @@ import {
   deleteAllUserTransactions,
 } from "../services/transaction.service";
 import { createError } from "../middleware/errorHandler";
+import { logEvent } from "../services/log.service";
 import type { CreateTransactionRequest, PeriodFilter } from "../types/index";
 import { formatDatesInObject } from "../utils/date-formatter";
 
@@ -120,6 +121,21 @@ export async function createTransactionController(
       time,
       note
     );
+
+    // Logger la création de la transaction
+    logEvent({
+      level: "INFO",
+      scope: "BUSINESS",
+      action: "TRANSACTION_CREATED",
+      userId: userId,
+      targetId: transaction.id,
+      metadata: {
+        amount,
+        categoryId,
+        date,
+        hasNote: !!note,
+      },
+    });
 
     res.status(201).json(formatDatesInObject({
       success: true,

@@ -62,6 +62,10 @@ router.use("/admin/auth", adminAuthRoutes);
 import adminRoutes from "./admin.routes";
 router.use("/admin", adminRoutes);
 
+// Routes de logs systèmes (admin uniquement)
+import adminLogsRoutes from "./admin-logs.routes";
+router.use("/admin/logs", adminLogsRoutes);
+
 // Routes de discussions de support client
 import discussionRoutes from "./discussion.routes";
 router.use("/discussions", discussionRoutes);
