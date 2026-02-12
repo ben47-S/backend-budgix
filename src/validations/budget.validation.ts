@@ -8,7 +8,23 @@
  */
 
 import { z } from "zod";
-import { flexibleDateSchema } from "../utils/date-validation";
+
+/**
+ * Schéma pour valider une date ISO et la retourner en string
+ */
+const isoDateStringSchema = z
+  .string({
+    message: "La date doit être une chaîne de caractères",
+  })
+  .refine(
+    (val) => {
+      const date = new Date(val);
+      return !isNaN(date.getTime());
+    },
+    {
+      message: "Format de date invalide. Attendu: ISO 8601 (ex: 2026-02-05)",
+    }
+  );
 
 /**
  * Schéma pour créer ou mettre à jour un budget
@@ -24,8 +40,8 @@ export const upsertBudgetSchema = {
         .number("Le montant du budget doit être un nombre")
         .positive("Le montant du budget doit être positif")
         .max(999999999999.99, "Le montant du budget est trop élevé"),
-      startDate: flexibleDateSchema,
-      endDate: flexibleDateSchema,
+      startDate: isoDateStringSchema,
+      endDate: isoDateStringSchema,
       categoryId: z
         .string()
         .cuid("Format d'ID de catégorie invalide")
@@ -109,8 +125,8 @@ export const getMonthlyBudgetsSchema = {
 export const getBudgetsOverviewSchema = {
   query: z
     .object({
-      startDate: flexibleDateSchema,
-      endDate: flexibleDateSchema,
+      startDate: isoDateStringSchema,
+      endDate: isoDateStringSchema,
     })
     .refine(
       (data) => {
