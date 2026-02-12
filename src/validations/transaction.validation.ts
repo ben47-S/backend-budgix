@@ -3,7 +3,7 @@
  */
 
 import { z } from "zod";
-import { dateSchemaJJMMYYYY } from "../utils/date-validation";
+import { flexibleDateSchema } from "../utils/date-validation";
 
 /**
  * Schéma pour créer une transaction
@@ -18,7 +18,7 @@ export const createTransactionSchema = {
       .string()
       .min(1, "L'ID de la catégorie est requis")
       .cuid("Format d'ID de catégorie invalide"),
-    date: dateSchemaJJMMYYYY,
+    date: flexibleDateSchema,
     time: z
       .string()
       .regex(/^([0-1][0-9]|2[0-3]):[0-5][0-9]$/, "Format d'heure invalide (HH:mm)")

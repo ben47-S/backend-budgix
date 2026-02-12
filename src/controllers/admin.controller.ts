@@ -24,7 +24,7 @@ import {
   type PaginationParams,
 } from "../services/admin.service";
 import { logEvent } from "../services/log.service";
-import { formatDatesInObject } from "../utils/date-formatter";
+import { formatDatesToISO } from "../utils/date-formatter";
 
 /**
  * Récupère la liste des utilisateurs avec pagination et filtres
@@ -179,7 +179,7 @@ export async function deleteUserController(
       level: "INFO",
       scope: "ADMIN",
       action: "USER_DELETED",
-      adminId: adminId || undefined,
+      ...(adminId && { adminId }),
       targetId: userId,
       metadata: {
         deletedBy: adminId,
@@ -411,7 +411,7 @@ export async function getAllExternalSubscriptionsController(
 
     const result = await getAllExternalSubscriptions(filters, pagination);
 
-    res.json(formatDatesInObject({
+    res.json(formatDatesToISO({
       success: true,
       message: "Abonnements externes récupérés avec succès",
       data: result,

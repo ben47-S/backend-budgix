@@ -18,7 +18,7 @@ import {
   getMonthlyBudgets,
   getAllBudgets,
 } from "../services/budget.service";
-import { formatDatesInObject } from "../utils/date-formatter";
+import { formatDatesToISO } from "../utils/date-formatter";
 import { parseDate } from "../utils/date";
 
 /**
@@ -54,7 +54,7 @@ export async function upsertBudgetController(
       type: type ?? "CUSTOM",
     });
 
-    res.status(201).json(formatDatesInObject({
+res.status(201).json(formatDatesToISO({
       success: true,
       message: "Budget enregistré avec succès",
       data: budget,
@@ -100,7 +100,7 @@ export async function upsertMonthlyBudgetController(
       categoryId: categoryId ?? null,
     });
 
-    res.status(201).json(formatDatesInObject({
+res.status(201).json(formatDatesToISO({
       success: true,
       message: "Budget mensuel enregistré avec succès",
       data: budget,
@@ -162,9 +162,9 @@ export async function getMonthlyBudgetsController(
       options.categoryId = categoryId === "null" || categoryId === null ? null : String(categoryId);
     }
 
-    const budgets = await getMonthlyBudgets(userId, options);
+const budgets = await getMonthlyBudgets(userId, options);
 
-    res.json(formatDatesInObject({
+    res.json(formatDatesToISO({
       success: true,
       data: {
         budgets,
@@ -258,7 +258,7 @@ export async function deleteBudgetController(
 
     await deleteBudgetById(userId, budgetId);
 
-    res.json(formatDatesInObject({
+res.json(formatDatesToISO({
       success: true,
       message: "Budget supprimé avec succès",
       data: { id: budgetId },
@@ -317,9 +317,9 @@ export async function getAllBudgetsController(
       options.offset = Number(offset);
     }
 
-    const budgets = await getAllBudgets(userId, options);
+const budgets = await getAllBudgets(userId, options);
 
-    res.json(formatDatesInObject({
+    res.json(formatDatesToISO({
       success: true,
       data: {
         budgets,
@@ -352,7 +352,7 @@ export async function checkBudgetsController(
 
     const result = await checkAllBudgetsForUser(userId);
 
-    res.json(formatDatesInObject({
+res.json(formatDatesToISO({
       success: true,
       message: "Vérification des budgets effectuée",
       data: result,

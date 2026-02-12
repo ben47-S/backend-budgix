@@ -6,7 +6,7 @@
  */
 
 import { z } from "zod";
-import { dateSchemaJJMMYYYY } from "../utils/date-validation";
+import { flexibleDateSchema } from "../utils/date-validation";
 
 /**
  * Schéma pour les statistiques premium avec dates spécifiques
@@ -20,11 +20,11 @@ export const getPremiumStatsSchema = {
   query: z
     .object({
       // Option 1: Période personnalisée avec dates de début et fin
-      startDate: dateSchemaJJMMYYYY.optional(),
-      endDate: dateSchemaJJMMYYYY.optional(),
-      
+      startDate: flexibleDateSchema.optional(),
+      endDate: flexibleDateSchema.optional(),
+
       // Option 2: Date de référence + période relative
-      date: dateSchemaJJMMYYYY.optional(),
+      date: flexibleDateSchema.optional(),
       period: z.enum(["day", "week", "month", "year"]).optional(),
     })
     .refine(

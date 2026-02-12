@@ -3,6 +3,7 @@
  */
 
 import { z } from "zod";
+import { flexibleDateSchema } from "../utils/date-validation";
 
 export const initiatePaymentSchema = {
   body: z.object({
@@ -17,19 +18,7 @@ export const confirmPaymentSchema = {
     paymentId: z.string().min(1, "paymentId requis"),
     waveTransactionId: z.string().min(1, "L'ID Wave est requis").trim(),
     senderName: z.string().min(1, "Le nom de l'expéditeur est requis").trim(),
-    transferDate: z.string()
-      .regex(/^\d{2}\/\d{2}\/\d{4}$/, "La date doit être au format jj/mm/aaaa")
-      .transform((dateStr) => {
-        const [day, month, year] = dateStr.split("/").map(Number);
-        const date = new Date(year, month - 1, day);
-        
-        // Vérifier que la date est valide
-        if (isNaN(date.getTime())) {
-          throw new Error("La date de transfert est invalide");
-        }
-        
-        return date;
-      }),
+    transferDate: flexibleDateSchema,
   }),
 };
 

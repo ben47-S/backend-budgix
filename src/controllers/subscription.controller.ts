@@ -24,7 +24,7 @@ import {
   formatSubscriptionPlan,
   calculateSavings,
 } from "../utils/price-formatter";
-import { formatDatesInObject } from "../utils/date-formatter";
+import { formatDatesToISO } from "../utils/date-formatter";
 import type { CreateSubscriptionRequest } from "../types";
 
 /**
@@ -59,7 +59,7 @@ export async function createSubscriptionController(
     // Créer ou mettre à jour l'abonnement
     const subscription = await createOrUpdateSubscription(userId, plan);
 
-    res.json(formatDatesInObject({
+res.json(formatDatesToISO({
       success: true,
       message: "Abonnement créé avec succès",
       data: {
@@ -91,7 +91,7 @@ export async function getSubscriptionController(
     const subscription = await getUserSubscription(userId);
 
     if (!subscription) {
-      return res.json(formatDatesInObject({
+return res.json(formatDatesToISO({
         success: true,
         message: "Aucun abonnement trouvé",
         data: {
@@ -143,7 +143,7 @@ export async function getSubscriptionController(
     const formattedPrice = formatSubscriptionPrice(priceNumber);
     const formattedPlan = formatSubscriptionPlan(subscription.plan);
 
-    res.json(formatDatesInObject({
+res.json(formatDatesToISO({
       success: true,
       data: {
         subscription,
@@ -185,7 +185,7 @@ export async function checkSubscriptionStatusController(
     const subscription = await getUserSubscription(userId);
 
     if (!subscription) {
-      return res.json(formatDatesInObject({
+return res.json(formatDatesToISO({
         success: true,
         data: {
           isPremium,
@@ -197,7 +197,7 @@ export async function checkSubscriptionStatusController(
 
     const isActive = isSubscriptionActive(subscription);
 
-    res.json(formatDatesInObject({
+res.json(formatDatesToISO({
       success: true,
       data: {
         isPremium,
@@ -229,7 +229,7 @@ export async function cancelSubscriptionController(
 
     const subscription = await cancelSubscription(userId);
 
-    res.json(formatDatesInObject({
+res.json(formatDatesToISO({
       success: true,
       message: "Abonnement annulé avec succès",
       data: {
@@ -260,7 +260,7 @@ export async function getSubscriptionProgressController(
 
     const progress = await getSubscriptionProgress(userId);
 
-    res.json(formatDatesInObject({
+res.json(formatDatesToISO({
       success: true,
       message: "Progression de l'abonnement récupérée avec succès",
       data: progress,

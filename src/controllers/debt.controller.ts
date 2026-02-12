@@ -19,7 +19,7 @@ import {
   deleteDebt,
   getDebtStats,
 } from "../services/debt.service";
-import { formatDatesInObject } from "../utils/date-formatter";
+import { formatDatesToISO } from "../utils/date-formatter";
 import type { CreateDebtRequest, UpdateDebtRequest } from "../types";
 import type { DebtType } from "../../generated/prisma/client";
 
@@ -54,7 +54,7 @@ export async function createDebtController(
 
     const debt = await createDebt(userId, type, contactName, amount, notes);
 
-    res.status(201).json(formatDatesInObject({
+res.status(201).json(formatDatesToISO({
       success: true,
       message: "Dette créée avec succès",
       data: {
@@ -115,7 +115,7 @@ export async function getDebtsController(
 
     const debts = await getDebts(userId, debtType, isPaidFilter);
 
-    res.json(formatDatesInObject({
+res.json(formatDatesToISO({
       success: true,
       data: {
         debts,
@@ -148,7 +148,7 @@ export async function getDebtByIdController(
 
     const debt = await getDebtById(id, userId);
 
-    res.json(formatDatesInObject({
+res.json(formatDatesToISO({
       success: true,
       data: {
         debt,
@@ -191,7 +191,7 @@ export async function updateDebtController(
 
     const updatedDebt = await updateDebt(id, userId, updates);
 
-    res.json(formatDatesInObject({
+res.json(formatDatesToISO({
       success: true,
       message: "Dette mise à jour avec succès",
       data: {
@@ -224,7 +224,7 @@ export async function deleteDebtController(
 
     await deleteDebt(id, userId);
 
-    res.json(formatDatesInObject({
+res.json(formatDatesToISO({
       success: true,
       message: "Dette supprimée avec succès",
     }));
@@ -252,7 +252,7 @@ export async function getDebtStatsController(
 
     const stats = await getDebtStats(userId);
 
-    res.json(formatDatesInObject({
+res.json(formatDatesToISO({
       success: true,
       data: {
         stats,

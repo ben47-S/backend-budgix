@@ -19,7 +19,7 @@ import {
   deleteExternalSubscription,
   renewExternalSubscription,
 } from "../services/external-subscription.service";
-import { formatDatesInObject } from "../utils/date-formatter";
+import { formatDatesToISO } from "../utils/date-formatter";
 
 /**
  * Récupère tous les abonnements externes de l'utilisateur
@@ -76,7 +76,7 @@ export async function getExternalSubscriptionsController(
 
     const result = await getExternalSubscriptions(userId, options);
 
-    res.json(formatDatesInObject({
+res.json(formatDatesToISO({
       success: true,
       message: "Abonnements récupérés avec succès",
       data: result,
@@ -111,7 +111,7 @@ export async function getExternalSubscriptionController(
 
     const subscription = await getExternalSubscriptionById(userId, id);
 
-    res.json(formatDatesInObject({
+res.json(formatDatesToISO({
       success: true,
       message: "Abonnement récupéré avec succès",
       data: {
@@ -179,7 +179,7 @@ export async function createExternalSubscriptionController(
       notes: notes || null,
     });
 
-    res.status(201).json(formatDatesInObject({
+res.status(201).json(formatDatesToISO({
       success: true,
       message: "Abonnement créé avec succès",
       data: {
@@ -248,7 +248,7 @@ export async function updateExternalSubscriptionController(
 
     const subscription = await updateExternalSubscription(userId, id, updateData);
 
-    res.json(formatDatesInObject({
+res.json(formatDatesToISO({
       success: true,
       message: "Abonnement mis à jour avec succès",
       data: {
@@ -285,7 +285,7 @@ export async function deleteExternalSubscriptionController(
 
     await deleteExternalSubscription(userId, id);
 
-    res.json(formatDatesInObject({
+res.json(formatDatesToISO({
       success: true,
       message: "Abonnement supprimé avec succès",
       data: {
@@ -327,7 +327,7 @@ export async function renewExternalSubscriptionController(
     
     const subscription = await renewExternalSubscription(userId, id, renewalDateObj);
 
-    res.json(formatDatesInObject({
+res.json(formatDatesToISO({
       success: true,
       message: "Abonnement renouvelé avec succès",
       data: {

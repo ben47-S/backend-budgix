@@ -17,7 +17,7 @@ import {
 import { createError } from "../middleware/errorHandler";
 import { logEvent } from "../services/log.service";
 import type { CreateTransactionRequest, PeriodFilter } from "../types/index";
-import { formatDatesInObject } from "../utils/date-formatter";
+import { formatDatesToISO } from "../utils/date-formatter";
 
 /**
  * Récupère les transactions de l'utilisateur connecté
@@ -137,7 +137,7 @@ export async function createTransactionController(
       },
     });
 
-    res.status(201).json(formatDatesInObject({
+    res.status(201).json(formatDatesToISO({
       success: true,
       message: "Transaction créée avec succès",
       data: transaction,
@@ -180,7 +180,7 @@ export async function getTransactionSummaryController(
 
     const summary = await getTransactionSummary(userId, period);
 
-    res.json(formatDatesInObject({
+res.json(formatDatesToISO({
       success: true,
       data: summary,
       ...(period && { period }),
@@ -223,7 +223,7 @@ export async function deleteAllTransactionsController(
 
     const result = await deleteAllUserTransactions(userId);
 
-    res.json(formatDatesInObject({
+res.json(formatDatesToISO({
       success: true,
       message: result.message,
       data: {

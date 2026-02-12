@@ -101,7 +101,8 @@ export function isDateInPeriod(
 
 /**
  * Formate une date pour l'affichage au format jj-mm-yyyy
- * 
+ *
+ * @deprecated Cette fonction est obsolète. Pour les réponses API, utilisez formatDatesToISO() de date-formatter.ts
  * @param date - Date à formater
  * @returns Date formatée (jj-mm-yyyy)
  */
@@ -114,9 +115,10 @@ export function formatDate(date: Date): string {
 
 /**
  * Formate une date pour l'affichage au format YYYY-MM-DD (pour compatibilité interne)
- * 
+ *
+ * @deprecated Cette fonction est obsolète. Pour les réponses API, utilisez formatDatesToISO() de date-formatter.ts qui retourne un ISO 8601 complet
  * @param date - Date à formater
- * @returns Date formatée (YYYY-MM-DD)
+ * @returns Date formatée (YYYY-MM-DD) - Format partiel, non recommandé
  */
 export function formatDateISO(date: Date): string {
   const isoString = date.toISOString();
@@ -129,50 +131,63 @@ export function formatDateISO(date: Date): string {
 }
 
 /**
- * Parse une date au format jj-mm-yyyy ou YYYY-MM-DD et retourne un objet Date
- * 
- * @param dateString - Date au format jj-mm-yyyy ou YYYY-MM-DD
+ * Parse une date au format ISO 8601, jj-mm-yyyy, jj/mm/aaaa ou YYYY-MM-DD et retourne un objet Date
+ *
+ * Ordre de priorité :
+ * 1. ISO 8601 (YYYY-MM-DD ou YYYY-MM-DDTHH:mm:ss.sssZ)
+ * 2. jj/mm/aaaa (format user-friendly)
+ * 3. jj-mm-yyyy (legacy)
+ * 4. Tout autre format JavaScript valide
+ *
+ * @param dateString - Date dans un des formats acceptés
  * @returns Date parsée
  */
 export function parseDate(dateString: string): Date {
-  // Format jj-mm-yyyy
-  const jjMmYyyyPattern = /^(\d{2})-(\d{2})-(\d{4})$/;
-  const jjMmYyyyMatch = dateString.match(jjMmYyyyPattern);
-  
-  if (jjMmYyyyMatch) {
-    const [, day, month, year] = jjMmYyyyMatch;
-    // Valider que tous les éléments sont présents
+  // 1. Vérifier si c'est un format ISO 8601 (priorité absolue)
+  const isoPattern = /^\d{4}-\d{2}-\d{2}/;
+  if (isoPattern.test(dateString)) {
+    const date = new Date(dateString);
+    if (!isNaN(date.getTime())) {
+      return date;
+    }
+  }
+
+  // 2. Format jj/mm/aaaa (avec slashes - format user-friendly)
+  const slashPattern = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+  const slashMatch = dateString.match(slashPattern);
+
+  if (slashMatch) {
+    const [, day, month, year] = slashMatch;
     if (!day || !month || !year) {
       throw new Error("Format de date invalide");
     }
     const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
     if (isNaN(date.getTime())) {
-      throw new Error("Format de date invalide");
+      throw new Error("Date invalide");
     }
     return date;
   }
-  
-  // Format YYYY-MM-DD (pour compatibilité)
-  const yyyyMmDdPattern = /^(\d{4})-(\d{2})-(\d{2})$/;
-  const yyyyMmDdMatch = dateString.match(yyyyMmDdPattern);
-  
-  if (yyyyMmDdMatch) {
-    const [, year, month, day] = yyyyMmDdMatch;
-    // Valider que tous les éléments sont présents
-    if (!year || !month || !day) {
+
+  // 3. Format jj-mm-yyyy (avec tirets - legacy)
+  const dashPattern = /^(\d{2})-(\d{2})-(\d{4})$/;
+  const dashMatch = dateString.match(dashPattern);
+
+  if (dashMatch) {
+    const [, day, month, year] = dashMatch;
+    if (!day || !month || !year) {
       throw new Error("Format de date invalide");
     }
     const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
     if (isNaN(date.getTime())) {
-      throw new Error("Format de date invalide");
+      throw new Error("Date invalide");
     }
     return date;
   }
-  
-  // Essayer de parser comme date ISO ou autre format
+
+  // 4. Essayer de parser comme date JavaScript standard
   const date = new Date(dateString);
   if (isNaN(date.getTime())) {
-    throw new Error("Format de date invalide (accepte jj-mm-yyyy ou YYYY-MM-DD)");
+    throw new Error("Format de date invalide (accepte ISO 8601, jj/mm/aaaa, jj-mm-yyyy ou YYYY-MM-DD)");
   }
   return date;
 }

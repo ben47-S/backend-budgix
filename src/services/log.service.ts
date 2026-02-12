@@ -86,7 +86,7 @@ export async function logEvent(params: LogEventParams): Promise<void> {
           userId: params.userId || null,
           adminId: params.adminId || null,
           targetId: params.targetId || null,
-          metadata: params.metadata || null,
+          ...(params.metadata && { metadata: params.metadata }),
           ip: params.ip || null,
           userAgent: params.userAgent || null,
         },
@@ -171,13 +171,14 @@ export async function getLogs(params: GetLogsParams) {
     prisma.log.count({ where }),
   ])
 
-  // Tronquer tous les IDs et métadonnées avant de les retourner
+  // Tronquer les données sensibles et convertir les dates en ISO 8601
   const logs = logsRaw.map((log) => ({
     ...log,
     userId: truncateId(log.userId),
     adminId: truncateId(log.adminId),
     targetId: truncateId(log.targetId),
     metadata: truncateMetadata(log.metadata),
+    createdAt: log.createdAt.toISOString(), // Format ISO 8601
   }))
 
   return {

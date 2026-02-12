@@ -6,7 +6,7 @@
  */
 
 import { z } from "zod";
-import { dateSchemaJJMMYYYY } from "../utils/date-validation";
+import { flexibleDateSchema } from "../utils/date-validation";
 
 /**
  * Enum pour les cycles de facturation
@@ -28,7 +28,7 @@ export const createExternalSubscriptionSchema = {
         .int("Le montant doit être un nombre entier")
         .positive("Le montant doit être positif")
         .max(999999999999, "Le montant est trop élevé"),
-      startDate: dateSchemaJJMMYYYY,
+      startDate: flexibleDateSchema,
       billingCycle: BillingCycleEnum,
       customDays: z
         .number()
@@ -81,7 +81,7 @@ export const updateExternalSubscriptionSchema = {
         .positive("Le montant doit être positif")
         .max(999999999999, "Le montant est trop élevé")
         .optional(),
-      startDate: dateSchemaJJMMYYYY.optional(),
+      startDate: flexibleDateSchema.optional(),
       billingCycle: BillingCycleEnum.optional(),
       customDays: z
         .number()
@@ -156,7 +156,7 @@ export const externalSubscriptionIdSchema = {
 export const renewExternalSubscriptionSchema = {
   body: z
     .object({
-      renewalDate: dateSchemaJJMMYYYY.optional(),
+      renewalDate: flexibleDateSchema.optional(),
     })
     .optional(),
 };

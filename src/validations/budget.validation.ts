@@ -8,7 +8,7 @@
  */
 
 import { z } from "zod";
-import { dateSchemaJJMMYYYY } from "../utils/date-validation";
+import { flexibleDateSchema } from "../utils/date-validation";
 
 /**
  * Schéma pour créer ou mettre à jour un budget
@@ -24,8 +24,8 @@ export const upsertBudgetSchema = {
         .number("Le montant du budget doit être un nombre")
         .positive("Le montant du budget doit être positif")
         .max(999999999999.99, "Le montant du budget est trop élevé"),
-      startDate: dateSchemaJJMMYYYY,
-      endDate: dateSchemaJJMMYYYY,
+      startDate: flexibleDateSchema,
+      endDate: flexibleDateSchema,
       categoryId: z
         .string()
         .cuid("Format d'ID de catégorie invalide")
@@ -109,8 +109,8 @@ export const getMonthlyBudgetsSchema = {
 export const getBudgetsOverviewSchema = {
   query: z
     .object({
-      startDate: dateSchemaJJMMYYYY,
-      endDate: dateSchemaJJMMYYYY,
+      startDate: flexibleDateSchema,
+      endDate: flexibleDateSchema,
     })
     .refine(
       (data) => {

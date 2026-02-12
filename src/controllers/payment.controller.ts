@@ -14,7 +14,7 @@ import {
   rejectPayment,
   buildWavePaymentUrl,
 } from "../services/payment.service";
-import { formatDatesInObject } from "../utils/date-formatter";
+import { formatDatesToISO } from "../utils/date-formatter";
 import type {
   InitiatePaymentRequest,
   ConfirmPaymentRequest,
@@ -37,7 +37,7 @@ export async function initiatePaymentController(
     const payment = await initiatePayment(userId, plan);
     const waveUrl = buildWavePaymentUrl(Number(payment.amount));
 
-    res.status(201).json(formatDatesInObject({
+res.status(201).json(formatDatesToISO({
       success: true,
       message: "Paiement initié",
       data: {
@@ -71,7 +71,7 @@ export async function confirmPaymentController(
       transferDate
     );
 
-    res.json(formatDatesInObject({
+res.json(formatDatesToISO({
       success: true,
       message: "Paiement soumis pour vérification",
       data: { payment },
@@ -96,7 +96,7 @@ export async function getPaymentStatusController(
 
     const payment = await getPaymentStatus(userId, paymentId);
 
-    res.json(formatDatesInObject({
+res.json(formatDatesToISO({
       success: true,
       data: { payment },
     }));
@@ -113,7 +113,7 @@ export async function listPendingPaymentsController(
   try {
     const payments = await listPendingPayments();
 
-    res.json(formatDatesInObject({
+res.json(formatDatesToISO({
       success: true,
       data: { payments },
     }));
@@ -173,7 +173,7 @@ export async function listPaymentsController(
 
     const result = await listPayments(filters);
 
-    res.json(formatDatesInObject({
+res.json(formatDatesToISO({
       success: true,
       data: result,
     }));
@@ -198,7 +198,7 @@ export async function approvePaymentController(
 
     const result = await approvePayment(adminId, paymentId, plan);
 
-    res.json(formatDatesInObject({
+res.json(formatDatesToISO({
       success: true,
       message: "Paiement approuvé",
       data: result,
@@ -224,7 +224,7 @@ export async function rejectPaymentController(
 
     const payment = await rejectPayment(adminId, paymentId, reason);
 
-    res.json(formatDatesInObject({
+res.json(formatDatesToISO({
       success: true,
       message: "Paiement refusé",
       data: { payment },

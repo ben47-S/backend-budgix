@@ -1,13 +1,24 @@
 /**
  * Utilitaires pour formater les dates dans les réponses API
  * 
- * Formate toutes les dates au format jj-mm-yyyy pour l'affichage
+ * Formate toutes les dates au format ISO 8601 (YYYY-MM-DDTHH:mm:ss.sssZ)
+ * pour une compatibilité maximale avec les frontends
  */
 
 import { formatDate } from './date';
 
 /**
  * Formate une date ou retourne null si la date est null/undefined
+ * Format ISO 8601 complet avec heure (YYYY-MM-DDTHH:mm:ss.sssZ)
+ */
+function formatDateToISO(date: Date | null | undefined): string | null {
+  if (!date) return null;
+  return date.toISOString();
+}
+
+/**
+ * @deprecated Utiliser formatDateToISO pour le nouveau format
+ * Formate une date au format jj-mm-yyyy (ancien format)
  */
 function formatDateOrNull(date: Date | null | undefined): string | null {
   if (!date) return null;
@@ -58,10 +69,77 @@ function decimalToString(decimal: any): string {
 }
 
 /**
- * Formate récursivement toutes les dates et Decimals dans un objet pour les réponses API
+ * Formate récursivement toutes les dates en ISO 8601 et les Decimals en strings
  *
  * @param obj - Objet à formater
- * @returns Objet avec toutes les dates formatées en jj-mm-yyyy et les Decimals en strings
+ * @returns Objet avec toutes les dates formatées en ISO 8601 (YYYY-MM-DDTHH:mm:ss.sssZ)
+ */
+export function formatDatesToISO<T>(obj: T): T {
+  if (obj === null || obj === undefined) {
+    return obj;
+  }
+
+  if (obj instanceof Date) {
+    return obj.toISOString() as unknown as T;
+  }
+
+  // Vérifier si c'est un Decimal de Prisma
+  if (isDecimal(obj)) {
+    return decimalToString(obj) as unknown as T;
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map(item => formatDatesToISO(item)) as unknown as T;
+  }
+
+  if (typeof obj === 'object') {
+    const formatted: Record<string, unknown> = {};
+
+    for (const [key, value] of Object.entries(obj)) {
+      // Vérifier si c'est un Decimal
+      if (isDecimal(value)) {
+        formatted[key] = decimalToString(value);
+      }
+      // Formater les champs de date connus en ISO 8601
+      else if (
+        key === 'date' ||
+        key === 'startDate' ||
+        key === 'endDate' ||
+        key === 'periodStart' ||
+        key === 'periodEnd' ||
+        key === 'nextBillingDate' ||
+        key === 'createdAt' ||
+        key === 'updatedAt' ||
+        key === 'scheduledAt' ||
+        key === 'executedAt' ||
+        key === 'scheduledFor' ||
+        key === 'renewalDate' ||
+        key === 'dueDate' ||
+        key === 'timestamp' ||
+        key.endsWith('Date') ||
+        key.endsWith('At')
+      ) {
+        formatted[key] = formatDateToISO(value as Date | null | undefined);
+      } else if (value instanceof Date) {
+        formatted[key] = value.toISOString();
+      } else if (Array.isArray(value)) {
+        formatted[key] = value.map(item => formatDatesToISO(item));
+      } else if (value !== null && typeof value === 'object') {
+        formatted[key] = formatDatesToISO(value);
+      } else {
+        formatted[key] = value;
+      }
+    }
+
+    return formatted as T;
+  }
+
+  return obj;
+}
+
+/**
+ * @deprecated Utiliser formatDatesToISO pour le nouveau format standard
+ * Formate récursivement toutes les dates au format jj-mm-yyyy (ancien format)
  */
 export function formatDatesInObject<T>(obj: T): T {
   if (obj === null || obj === undefined) {
