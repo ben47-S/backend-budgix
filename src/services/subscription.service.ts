@@ -137,8 +137,99 @@ export async function createOrUpdateSubscription(
 }
 
 /**
+ * Renouvelle ou crée un abonnement pour un utilisateur
+ *
+ * Cette fonction gère deux scénarios :
+ * 1. RENOUVELLEMENT : Si isRenewal=true et un abonnement existe, étend la date de fin
+ *    en ajoutant la durée du plan à la date de fin actuelle (préserve startDate)
+ * 2. NOUVEAU : Sinon, réinitialise complètement avec une nouvelle startDate et endDate
+ *
+ * @param userId - ID de l'utilisateur
+ * @param plan - Plan d'abonnement (MONTHLY ou ANNUAL)
+ * @param isRenewal - true si c'est un renouvellement, false si c'est un nouvel abonnement
+ * @returns L'abonnement créé ou mis à jour
+ */
+export async function renewOrCreateSubscription(
+  userId: string,
+  plan: SubscriptionPlan,
+  isRenewal: boolean = false
+) {
+  // Vérifier que l'utilisateur existe
+  await getUserById(userId);
+
+  // Calculer le prix
+  const price = calculateSubscriptionPrice(plan);
+
+  // Vérifier si l'utilisateur a déjà un abonnement
+  const existingSubscription = await prisma.subscription.findUnique({
+    where: { userId },
+  });
+
+  let subscription;
+
+  if (existingSubscription && isRenewal) {
+    // CAS RENOUVELLEMENT : Étendre la date de fin
+    const currentEndDate = existingSubscription.endDate || new Date();
+
+    // Si l'abonnement est déjà expiré, partir d'aujourd'hui
+    const baseDate = currentEndDate > new Date() ? currentEndDate : new Date();
+
+    const newEndDate = new Date(baseDate);
+    if (plan === 'MONTHLY') {
+      newEndDate.setMonth(newEndDate.getMonth() + 1);
+    } else if (plan === 'ANNUAL') {
+      newEndDate.setFullYear(newEndDate.getFullYear() + 1);
+    }
+
+    subscription = await prisma.subscription.update({
+      where: { userId },
+      data: {
+        plan,
+        price,
+        // startDate RESTE INCHANGÉ - on préserve la date de début originale
+        endDate: newEndDate,
+      },
+    });
+  } else {
+    // CAS NOUVEAU : Créer ou réinitialiser complètement
+    const startDate = new Date();
+    const endDate = calculateEndDate(plan, startDate);
+
+    if (existingSubscription) {
+      subscription = await prisma.subscription.update({
+        where: { userId },
+        data: {
+          plan,
+          price,
+          startDate,
+          endDate,
+        },
+      });
+    } else {
+      subscription = await prisma.subscription.create({
+        data: {
+          userId,
+          plan,
+          price,
+          startDate,
+          endDate,
+        },
+      });
+    }
+  }
+
+  // Mettre à jour le statut premium de l'utilisateur
+  await prisma.user.update({
+    where: { id: userId },
+    data: { isPremium: true },
+  });
+
+  return subscription;
+}
+
+/**
  * Récupère l'abonnement d'un utilisateur
- * 
+ *
  * @param userId - ID de l'utilisateur
  * @returns L'abonnement de l'utilisateur ou null
  */

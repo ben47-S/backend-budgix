@@ -32,9 +32,9 @@ export async function initiatePaymentController(
       throw createError("Authentification requise", 401, "UNAUTHORIZED");
     }
 
-    const { plan } = req.body;
+    const { plan, isRenewal } = req.body;
 
-    const payment = await initiatePayment(userId, plan);
+    const payment = await initiatePayment(userId, plan, isRenewal);
     const waveUrl = buildWavePaymentUrl(Number(payment.amount));
 
 res.status(201).json(formatDatesToISO({
@@ -61,13 +61,12 @@ export async function confirmPaymentController(
       throw createError("Authentification requise", 401, "UNAUTHORIZED");
     }
 
-    const { paymentId, waveTransactionId, senderName, transferDate } = req.body;
+    const { paymentId, waveTransactionId, transferDate } = req.body;
 
     const payment = await confirmPayment(
       userId,
       paymentId,
       waveTransactionId,
-      senderName,
       transferDate
     );
 

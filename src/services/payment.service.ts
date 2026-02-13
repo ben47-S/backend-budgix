@@ -9,13 +9,17 @@
 
 import { prisma } from "../lib/prisma";
 import { createError } from "../middleware/errorHandler";
-import { calculateSubscriptionPrice, createOrUpdateSubscription } from "./subscription.service";
+import { calculateSubscriptionPrice, createOrUpdateSubscription, renewOrCreateSubscription } from "./subscription.service";
 import { sendNotificationToUser } from "./notification.service";
 import type { SubscriptionPlan } from "../../generated/prisma/client";
 
 const prismaClient = prisma as any;
 
-export async function initiatePayment(userId: string, plan: SubscriptionPlan) {
+export async function initiatePayment(
+  userId: string,
+  plan: SubscriptionPlan,
+  isRenewal: boolean = false
+) {
   const amount = calculateSubscriptionPrice(plan);
 
   // Vérifier s'il existe un paiement PENDING_VERIFICATION en cours
@@ -27,14 +31,15 @@ export async function initiatePayment(userId: string, plan: SubscriptionPlan) {
     orderBy: { createdAt: "desc" },
   });
 
-  // Si un paiement est en attente de vérification, mettre à jour le plan si différent
+  // Si un paiement est en attente de vérification, mettre à jour le plan et isRenewal si différent
   if (pendingVerification) {
-    if (pendingVerification.plan !== plan) {
+    if (pendingVerification.plan !== plan || pendingVerification.isRenewal !== isRenewal) {
       const updatedPayment = await prismaClient.subscriptionPayment.update({
         where: { id: pendingVerification.id },
         data: {
           plan,
           amount,
+          isRenewal,
         },
       });
       return updatedPayment;
@@ -82,14 +87,15 @@ export async function initiatePayment(userId: string, plan: SubscriptionPlan) {
     orderBy: { createdAt: "desc" },
   });
 
-  // Si un paiement PENDING valide existe, mettre à jour le plan si différent
+  // Si un paiement PENDING valide existe, mettre à jour le plan et isRenewal si différent
   if (validPending) {
-    if (validPending.plan !== plan) {
+    if (validPending.plan !== plan || validPending.isRenewal !== isRenewal) {
       const updatedPayment = await prismaClient.subscriptionPayment.update({
         where: { id: validPending.id },
         data: {
           plan,
           amount,
+          isRenewal,
         },
       });
       return updatedPayment;
@@ -104,6 +110,7 @@ export async function initiatePayment(userId: string, plan: SubscriptionPlan) {
       plan,
       amount,
       status: "PENDING",
+      isRenewal,
     },
   });
 
@@ -126,7 +133,6 @@ export async function confirmPayment(
   userId: string,
   paymentId: string,
   waveTransactionId: string,
-  senderName: string,
   transferDate: Date
 ) {
   const payment = await prismaClient.subscriptionPayment.findUnique({
@@ -141,6 +147,36 @@ export async function confirmPayment(
     throw createError("Paiement déjà soumis ou traité", 400, "INVALID_PAYMENT_STATUS");
   }
 
+  // Normaliser la date pour comparaison (comparer juste le jour, pas l'heure)
+  const startOfDay = new Date(transferDate);
+  startOfDay.setHours(0, 0, 0, 0);
+
+  const endOfDay = new Date(transferDate);
+  endOfDay.setHours(23, 59, 59, 999);
+
+  // Vérifier si c'est un ancien paiement APPROUVÉ (même ID Wave + même date de transfert)
+  // Seuls les paiements approuvés sont considérés comme "anciens paiements"
+  const existingApprovedPayment = await prismaClient.subscriptionPayment.findFirst({
+    where: {
+      waveTransactionId,
+      transferDate: {
+        gte: startOfDay,
+        lte: endOfDay,
+      },
+      status: "APPROVED", // Vérifier seulement les paiements approuvés
+      id: { not: paymentId },
+    },
+  });
+
+  if (existingApprovedPayment) {
+    throw createError(
+      "Ceci est un ancien paiement. Effectuez votre paiement et entrez les bonnes données.",
+      409,
+      "OLD_PAYMENT_DETECTED"
+    );
+  }
+
+  // Vérifier si l'ID Wave est déjà utilisé avec une date différente
   const existingWaveTx = await prismaClient.subscriptionPayment.findFirst({
     where: {
       waveTransactionId,
@@ -157,7 +193,6 @@ export async function confirmPayment(
     data: {
       status: "PENDING_VERIFICATION",
       waveTransactionId,
-      senderName,
       transferDate,
     },
   });
@@ -330,14 +365,25 @@ export async function approvePayment(
     },
   });
 
-  // Créer ou mettre à jour l'abonnement avec le plan final
-  const subscription = await createOrUpdateSubscription(payment.userId, finalPlan);
+  // Créer ou renouveler l'abonnement avec le plan final
+  const subscription = await renewOrCreateSubscription(
+    payment.userId,
+    finalPlan,
+    payment.isRenewal || false
+  );
 
-  // Message de notification adaptée selon le plan
+  // Message de notification adaptée selon le plan et le contexte
   const planText = finalPlan === "MONTHLY" ? "mensuel" : "annuel";
-  const notificationMessage = customPlan && customPlan !== payment.plan
-    ? `Votre paiement a été approuvé. Votre abonnement premium ${planText} est activé ✅`
-    : "Votre paiement a été approuvé. Votre abonnement premium est activé ✅";
+  const isRenewal = payment.isRenewal || false;
+
+  let notificationMessage: string;
+  if (customPlan && customPlan !== payment.plan) {
+    notificationMessage = `Votre paiement a été approuvé. Votre abonnement premium ${planText} est activé ✅`;
+  } else if (isRenewal) {
+    notificationMessage = `Votre renouvellement a été approuvé. Votre abonnement premium ${planText} a été prolongé ✅`;
+  } else {
+    notificationMessage = "Votre paiement a été approuvé. Votre abonnement premium est activé ✅";
+  }
 
   await sendNotificationToUser(
     payment.userId,

@@ -284,8 +284,8 @@ export type ExternalSubscriptionWhereInput = {
   isActive?: Prisma.BoolFilter<"ExternalSubscription"> | boolean
   createdAt?: Prisma.DateTimeFilter<"ExternalSubscription"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ExternalSubscription"> | Date | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   category?: Prisma.XOR<Prisma.CategoryNullableScalarRelationFilter, Prisma.CategoryWhereInput> | null
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
 export type ExternalSubscriptionOrderByWithRelationInput = {
@@ -302,8 +302,8 @@ export type ExternalSubscriptionOrderByWithRelationInput = {
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  user?: Prisma.UserOrderByWithRelationInput
   category?: Prisma.CategoryOrderByWithRelationInput
+  user?: Prisma.UserOrderByWithRelationInput
 }
 
 export type ExternalSubscriptionWhereUniqueInput = Prisma.AtLeast<{
@@ -323,8 +323,8 @@ export type ExternalSubscriptionWhereUniqueInput = Prisma.AtLeast<{
   isActive?: Prisma.BoolFilter<"ExternalSubscription"> | boolean
   createdAt?: Prisma.DateTimeFilter<"ExternalSubscription"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ExternalSubscription"> | Date | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   category?: Prisma.XOR<Prisma.CategoryNullableScalarRelationFilter, Prisma.CategoryWhereInput> | null
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id">
 
 export type ExternalSubscriptionOrderByWithAggregationInput = {
@@ -379,8 +379,8 @@ export type ExternalSubscriptionCreateInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutExternalSubscriptionsInput
   category?: Prisma.CategoryCreateNestedOneWithoutExternalSubscriptionsInput
+  user: Prisma.UserCreateNestedOneWithoutExternalSubscriptionsInput
 }
 
 export type ExternalSubscriptionUncheckedCreateInput = {
@@ -411,8 +411,8 @@ export type ExternalSubscriptionUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutExternalSubscriptionsNestedInput
   category?: Prisma.CategoryUpdateOneWithoutExternalSubscriptionsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutExternalSubscriptionsNestedInput
 }
 
 export type ExternalSubscriptionUncheckedUpdateInput = {
@@ -916,8 +916,8 @@ export type ExternalSubscriptionSelect<ExtArgs extends runtime.Types.Extensions.
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   category?: boolean | Prisma.ExternalSubscription$categoryArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["externalSubscription"]>
 
 export type ExternalSubscriptionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -934,8 +934,8 @@ export type ExternalSubscriptionSelectCreateManyAndReturn<ExtArgs extends runtim
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   category?: boolean | Prisma.ExternalSubscription$categoryArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["externalSubscription"]>
 
 export type ExternalSubscriptionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -952,8 +952,8 @@ export type ExternalSubscriptionSelectUpdateManyAndReturn<ExtArgs extends runtim
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   category?: boolean | Prisma.ExternalSubscription$categoryArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["externalSubscription"]>
 
 export type ExternalSubscriptionSelectScalar = {
@@ -974,23 +974,23 @@ export type ExternalSubscriptionSelectScalar = {
 
 export type ExternalSubscriptionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "name" | "amount" | "startDate" | "billingCycle" | "customDays" | "nextBillingDate" | "categoryId" | "notes" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["externalSubscription"]>
 export type ExternalSubscriptionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   category?: boolean | Prisma.ExternalSubscription$categoryArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type ExternalSubscriptionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   category?: boolean | Prisma.ExternalSubscription$categoryArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type ExternalSubscriptionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   category?: boolean | Prisma.ExternalSubscription$categoryArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
 export type $ExternalSubscriptionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ExternalSubscription"
   objects: {
-    user: Prisma.$UserPayload<ExtArgs>
     category: Prisma.$CategoryPayload<ExtArgs> | null
+    user: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1400,8 +1400,8 @@ readonly fields: ExternalSubscriptionFieldRefs;
  */
 export interface Prisma__ExternalSubscriptionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   category<T extends Prisma.ExternalSubscription$categoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ExternalSubscription$categoryArgs<ExtArgs>>): Prisma.Prisma__CategoryClient<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

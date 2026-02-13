@@ -254,22 +254,22 @@ export type UserWhereInput = {
   privacyAcceptedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   termsVersion?: Prisma.StringNullableFilter<"User"> | string | null
   privacyVersion?: Prisma.StringNullableFilter<"User"> | string | null
-  transactions?: Prisma.TransactionListRelationFilter
-  categories?: Prisma.CategoryListRelationFilter
-  subscription?: Prisma.XOR<Prisma.SubscriptionNullableScalarRelationFilter, Prisma.SubscriptionWhereInput> | null
-  otpCodes?: Prisma.OtpCodeListRelationFilter
-  emailVerificationCodes?: Prisma.EmailVerificationCodeListRelationFilter
-  debts?: Prisma.DebtListRelationFilter
   budgets?: Prisma.BudgetListRelationFilter
-  pushTokens?: Prisma.PushTokenListRelationFilter
-  notifications?: Prisma.NotificationListRelationFilter
-  externalSubscriptions?: Prisma.ExternalSubscriptionListRelationFilter
+  categories?: Prisma.CategoryListRelationFilter
+  debts?: Prisma.DebtListRelationFilter
   discussions?: Prisma.DiscussionListRelationFilter
-  reviews?: Prisma.ReviewListRelationFilter
+  emailVerificationCodes?: Prisma.EmailVerificationCodeListRelationFilter
+  externalSubscriptions?: Prisma.ExternalSubscriptionListRelationFilter
   improvementSuggestions?: Prisma.ImprovementSuggestionListRelationFilter
-  subscriptionPayments?: Prisma.SubscriptionPaymentListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
+  otpCodes?: Prisma.OtpCodeListRelationFilter
+  pushTokens?: Prisma.PushTokenListRelationFilter
+  reviews?: Prisma.XOR<Prisma.ReviewNullableScalarRelationFilter, Prisma.ReviewWhereInput> | null
+  subscription?: Prisma.XOR<Prisma.SubscriptionNullableScalarRelationFilter, Prisma.SubscriptionWhereInput> | null
   approvedPayments?: Prisma.SubscriptionPaymentListRelationFilter
   rejectedPayments?: Prisma.SubscriptionPaymentListRelationFilter
+  subscriptionPayments?: Prisma.SubscriptionPaymentListRelationFilter
+  transactions?: Prisma.TransactionListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -287,22 +287,22 @@ export type UserOrderByWithRelationInput = {
   privacyAcceptedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   termsVersion?: Prisma.SortOrderInput | Prisma.SortOrder
   privacyVersion?: Prisma.SortOrderInput | Prisma.SortOrder
-  transactions?: Prisma.TransactionOrderByRelationAggregateInput
-  categories?: Prisma.CategoryOrderByRelationAggregateInput
-  subscription?: Prisma.SubscriptionOrderByWithRelationInput
-  otpCodes?: Prisma.OtpCodeOrderByRelationAggregateInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeOrderByRelationAggregateInput
-  debts?: Prisma.DebtOrderByRelationAggregateInput
   budgets?: Prisma.BudgetOrderByRelationAggregateInput
-  pushTokens?: Prisma.PushTokenOrderByRelationAggregateInput
-  notifications?: Prisma.NotificationOrderByRelationAggregateInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionOrderByRelationAggregateInput
+  categories?: Prisma.CategoryOrderByRelationAggregateInput
+  debts?: Prisma.DebtOrderByRelationAggregateInput
   discussions?: Prisma.DiscussionOrderByRelationAggregateInput
-  reviews?: Prisma.ReviewOrderByRelationAggregateInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeOrderByRelationAggregateInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionOrderByRelationAggregateInput
   improvementSuggestions?: Prisma.ImprovementSuggestionOrderByRelationAggregateInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentOrderByRelationAggregateInput
+  notifications?: Prisma.NotificationOrderByRelationAggregateInput
+  otpCodes?: Prisma.OtpCodeOrderByRelationAggregateInput
+  pushTokens?: Prisma.PushTokenOrderByRelationAggregateInput
+  reviews?: Prisma.ReviewOrderByWithRelationInput
+  subscription?: Prisma.SubscriptionOrderByWithRelationInput
   approvedPayments?: Prisma.SubscriptionPaymentOrderByRelationAggregateInput
   rejectedPayments?: Prisma.SubscriptionPaymentOrderByRelationAggregateInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentOrderByRelationAggregateInput
+  transactions?: Prisma.TransactionOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -323,22 +323,22 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   privacyAcceptedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   termsVersion?: Prisma.StringNullableFilter<"User"> | string | null
   privacyVersion?: Prisma.StringNullableFilter<"User"> | string | null
-  transactions?: Prisma.TransactionListRelationFilter
-  categories?: Prisma.CategoryListRelationFilter
-  subscription?: Prisma.XOR<Prisma.SubscriptionNullableScalarRelationFilter, Prisma.SubscriptionWhereInput> | null
-  otpCodes?: Prisma.OtpCodeListRelationFilter
-  emailVerificationCodes?: Prisma.EmailVerificationCodeListRelationFilter
-  debts?: Prisma.DebtListRelationFilter
   budgets?: Prisma.BudgetListRelationFilter
-  pushTokens?: Prisma.PushTokenListRelationFilter
-  notifications?: Prisma.NotificationListRelationFilter
-  externalSubscriptions?: Prisma.ExternalSubscriptionListRelationFilter
+  categories?: Prisma.CategoryListRelationFilter
+  debts?: Prisma.DebtListRelationFilter
   discussions?: Prisma.DiscussionListRelationFilter
-  reviews?: Prisma.ReviewListRelationFilter
+  emailVerificationCodes?: Prisma.EmailVerificationCodeListRelationFilter
+  externalSubscriptions?: Prisma.ExternalSubscriptionListRelationFilter
   improvementSuggestions?: Prisma.ImprovementSuggestionListRelationFilter
-  subscriptionPayments?: Prisma.SubscriptionPaymentListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
+  otpCodes?: Prisma.OtpCodeListRelationFilter
+  pushTokens?: Prisma.PushTokenListRelationFilter
+  reviews?: Prisma.XOR<Prisma.ReviewNullableScalarRelationFilter, Prisma.ReviewWhereInput> | null
+  subscription?: Prisma.XOR<Prisma.SubscriptionNullableScalarRelationFilter, Prisma.SubscriptionWhereInput> | null
   approvedPayments?: Prisma.SubscriptionPaymentListRelationFilter
   rejectedPayments?: Prisma.SubscriptionPaymentListRelationFilter
+  subscriptionPayments?: Prisma.SubscriptionPaymentListRelationFilter
+  transactions?: Prisma.TransactionListRelationFilter
 }, "id" | "username" | "phone" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -396,22 +396,22 @@ export type UserCreateInput = {
   privacyAcceptedAt?: Date | string | null
   termsVersion?: string | null
   privacyVersion?: string | null
-  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
-  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
-  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutUserInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeCreateNestedManyWithoutUserInput
-  debts?: Prisma.DebtCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
-  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  debts?: Prisma.DebtCreateNestedManyWithoutUserInput
   discussions?: Prisma.DiscussionCreateNestedManyWithoutUserInput
-  reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeCreateNestedManyWithoutUserInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionCreateNestedManyWithoutUserInput
   improvementSuggestions?: Prisma.ImprovementSuggestionCreateNestedManyWithoutUserInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewCreateNestedOneWithoutUserInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
   approvedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutApprovedByInput
   rejectedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutRejectedByInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -429,22 +429,22 @@ export type UserUncheckedCreateInput = {
   privacyAcceptedAt?: Date | string | null
   termsVersion?: string | null
   privacyVersion?: string | null
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
-  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
-  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutUserInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedCreateNestedManyWithoutUserInput
-  debts?: Prisma.DebtUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
-  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  debts?: Prisma.DebtUncheckedCreateNestedManyWithoutUserInput
   discussions?: Prisma.DiscussionUncheckedCreateNestedManyWithoutUserInput
-  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedCreateNestedManyWithoutUserInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedCreateNestedManyWithoutUserInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedCreateNestedManyWithoutUserInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedOneWithoutUserInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
   approvedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutApprovedByInput
   rejectedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutRejectedByInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -462,22 +462,22 @@ export type UserUpdateInput = {
   privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
-  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
-  otpCodes?: Prisma.OtpCodeUpdateManyWithoutUserNestedInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUpdateManyWithoutUserNestedInput
-  debts?: Prisma.DebtUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
-  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  debts?: Prisma.DebtUpdateManyWithoutUserNestedInput
   discussions?: Prisma.DiscussionUpdateManyWithoutUserNestedInput
-  reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUpdateManyWithoutUserNestedInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUpdateManyWithoutUserNestedInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUpdateManyWithoutUserNestedInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUpdateOneWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
   approvedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutApprovedByNestedInput
   rejectedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutRejectedByNestedInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -495,22 +495,22 @@ export type UserUncheckedUpdateInput = {
   privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
-  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
-  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutUserNestedInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedUpdateManyWithoutUserNestedInput
-  debts?: Prisma.DebtUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
-  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  debts?: Prisma.DebtUncheckedUpdateManyWithoutUserNestedInput
   discussions?: Prisma.DiscussionUncheckedUpdateManyWithoutUserNestedInput
-  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedUpdateManyWithoutUserNestedInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedUpdateManyWithoutUserNestedInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateOneWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
   approvedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutApprovedByNestedInput
   rejectedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutRejectedByNestedInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -615,14 +615,14 @@ export type UserMinOrderByAggregateInput = {
   privacyVersion?: Prisma.SortOrder
 }
 
-export type UserScalarRelationFilter = {
-  is?: Prisma.UserWhereInput
-  isNot?: Prisma.UserWhereInput
-}
-
 export type UserNullableScalarRelationFilter = {
   is?: Prisma.UserWhereInput | null
   isNot?: Prisma.UserWhereInput | null
+}
+
+export type UserScalarRelationFilter = {
+  is?: Prisma.UserWhereInput
+  isNot?: Prisma.UserWhereInput
 }
 
 export type StringFieldUpdateOperationsInput = {
@@ -653,12 +653,6 @@ export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
 }
 
-export type UserCreateNestedOneWithoutSubscriptionPaymentsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutSubscriptionPaymentsInput, Prisma.UserUncheckedCreateWithoutSubscriptionPaymentsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSubscriptionPaymentsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
 export type UserCreateNestedOneWithoutApprovedPaymentsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutApprovedPaymentsInput, Prisma.UserUncheckedCreateWithoutApprovedPaymentsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutApprovedPaymentsInput
@@ -671,12 +665,10 @@ export type UserCreateNestedOneWithoutRejectedPaymentsInput = {
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneRequiredWithoutSubscriptionPaymentsNestedInput = {
+export type UserCreateNestedOneWithoutSubscriptionPaymentsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutSubscriptionPaymentsInput, Prisma.UserUncheckedCreateWithoutSubscriptionPaymentsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutSubscriptionPaymentsInput
-  upsert?: Prisma.UserUpsertWithoutSubscriptionPaymentsInput
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSubscriptionPaymentsInput, Prisma.UserUpdateWithoutSubscriptionPaymentsInput>, Prisma.UserUncheckedUpdateWithoutSubscriptionPaymentsInput>
 }
 
 export type UserUpdateOneWithoutApprovedPaymentsNestedInput = {
@@ -697,6 +689,14 @@ export type UserUpdateOneWithoutRejectedPaymentsNestedInput = {
   delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRejectedPaymentsInput, Prisma.UserUpdateWithoutRejectedPaymentsInput>, Prisma.UserUncheckedUpdateWithoutRejectedPaymentsInput>
+}
+
+export type UserUpdateOneRequiredWithoutSubscriptionPaymentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSubscriptionPaymentsInput, Prisma.UserUncheckedCreateWithoutSubscriptionPaymentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSubscriptionPaymentsInput
+  upsert?: Prisma.UserUpsertWithoutSubscriptionPaymentsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSubscriptionPaymentsInput, Prisma.UserUpdateWithoutSubscriptionPaymentsInput>, Prisma.UserUncheckedUpdateWithoutSubscriptionPaymentsInput>
 }
 
 export type UserCreateNestedOneWithoutOtpCodesInput = {
@@ -887,75 +887,6 @@ export type UserUpdateOneRequiredWithoutImprovementSuggestionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutImprovementSuggestionsInput, Prisma.UserUpdateWithoutImprovementSuggestionsInput>, Prisma.UserUncheckedUpdateWithoutImprovementSuggestionsInput>
 }
 
-export type UserCreateWithoutSubscriptionPaymentsInput = {
-  id?: string
-  username?: string | null
-  phone?: string | null
-  email?: string | null
-  password?: string | null
-  isPremium?: boolean
-  role?: $Enums.UserRole
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  status?: $Enums.UserStatus
-  termsAcceptedAt?: Date | string | null
-  privacyAcceptedAt?: Date | string | null
-  termsVersion?: string | null
-  privacyVersion?: string | null
-  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
-  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
-  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutUserInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeCreateNestedManyWithoutUserInput
-  debts?: Prisma.DebtCreateNestedManyWithoutUserInput
-  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
-  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionCreateNestedManyWithoutUserInput
-  discussions?: Prisma.DiscussionCreateNestedManyWithoutUserInput
-  reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
-  improvementSuggestions?: Prisma.ImprovementSuggestionCreateNestedManyWithoutUserInput
-  approvedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutApprovedByInput
-  rejectedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutRejectedByInput
-}
-
-export type UserUncheckedCreateWithoutSubscriptionPaymentsInput = {
-  id?: string
-  username?: string | null
-  phone?: string | null
-  email?: string | null
-  password?: string | null
-  isPremium?: boolean
-  role?: $Enums.UserRole
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  status?: $Enums.UserStatus
-  termsAcceptedAt?: Date | string | null
-  privacyAcceptedAt?: Date | string | null
-  termsVersion?: string | null
-  privacyVersion?: string | null
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
-  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
-  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutUserInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedCreateNestedManyWithoutUserInput
-  debts?: Prisma.DebtUncheckedCreateNestedManyWithoutUserInput
-  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
-  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedCreateNestedManyWithoutUserInput
-  discussions?: Prisma.DiscussionUncheckedCreateNestedManyWithoutUserInput
-  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
-  improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedCreateNestedManyWithoutUserInput
-  approvedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutApprovedByInput
-  rejectedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutRejectedByInput
-}
-
-export type UserCreateOrConnectWithoutSubscriptionPaymentsInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutSubscriptionPaymentsInput, Prisma.UserUncheckedCreateWithoutSubscriptionPaymentsInput>
-}
-
 export type UserCreateWithoutApprovedPaymentsInput = {
   id?: string
   username?: string | null
@@ -971,21 +902,21 @@ export type UserCreateWithoutApprovedPaymentsInput = {
   privacyAcceptedAt?: Date | string | null
   termsVersion?: string | null
   privacyVersion?: string | null
-  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
-  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
-  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutUserInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeCreateNestedManyWithoutUserInput
-  debts?: Prisma.DebtCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
-  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  debts?: Prisma.DebtCreateNestedManyWithoutUserInput
   discussions?: Prisma.DiscussionCreateNestedManyWithoutUserInput
-  reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeCreateNestedManyWithoutUserInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionCreateNestedManyWithoutUserInput
   improvementSuggestions?: Prisma.ImprovementSuggestionCreateNestedManyWithoutUserInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewCreateNestedOneWithoutUserInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
   rejectedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutRejectedByInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutApprovedPaymentsInput = {
@@ -1003,21 +934,21 @@ export type UserUncheckedCreateWithoutApprovedPaymentsInput = {
   privacyAcceptedAt?: Date | string | null
   termsVersion?: string | null
   privacyVersion?: string | null
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
-  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
-  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutUserInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedCreateNestedManyWithoutUserInput
-  debts?: Prisma.DebtUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
-  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  debts?: Prisma.DebtUncheckedCreateNestedManyWithoutUserInput
   discussions?: Prisma.DiscussionUncheckedCreateNestedManyWithoutUserInput
-  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedCreateNestedManyWithoutUserInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedCreateNestedManyWithoutUserInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedCreateNestedManyWithoutUserInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedOneWithoutUserInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
   rejectedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutRejectedByInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutApprovedPaymentsInput = {
@@ -1040,21 +971,21 @@ export type UserCreateWithoutRejectedPaymentsInput = {
   privacyAcceptedAt?: Date | string | null
   termsVersion?: string | null
   privacyVersion?: string | null
-  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
-  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
-  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutUserInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeCreateNestedManyWithoutUserInput
-  debts?: Prisma.DebtCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
-  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  debts?: Prisma.DebtCreateNestedManyWithoutUserInput
   discussions?: Prisma.DiscussionCreateNestedManyWithoutUserInput
-  reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeCreateNestedManyWithoutUserInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionCreateNestedManyWithoutUserInput
   improvementSuggestions?: Prisma.ImprovementSuggestionCreateNestedManyWithoutUserInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewCreateNestedOneWithoutUserInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
   approvedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutApprovedByInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRejectedPaymentsInput = {
@@ -1072,21 +1003,21 @@ export type UserUncheckedCreateWithoutRejectedPaymentsInput = {
   privacyAcceptedAt?: Date | string | null
   termsVersion?: string | null
   privacyVersion?: string | null
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
-  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
-  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutUserInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedCreateNestedManyWithoutUserInput
-  debts?: Prisma.DebtUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
-  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  debts?: Prisma.DebtUncheckedCreateNestedManyWithoutUserInput
   discussions?: Prisma.DiscussionUncheckedCreateNestedManyWithoutUserInput
-  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedCreateNestedManyWithoutUserInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedCreateNestedManyWithoutUserInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedCreateNestedManyWithoutUserInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedOneWithoutUserInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
   approvedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutApprovedByInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRejectedPaymentsInput = {
@@ -1094,79 +1025,73 @@ export type UserCreateOrConnectWithoutRejectedPaymentsInput = {
   create: Prisma.XOR<Prisma.UserCreateWithoutRejectedPaymentsInput, Prisma.UserUncheckedCreateWithoutRejectedPaymentsInput>
 }
 
-export type UserUpsertWithoutSubscriptionPaymentsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutSubscriptionPaymentsInput, Prisma.UserUncheckedUpdateWithoutSubscriptionPaymentsInput>
+export type UserCreateWithoutSubscriptionPaymentsInput = {
+  id?: string
+  username?: string | null
+  phone?: string | null
+  email?: string | null
+  password?: string | null
+  isPremium?: boolean
+  role?: $Enums.UserRole
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  status?: $Enums.UserStatus
+  termsAcceptedAt?: Date | string | null
+  privacyAcceptedAt?: Date | string | null
+  termsVersion?: string | null
+  privacyVersion?: string | null
+  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  debts?: Prisma.DebtCreateNestedManyWithoutUserInput
+  discussions?: Prisma.DiscussionCreateNestedManyWithoutUserInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeCreateNestedManyWithoutUserInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionCreateNestedManyWithoutUserInput
+  improvementSuggestions?: Prisma.ImprovementSuggestionCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewCreateNestedOneWithoutUserInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
+  approvedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutApprovedByInput
+  rejectedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutRejectedByInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutSubscriptionPaymentsInput = {
+  id?: string
+  username?: string | null
+  phone?: string | null
+  email?: string | null
+  password?: string | null
+  isPremium?: boolean
+  role?: $Enums.UserRole
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  status?: $Enums.UserStatus
+  termsAcceptedAt?: Date | string | null
+  privacyAcceptedAt?: Date | string | null
+  termsVersion?: string | null
+  privacyVersion?: string | null
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  debts?: Prisma.DebtUncheckedCreateNestedManyWithoutUserInput
+  discussions?: Prisma.DiscussionUncheckedCreateNestedManyWithoutUserInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedCreateNestedManyWithoutUserInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedOneWithoutUserInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
+  approvedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutApprovedByInput
+  rejectedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutRejectedByInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutSubscriptionPaymentsInput = {
+  where: Prisma.UserWhereUniqueInput
   create: Prisma.XOR<Prisma.UserCreateWithoutSubscriptionPaymentsInput, Prisma.UserUncheckedCreateWithoutSubscriptionPaymentsInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutSubscriptionPaymentsInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutSubscriptionPaymentsInput, Prisma.UserUncheckedUpdateWithoutSubscriptionPaymentsInput>
-}
-
-export type UserUpdateWithoutSubscriptionPaymentsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPremium?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
-  termsAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
-  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
-  otpCodes?: Prisma.OtpCodeUpdateManyWithoutUserNestedInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUpdateManyWithoutUserNestedInput
-  debts?: Prisma.DebtUpdateManyWithoutUserNestedInput
-  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
-  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUpdateManyWithoutUserNestedInput
-  discussions?: Prisma.DiscussionUpdateManyWithoutUserNestedInput
-  reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
-  improvementSuggestions?: Prisma.ImprovementSuggestionUpdateManyWithoutUserNestedInput
-  approvedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutApprovedByNestedInput
-  rejectedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutRejectedByNestedInput
-}
-
-export type UserUncheckedUpdateWithoutSubscriptionPaymentsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPremium?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
-  termsAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
-  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
-  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutUserNestedInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedUpdateManyWithoutUserNestedInput
-  debts?: Prisma.DebtUncheckedUpdateManyWithoutUserNestedInput
-  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
-  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedUpdateManyWithoutUserNestedInput
-  discussions?: Prisma.DiscussionUncheckedUpdateManyWithoutUserNestedInput
-  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
-  improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedUpdateManyWithoutUserNestedInput
-  approvedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutApprovedByNestedInput
-  rejectedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutRejectedByNestedInput
 }
 
 export type UserUpsertWithoutApprovedPaymentsInput = {
@@ -1195,21 +1120,21 @@ export type UserUpdateWithoutApprovedPaymentsInput = {
   privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
-  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
-  otpCodes?: Prisma.OtpCodeUpdateManyWithoutUserNestedInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUpdateManyWithoutUserNestedInput
-  debts?: Prisma.DebtUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
-  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  debts?: Prisma.DebtUpdateManyWithoutUserNestedInput
   discussions?: Prisma.DiscussionUpdateManyWithoutUserNestedInput
-  reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUpdateManyWithoutUserNestedInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUpdateManyWithoutUserNestedInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUpdateManyWithoutUserNestedInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUpdateOneWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
   rejectedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutRejectedByNestedInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutApprovedPaymentsInput = {
@@ -1227,21 +1152,21 @@ export type UserUncheckedUpdateWithoutApprovedPaymentsInput = {
   privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
-  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
-  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutUserNestedInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedUpdateManyWithoutUserNestedInput
-  debts?: Prisma.DebtUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
-  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  debts?: Prisma.DebtUncheckedUpdateManyWithoutUserNestedInput
   discussions?: Prisma.DiscussionUncheckedUpdateManyWithoutUserNestedInput
-  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedUpdateManyWithoutUserNestedInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedUpdateManyWithoutUserNestedInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateOneWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
   rejectedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutRejectedByNestedInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutRejectedPaymentsInput = {
@@ -1270,21 +1195,21 @@ export type UserUpdateWithoutRejectedPaymentsInput = {
   privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
-  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
-  otpCodes?: Prisma.OtpCodeUpdateManyWithoutUserNestedInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUpdateManyWithoutUserNestedInput
-  debts?: Prisma.DebtUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
-  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  debts?: Prisma.DebtUpdateManyWithoutUserNestedInput
   discussions?: Prisma.DiscussionUpdateManyWithoutUserNestedInput
-  reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUpdateManyWithoutUserNestedInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUpdateManyWithoutUserNestedInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUpdateManyWithoutUserNestedInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUpdateOneWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
   approvedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutApprovedByNestedInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRejectedPaymentsInput = {
@@ -1302,21 +1227,96 @@ export type UserUncheckedUpdateWithoutRejectedPaymentsInput = {
   privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
-  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
-  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutUserNestedInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedUpdateManyWithoutUserNestedInput
-  debts?: Prisma.DebtUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
-  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  debts?: Prisma.DebtUncheckedUpdateManyWithoutUserNestedInput
   discussions?: Prisma.DiscussionUncheckedUpdateManyWithoutUserNestedInput
-  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedUpdateManyWithoutUserNestedInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedUpdateManyWithoutUserNestedInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateOneWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
   approvedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutApprovedByNestedInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserUpsertWithoutSubscriptionPaymentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSubscriptionPaymentsInput, Prisma.UserUncheckedUpdateWithoutSubscriptionPaymentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSubscriptionPaymentsInput, Prisma.UserUncheckedCreateWithoutSubscriptionPaymentsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSubscriptionPaymentsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSubscriptionPaymentsInput, Prisma.UserUncheckedUpdateWithoutSubscriptionPaymentsInput>
+}
+
+export type UserUpdateWithoutSubscriptionPaymentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPremium?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  termsAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  debts?: Prisma.DebtUpdateManyWithoutUserNestedInput
+  discussions?: Prisma.DiscussionUpdateManyWithoutUserNestedInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUpdateManyWithoutUserNestedInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUpdateManyWithoutUserNestedInput
+  improvementSuggestions?: Prisma.ImprovementSuggestionUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUpdateOneWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
+  approvedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutApprovedByNestedInput
+  rejectedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutRejectedByNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSubscriptionPaymentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPremium?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  termsAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  debts?: Prisma.DebtUncheckedUpdateManyWithoutUserNestedInput
+  discussions?: Prisma.DiscussionUncheckedUpdateManyWithoutUserNestedInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedUpdateManyWithoutUserNestedInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateOneWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+  approvedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutApprovedByNestedInput
+  rejectedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutRejectedByNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutOtpCodesInput = {
@@ -1334,21 +1334,21 @@ export type UserCreateWithoutOtpCodesInput = {
   privacyAcceptedAt?: Date | string | null
   termsVersion?: string | null
   privacyVersion?: string | null
-  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
-  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeCreateNestedManyWithoutUserInput
-  debts?: Prisma.DebtCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
-  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  debts?: Prisma.DebtCreateNestedManyWithoutUserInput
   discussions?: Prisma.DiscussionCreateNestedManyWithoutUserInput
-  reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeCreateNestedManyWithoutUserInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionCreateNestedManyWithoutUserInput
   improvementSuggestions?: Prisma.ImprovementSuggestionCreateNestedManyWithoutUserInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewCreateNestedOneWithoutUserInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
   approvedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutApprovedByInput
   rejectedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutRejectedByInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutOtpCodesInput = {
@@ -1366,21 +1366,21 @@ export type UserUncheckedCreateWithoutOtpCodesInput = {
   privacyAcceptedAt?: Date | string | null
   termsVersion?: string | null
   privacyVersion?: string | null
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
-  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedCreateNestedManyWithoutUserInput
-  debts?: Prisma.DebtUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
-  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  debts?: Prisma.DebtUncheckedCreateNestedManyWithoutUserInput
   discussions?: Prisma.DiscussionUncheckedCreateNestedManyWithoutUserInput
-  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedCreateNestedManyWithoutUserInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedCreateNestedManyWithoutUserInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedCreateNestedManyWithoutUserInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedOneWithoutUserInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
   approvedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutApprovedByInput
   rejectedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutRejectedByInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutOtpCodesInput = {
@@ -1414,21 +1414,21 @@ export type UserUpdateWithoutOtpCodesInput = {
   privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
-  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUpdateManyWithoutUserNestedInput
-  debts?: Prisma.DebtUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
-  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  debts?: Prisma.DebtUpdateManyWithoutUserNestedInput
   discussions?: Prisma.DiscussionUpdateManyWithoutUserNestedInput
-  reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUpdateManyWithoutUserNestedInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUpdateManyWithoutUserNestedInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUpdateManyWithoutUserNestedInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUpdateOneWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
   approvedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutApprovedByNestedInput
   rejectedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutRejectedByNestedInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOtpCodesInput = {
@@ -1446,21 +1446,21 @@ export type UserUncheckedUpdateWithoutOtpCodesInput = {
   privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
-  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedUpdateManyWithoutUserNestedInput
-  debts?: Prisma.DebtUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
-  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  debts?: Prisma.DebtUncheckedUpdateManyWithoutUserNestedInput
   discussions?: Prisma.DiscussionUncheckedUpdateManyWithoutUserNestedInput
-  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedUpdateManyWithoutUserNestedInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedUpdateManyWithoutUserNestedInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateOneWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
   approvedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutApprovedByNestedInput
   rejectedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutRejectedByNestedInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutEmailVerificationCodesInput = {
@@ -1478,21 +1478,21 @@ export type UserCreateWithoutEmailVerificationCodesInput = {
   privacyAcceptedAt?: Date | string | null
   termsVersion?: string | null
   privacyVersion?: string | null
-  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
-  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
-  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutUserInput
-  debts?: Prisma.DebtCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
-  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  debts?: Prisma.DebtCreateNestedManyWithoutUserInput
   discussions?: Prisma.DiscussionCreateNestedManyWithoutUserInput
-  reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionCreateNestedManyWithoutUserInput
   improvementSuggestions?: Prisma.ImprovementSuggestionCreateNestedManyWithoutUserInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewCreateNestedOneWithoutUserInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
   approvedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutApprovedByInput
   rejectedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutRejectedByInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutEmailVerificationCodesInput = {
@@ -1510,21 +1510,21 @@ export type UserUncheckedCreateWithoutEmailVerificationCodesInput = {
   privacyAcceptedAt?: Date | string | null
   termsVersion?: string | null
   privacyVersion?: string | null
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
-  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
-  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutUserInput
-  debts?: Prisma.DebtUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
-  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  debts?: Prisma.DebtUncheckedCreateNestedManyWithoutUserInput
   discussions?: Prisma.DiscussionUncheckedCreateNestedManyWithoutUserInput
-  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedCreateNestedManyWithoutUserInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedCreateNestedManyWithoutUserInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedOneWithoutUserInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
   approvedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutApprovedByInput
   rejectedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutRejectedByInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutEmailVerificationCodesInput = {
@@ -1558,21 +1558,21 @@ export type UserUpdateWithoutEmailVerificationCodesInput = {
   privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
-  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
-  otpCodes?: Prisma.OtpCodeUpdateManyWithoutUserNestedInput
-  debts?: Prisma.DebtUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
-  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  debts?: Prisma.DebtUpdateManyWithoutUserNestedInput
   discussions?: Prisma.DiscussionUpdateManyWithoutUserNestedInput
-  reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUpdateManyWithoutUserNestedInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUpdateManyWithoutUserNestedInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUpdateOneWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
   approvedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutApprovedByNestedInput
   rejectedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutRejectedByNestedInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEmailVerificationCodesInput = {
@@ -1590,21 +1590,21 @@ export type UserUncheckedUpdateWithoutEmailVerificationCodesInput = {
   privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
-  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
-  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutUserNestedInput
-  debts?: Prisma.DebtUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
-  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  debts?: Prisma.DebtUncheckedUpdateManyWithoutUserNestedInput
   discussions?: Prisma.DiscussionUncheckedUpdateManyWithoutUserNestedInput
-  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedUpdateManyWithoutUserNestedInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateOneWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
   approvedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutApprovedByNestedInput
   rejectedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutRejectedByNestedInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCategoriesInput = {
@@ -1622,21 +1622,21 @@ export type UserCreateWithoutCategoriesInput = {
   privacyAcceptedAt?: Date | string | null
   termsVersion?: string | null
   privacyVersion?: string | null
-  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
-  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
-  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutUserInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeCreateNestedManyWithoutUserInput
-  debts?: Prisma.DebtCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
-  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionCreateNestedManyWithoutUserInput
+  debts?: Prisma.DebtCreateNestedManyWithoutUserInput
   discussions?: Prisma.DiscussionCreateNestedManyWithoutUserInput
-  reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeCreateNestedManyWithoutUserInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionCreateNestedManyWithoutUserInput
   improvementSuggestions?: Prisma.ImprovementSuggestionCreateNestedManyWithoutUserInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewCreateNestedOneWithoutUserInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
   approvedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutApprovedByInput
   rejectedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutRejectedByInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCategoriesInput = {
@@ -1654,21 +1654,21 @@ export type UserUncheckedCreateWithoutCategoriesInput = {
   privacyAcceptedAt?: Date | string | null
   termsVersion?: string | null
   privacyVersion?: string | null
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
-  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
-  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutUserInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedCreateNestedManyWithoutUserInput
-  debts?: Prisma.DebtUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
-  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  debts?: Prisma.DebtUncheckedCreateNestedManyWithoutUserInput
   discussions?: Prisma.DiscussionUncheckedCreateNestedManyWithoutUserInput
-  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedCreateNestedManyWithoutUserInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedCreateNestedManyWithoutUserInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedCreateNestedManyWithoutUserInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedOneWithoutUserInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
   approvedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutApprovedByInput
   rejectedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutRejectedByInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCategoriesInput = {
@@ -1702,21 +1702,21 @@ export type UserUpdateWithoutCategoriesInput = {
   privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
-  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
-  otpCodes?: Prisma.OtpCodeUpdateManyWithoutUserNestedInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUpdateManyWithoutUserNestedInput
-  debts?: Prisma.DebtUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
-  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUpdateManyWithoutUserNestedInput
+  debts?: Prisma.DebtUpdateManyWithoutUserNestedInput
   discussions?: Prisma.DiscussionUpdateManyWithoutUserNestedInput
-  reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUpdateManyWithoutUserNestedInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUpdateManyWithoutUserNestedInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUpdateManyWithoutUserNestedInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUpdateOneWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
   approvedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutApprovedByNestedInput
   rejectedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutRejectedByNestedInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCategoriesInput = {
@@ -1734,21 +1734,21 @@ export type UserUncheckedUpdateWithoutCategoriesInput = {
   privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
-  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
-  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutUserNestedInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedUpdateManyWithoutUserNestedInput
-  debts?: Prisma.DebtUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
-  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  debts?: Prisma.DebtUncheckedUpdateManyWithoutUserNestedInput
   discussions?: Prisma.DiscussionUncheckedUpdateManyWithoutUserNestedInput
-  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedUpdateManyWithoutUserNestedInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedUpdateManyWithoutUserNestedInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateOneWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
   approvedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutApprovedByNestedInput
   rejectedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutRejectedByNestedInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTransactionsInput = {
@@ -1766,21 +1766,21 @@ export type UserCreateWithoutTransactionsInput = {
   privacyAcceptedAt?: Date | string | null
   termsVersion?: string | null
   privacyVersion?: string | null
-  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
-  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
-  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutUserInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeCreateNestedManyWithoutUserInput
-  debts?: Prisma.DebtCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
-  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  debts?: Prisma.DebtCreateNestedManyWithoutUserInput
   discussions?: Prisma.DiscussionCreateNestedManyWithoutUserInput
-  reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeCreateNestedManyWithoutUserInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionCreateNestedManyWithoutUserInput
   improvementSuggestions?: Prisma.ImprovementSuggestionCreateNestedManyWithoutUserInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewCreateNestedOneWithoutUserInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
   approvedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutApprovedByInput
   rejectedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutRejectedByInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTransactionsInput = {
@@ -1798,21 +1798,21 @@ export type UserUncheckedCreateWithoutTransactionsInput = {
   privacyAcceptedAt?: Date | string | null
   termsVersion?: string | null
   privacyVersion?: string | null
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
-  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
-  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutUserInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedCreateNestedManyWithoutUserInput
-  debts?: Prisma.DebtUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
-  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  debts?: Prisma.DebtUncheckedCreateNestedManyWithoutUserInput
   discussions?: Prisma.DiscussionUncheckedCreateNestedManyWithoutUserInput
-  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedCreateNestedManyWithoutUserInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedCreateNestedManyWithoutUserInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedCreateNestedManyWithoutUserInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedOneWithoutUserInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
   approvedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutApprovedByInput
   rejectedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutRejectedByInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTransactionsInput = {
@@ -1846,21 +1846,21 @@ export type UserUpdateWithoutTransactionsInput = {
   privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
-  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
-  otpCodes?: Prisma.OtpCodeUpdateManyWithoutUserNestedInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUpdateManyWithoutUserNestedInput
-  debts?: Prisma.DebtUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
-  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  debts?: Prisma.DebtUpdateManyWithoutUserNestedInput
   discussions?: Prisma.DiscussionUpdateManyWithoutUserNestedInput
-  reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUpdateManyWithoutUserNestedInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUpdateManyWithoutUserNestedInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUpdateManyWithoutUserNestedInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUpdateOneWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
   approvedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutApprovedByNestedInput
   rejectedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutRejectedByNestedInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTransactionsInput = {
@@ -1878,21 +1878,21 @@ export type UserUncheckedUpdateWithoutTransactionsInput = {
   privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
-  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
-  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutUserNestedInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedUpdateManyWithoutUserNestedInput
-  debts?: Prisma.DebtUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
-  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  debts?: Prisma.DebtUncheckedUpdateManyWithoutUserNestedInput
   discussions?: Prisma.DiscussionUncheckedUpdateManyWithoutUserNestedInput
-  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedUpdateManyWithoutUserNestedInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedUpdateManyWithoutUserNestedInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateOneWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
   approvedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutApprovedByNestedInput
   rejectedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutRejectedByNestedInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSubscriptionInput = {
@@ -1910,21 +1910,21 @@ export type UserCreateWithoutSubscriptionInput = {
   privacyAcceptedAt?: Date | string | null
   termsVersion?: string | null
   privacyVersion?: string | null
-  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
-  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutUserInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeCreateNestedManyWithoutUserInput
-  debts?: Prisma.DebtCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
-  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  debts?: Prisma.DebtCreateNestedManyWithoutUserInput
   discussions?: Prisma.DiscussionCreateNestedManyWithoutUserInput
-  reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeCreateNestedManyWithoutUserInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionCreateNestedManyWithoutUserInput
   improvementSuggestions?: Prisma.ImprovementSuggestionCreateNestedManyWithoutUserInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewCreateNestedOneWithoutUserInput
   approvedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutApprovedByInput
   rejectedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutRejectedByInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSubscriptionInput = {
@@ -1942,21 +1942,21 @@ export type UserUncheckedCreateWithoutSubscriptionInput = {
   privacyAcceptedAt?: Date | string | null
   termsVersion?: string | null
   privacyVersion?: string | null
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
-  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutUserInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedCreateNestedManyWithoutUserInput
-  debts?: Prisma.DebtUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
-  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  debts?: Prisma.DebtUncheckedCreateNestedManyWithoutUserInput
   discussions?: Prisma.DiscussionUncheckedCreateNestedManyWithoutUserInput
-  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedCreateNestedManyWithoutUserInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedCreateNestedManyWithoutUserInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedCreateNestedManyWithoutUserInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedOneWithoutUserInput
   approvedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutApprovedByInput
   rejectedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutRejectedByInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSubscriptionInput = {
@@ -1990,21 +1990,21 @@ export type UserUpdateWithoutSubscriptionInput = {
   privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
-  otpCodes?: Prisma.OtpCodeUpdateManyWithoutUserNestedInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUpdateManyWithoutUserNestedInput
-  debts?: Prisma.DebtUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
-  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  debts?: Prisma.DebtUpdateManyWithoutUserNestedInput
   discussions?: Prisma.DiscussionUpdateManyWithoutUserNestedInput
-  reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUpdateManyWithoutUserNestedInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUpdateManyWithoutUserNestedInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUpdateManyWithoutUserNestedInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUpdateOneWithoutUserNestedInput
   approvedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutApprovedByNestedInput
   rejectedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutRejectedByNestedInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSubscriptionInput = {
@@ -2022,21 +2022,21 @@ export type UserUncheckedUpdateWithoutSubscriptionInput = {
   privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
-  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutUserNestedInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedUpdateManyWithoutUserNestedInput
-  debts?: Prisma.DebtUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
-  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  debts?: Prisma.DebtUncheckedUpdateManyWithoutUserNestedInput
   discussions?: Prisma.DiscussionUncheckedUpdateManyWithoutUserNestedInput
-  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedUpdateManyWithoutUserNestedInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedUpdateManyWithoutUserNestedInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateOneWithoutUserNestedInput
   approvedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutApprovedByNestedInput
   rejectedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutRejectedByNestedInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutDebtsInput = {
@@ -2054,21 +2054,21 @@ export type UserCreateWithoutDebtsInput = {
   privacyAcceptedAt?: Date | string | null
   termsVersion?: string | null
   privacyVersion?: string | null
-  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
-  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
-  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutUserInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
-  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
   discussions?: Prisma.DiscussionCreateNestedManyWithoutUserInput
-  reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeCreateNestedManyWithoutUserInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionCreateNestedManyWithoutUserInput
   improvementSuggestions?: Prisma.ImprovementSuggestionCreateNestedManyWithoutUserInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewCreateNestedOneWithoutUserInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
   approvedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutApprovedByInput
   rejectedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutRejectedByInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutDebtsInput = {
@@ -2086,21 +2086,21 @@ export type UserUncheckedCreateWithoutDebtsInput = {
   privacyAcceptedAt?: Date | string | null
   termsVersion?: string | null
   privacyVersion?: string | null
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
-  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
-  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutUserInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
-  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
   discussions?: Prisma.DiscussionUncheckedCreateNestedManyWithoutUserInput
-  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedCreateNestedManyWithoutUserInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedCreateNestedManyWithoutUserInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedCreateNestedManyWithoutUserInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedOneWithoutUserInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
   approvedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutApprovedByInput
   rejectedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutRejectedByInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutDebtsInput = {
@@ -2134,21 +2134,21 @@ export type UserUpdateWithoutDebtsInput = {
   privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
-  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
-  otpCodes?: Prisma.OtpCodeUpdateManyWithoutUserNestedInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
-  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
   discussions?: Prisma.DiscussionUpdateManyWithoutUserNestedInput
-  reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUpdateManyWithoutUserNestedInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUpdateManyWithoutUserNestedInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUpdateManyWithoutUserNestedInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUpdateOneWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
   approvedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutApprovedByNestedInput
   rejectedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutRejectedByNestedInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDebtsInput = {
@@ -2166,21 +2166,21 @@ export type UserUncheckedUpdateWithoutDebtsInput = {
   privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
-  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
-  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutUserNestedInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
-  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
   discussions?: Prisma.DiscussionUncheckedUpdateManyWithoutUserNestedInput
-  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedUpdateManyWithoutUserNestedInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedUpdateManyWithoutUserNestedInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateOneWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
   approvedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutApprovedByNestedInput
   rejectedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutRejectedByNestedInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutBudgetsInput = {
@@ -2198,21 +2198,21 @@ export type UserCreateWithoutBudgetsInput = {
   privacyAcceptedAt?: Date | string | null
   termsVersion?: string | null
   privacyVersion?: string | null
-  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
   categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
-  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
-  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutUserInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeCreateNestedManyWithoutUserInput
   debts?: Prisma.DebtCreateNestedManyWithoutUserInput
-  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionCreateNestedManyWithoutUserInput
   discussions?: Prisma.DiscussionCreateNestedManyWithoutUserInput
-  reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeCreateNestedManyWithoutUserInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionCreateNestedManyWithoutUserInput
   improvementSuggestions?: Prisma.ImprovementSuggestionCreateNestedManyWithoutUserInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewCreateNestedOneWithoutUserInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
   approvedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutApprovedByInput
   rejectedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutRejectedByInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBudgetsInput = {
@@ -2230,21 +2230,21 @@ export type UserUncheckedCreateWithoutBudgetsInput = {
   privacyAcceptedAt?: Date | string | null
   termsVersion?: string | null
   privacyVersion?: string | null
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
-  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
-  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutUserInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedCreateNestedManyWithoutUserInput
   debts?: Prisma.DebtUncheckedCreateNestedManyWithoutUserInput
-  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedCreateNestedManyWithoutUserInput
   discussions?: Prisma.DiscussionUncheckedCreateNestedManyWithoutUserInput
-  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedCreateNestedManyWithoutUserInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedCreateNestedManyWithoutUserInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedCreateNestedManyWithoutUserInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedOneWithoutUserInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
   approvedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutApprovedByInput
   rejectedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutRejectedByInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBudgetsInput = {
@@ -2278,21 +2278,21 @@ export type UserUpdateWithoutBudgetsInput = {
   privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
-  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
-  otpCodes?: Prisma.OtpCodeUpdateManyWithoutUserNestedInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUpdateManyWithoutUserNestedInput
   debts?: Prisma.DebtUpdateManyWithoutUserNestedInput
-  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUpdateManyWithoutUserNestedInput
   discussions?: Prisma.DiscussionUpdateManyWithoutUserNestedInput
-  reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUpdateManyWithoutUserNestedInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUpdateManyWithoutUserNestedInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUpdateManyWithoutUserNestedInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUpdateOneWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
   approvedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutApprovedByNestedInput
   rejectedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutRejectedByNestedInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBudgetsInput = {
@@ -2310,21 +2310,21 @@ export type UserUncheckedUpdateWithoutBudgetsInput = {
   privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
-  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
-  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutUserNestedInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedUpdateManyWithoutUserNestedInput
   debts?: Prisma.DebtUncheckedUpdateManyWithoutUserNestedInput
-  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   discussions?: Prisma.DiscussionUncheckedUpdateManyWithoutUserNestedInput
-  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedUpdateManyWithoutUserNestedInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedUpdateManyWithoutUserNestedInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateOneWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
   approvedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutApprovedByNestedInput
   rejectedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutRejectedByNestedInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPushTokensInput = {
@@ -2342,21 +2342,21 @@ export type UserCreateWithoutPushTokensInput = {
   privacyAcceptedAt?: Date | string | null
   termsVersion?: string | null
   privacyVersion?: string | null
-  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
-  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
-  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutUserInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeCreateNestedManyWithoutUserInput
-  debts?: Prisma.DebtCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  debts?: Prisma.DebtCreateNestedManyWithoutUserInput
   discussions?: Prisma.DiscussionCreateNestedManyWithoutUserInput
-  reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeCreateNestedManyWithoutUserInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionCreateNestedManyWithoutUserInput
   improvementSuggestions?: Prisma.ImprovementSuggestionCreateNestedManyWithoutUserInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewCreateNestedOneWithoutUserInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
   approvedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutApprovedByInput
   rejectedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutRejectedByInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPushTokensInput = {
@@ -2374,21 +2374,21 @@ export type UserUncheckedCreateWithoutPushTokensInput = {
   privacyAcceptedAt?: Date | string | null
   termsVersion?: string | null
   privacyVersion?: string | null
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
-  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
-  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutUserInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedCreateNestedManyWithoutUserInput
-  debts?: Prisma.DebtUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  debts?: Prisma.DebtUncheckedCreateNestedManyWithoutUserInput
   discussions?: Prisma.DiscussionUncheckedCreateNestedManyWithoutUserInput
-  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedCreateNestedManyWithoutUserInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedCreateNestedManyWithoutUserInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedCreateNestedManyWithoutUserInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedOneWithoutUserInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
   approvedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutApprovedByInput
   rejectedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutRejectedByInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPushTokensInput = {
@@ -2422,21 +2422,21 @@ export type UserUpdateWithoutPushTokensInput = {
   privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
-  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
-  otpCodes?: Prisma.OtpCodeUpdateManyWithoutUserNestedInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUpdateManyWithoutUserNestedInput
-  debts?: Prisma.DebtUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  debts?: Prisma.DebtUpdateManyWithoutUserNestedInput
   discussions?: Prisma.DiscussionUpdateManyWithoutUserNestedInput
-  reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUpdateManyWithoutUserNestedInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUpdateManyWithoutUserNestedInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUpdateManyWithoutUserNestedInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUpdateOneWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
   approvedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutApprovedByNestedInput
   rejectedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutRejectedByNestedInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPushTokensInput = {
@@ -2454,21 +2454,21 @@ export type UserUncheckedUpdateWithoutPushTokensInput = {
   privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
-  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
-  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutUserNestedInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedUpdateManyWithoutUserNestedInput
-  debts?: Prisma.DebtUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  debts?: Prisma.DebtUncheckedUpdateManyWithoutUserNestedInput
   discussions?: Prisma.DiscussionUncheckedUpdateManyWithoutUserNestedInput
-  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedUpdateManyWithoutUserNestedInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedUpdateManyWithoutUserNestedInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateOneWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
   approvedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutApprovedByNestedInput
   rejectedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutRejectedByNestedInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutNotificationsInput = {
@@ -2486,21 +2486,21 @@ export type UserCreateWithoutNotificationsInput = {
   privacyAcceptedAt?: Date | string | null
   termsVersion?: string | null
   privacyVersion?: string | null
-  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
-  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
-  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutUserInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeCreateNestedManyWithoutUserInput
-  debts?: Prisma.DebtCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
-  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  debts?: Prisma.DebtCreateNestedManyWithoutUserInput
   discussions?: Prisma.DiscussionCreateNestedManyWithoutUserInput
-  reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeCreateNestedManyWithoutUserInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionCreateNestedManyWithoutUserInput
   improvementSuggestions?: Prisma.ImprovementSuggestionCreateNestedManyWithoutUserInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutUserInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewCreateNestedOneWithoutUserInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
   approvedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutApprovedByInput
   rejectedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutRejectedByInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -2518,21 +2518,21 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   privacyAcceptedAt?: Date | string | null
   termsVersion?: string | null
   privacyVersion?: string | null
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
-  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
-  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutUserInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedCreateNestedManyWithoutUserInput
-  debts?: Prisma.DebtUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
-  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  debts?: Prisma.DebtUncheckedCreateNestedManyWithoutUserInput
   discussions?: Prisma.DiscussionUncheckedCreateNestedManyWithoutUserInput
-  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedCreateNestedManyWithoutUserInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedCreateNestedManyWithoutUserInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedCreateNestedManyWithoutUserInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedOneWithoutUserInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
   approvedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutApprovedByInput
   rejectedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutRejectedByInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -2566,21 +2566,21 @@ export type UserUpdateWithoutNotificationsInput = {
   privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
-  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
-  otpCodes?: Prisma.OtpCodeUpdateManyWithoutUserNestedInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUpdateManyWithoutUserNestedInput
-  debts?: Prisma.DebtUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
-  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  debts?: Prisma.DebtUpdateManyWithoutUserNestedInput
   discussions?: Prisma.DiscussionUpdateManyWithoutUserNestedInput
-  reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUpdateManyWithoutUserNestedInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUpdateManyWithoutUserNestedInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUpdateManyWithoutUserNestedInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutUserNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUpdateOneWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
   approvedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutApprovedByNestedInput
   rejectedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutRejectedByNestedInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -2598,21 +2598,21 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
-  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
-  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutUserNestedInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedUpdateManyWithoutUserNestedInput
-  debts?: Prisma.DebtUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
-  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  debts?: Prisma.DebtUncheckedUpdateManyWithoutUserNestedInput
   discussions?: Prisma.DiscussionUncheckedUpdateManyWithoutUserNestedInput
-  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedUpdateManyWithoutUserNestedInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedUpdateManyWithoutUserNestedInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateOneWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
   approvedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutApprovedByNestedInput
   rejectedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutRejectedByNestedInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutExternalSubscriptionsInput = {
@@ -2630,21 +2630,21 @@ export type UserCreateWithoutExternalSubscriptionsInput = {
   privacyAcceptedAt?: Date | string | null
   termsVersion?: string | null
   privacyVersion?: string | null
-  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
-  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
-  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutUserInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeCreateNestedManyWithoutUserInput
-  debts?: Prisma.DebtCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
-  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  debts?: Prisma.DebtCreateNestedManyWithoutUserInput
   discussions?: Prisma.DiscussionCreateNestedManyWithoutUserInput
-  reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeCreateNestedManyWithoutUserInput
   improvementSuggestions?: Prisma.ImprovementSuggestionCreateNestedManyWithoutUserInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewCreateNestedOneWithoutUserInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
   approvedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutApprovedByInput
   rejectedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutRejectedByInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutExternalSubscriptionsInput = {
@@ -2662,21 +2662,21 @@ export type UserUncheckedCreateWithoutExternalSubscriptionsInput = {
   privacyAcceptedAt?: Date | string | null
   termsVersion?: string | null
   privacyVersion?: string | null
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
-  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
-  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutUserInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedCreateNestedManyWithoutUserInput
-  debts?: Prisma.DebtUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
-  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  debts?: Prisma.DebtUncheckedCreateNestedManyWithoutUserInput
   discussions?: Prisma.DiscussionUncheckedCreateNestedManyWithoutUserInput
-  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedCreateNestedManyWithoutUserInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedCreateNestedManyWithoutUserInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedOneWithoutUserInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
   approvedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutApprovedByInput
   rejectedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutRejectedByInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutExternalSubscriptionsInput = {
@@ -2710,21 +2710,21 @@ export type UserUpdateWithoutExternalSubscriptionsInput = {
   privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
-  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
-  otpCodes?: Prisma.OtpCodeUpdateManyWithoutUserNestedInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUpdateManyWithoutUserNestedInput
-  debts?: Prisma.DebtUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
-  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  debts?: Prisma.DebtUpdateManyWithoutUserNestedInput
   discussions?: Prisma.DiscussionUpdateManyWithoutUserNestedInput
-  reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUpdateManyWithoutUserNestedInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUpdateManyWithoutUserNestedInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUpdateOneWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
   approvedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutApprovedByNestedInput
   rejectedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutRejectedByNestedInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutExternalSubscriptionsInput = {
@@ -2742,21 +2742,21 @@ export type UserUncheckedUpdateWithoutExternalSubscriptionsInput = {
   privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
-  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
-  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutUserNestedInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedUpdateManyWithoutUserNestedInput
-  debts?: Prisma.DebtUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
-  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  debts?: Prisma.DebtUncheckedUpdateManyWithoutUserNestedInput
   discussions?: Prisma.DiscussionUncheckedUpdateManyWithoutUserNestedInput
-  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedUpdateManyWithoutUserNestedInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedUpdateManyWithoutUserNestedInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateOneWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
   approvedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutApprovedByNestedInput
   rejectedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutRejectedByNestedInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutDiscussionsInput = {
@@ -2774,21 +2774,21 @@ export type UserCreateWithoutDiscussionsInput = {
   privacyAcceptedAt?: Date | string | null
   termsVersion?: string | null
   privacyVersion?: string | null
-  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
-  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
-  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutUserInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeCreateNestedManyWithoutUserInput
-  debts?: Prisma.DebtCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
-  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  debts?: Prisma.DebtCreateNestedManyWithoutUserInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeCreateNestedManyWithoutUserInput
   externalSubscriptions?: Prisma.ExternalSubscriptionCreateNestedManyWithoutUserInput
-  reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
   improvementSuggestions?: Prisma.ImprovementSuggestionCreateNestedManyWithoutUserInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewCreateNestedOneWithoutUserInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
   approvedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutApprovedByInput
   rejectedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutRejectedByInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutDiscussionsInput = {
@@ -2806,21 +2806,21 @@ export type UserUncheckedCreateWithoutDiscussionsInput = {
   privacyAcceptedAt?: Date | string | null
   termsVersion?: string | null
   privacyVersion?: string | null
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
-  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
-  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutUserInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedCreateNestedManyWithoutUserInput
-  debts?: Prisma.DebtUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
-  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  debts?: Prisma.DebtUncheckedCreateNestedManyWithoutUserInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedCreateNestedManyWithoutUserInput
   externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedCreateNestedManyWithoutUserInput
-  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedCreateNestedManyWithoutUserInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedOneWithoutUserInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
   approvedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutApprovedByInput
   rejectedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutRejectedByInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutDiscussionsInput = {
@@ -2854,21 +2854,21 @@ export type UserUpdateWithoutDiscussionsInput = {
   privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
-  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
-  otpCodes?: Prisma.OtpCodeUpdateManyWithoutUserNestedInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUpdateManyWithoutUserNestedInput
-  debts?: Prisma.DebtUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
-  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  debts?: Prisma.DebtUpdateManyWithoutUserNestedInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUpdateManyWithoutUserNestedInput
   externalSubscriptions?: Prisma.ExternalSubscriptionUpdateManyWithoutUserNestedInput
-  reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUpdateManyWithoutUserNestedInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUpdateOneWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
   approvedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutApprovedByNestedInput
   rejectedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutRejectedByNestedInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDiscussionsInput = {
@@ -2886,21 +2886,21 @@ export type UserUncheckedUpdateWithoutDiscussionsInput = {
   privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
-  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
-  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutUserNestedInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedUpdateManyWithoutUserNestedInput
-  debts?: Prisma.DebtUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
-  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  debts?: Prisma.DebtUncheckedUpdateManyWithoutUserNestedInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedUpdateManyWithoutUserNestedInput
   externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedUpdateManyWithoutUserNestedInput
-  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedUpdateManyWithoutUserNestedInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateOneWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
   approvedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutApprovedByNestedInput
   rejectedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutRejectedByNestedInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutReviewsInput = {
@@ -2918,21 +2918,21 @@ export type UserCreateWithoutReviewsInput = {
   privacyAcceptedAt?: Date | string | null
   termsVersion?: string | null
   privacyVersion?: string | null
-  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
-  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
-  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutUserInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeCreateNestedManyWithoutUserInput
-  debts?: Prisma.DebtCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
-  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  debts?: Prisma.DebtCreateNestedManyWithoutUserInput
   discussions?: Prisma.DiscussionCreateNestedManyWithoutUserInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeCreateNestedManyWithoutUserInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionCreateNestedManyWithoutUserInput
   improvementSuggestions?: Prisma.ImprovementSuggestionCreateNestedManyWithoutUserInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
   approvedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutApprovedByInput
   rejectedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutRejectedByInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutReviewsInput = {
@@ -2950,21 +2950,21 @@ export type UserUncheckedCreateWithoutReviewsInput = {
   privacyAcceptedAt?: Date | string | null
   termsVersion?: string | null
   privacyVersion?: string | null
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
-  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
-  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutUserInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedCreateNestedManyWithoutUserInput
-  debts?: Prisma.DebtUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
-  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  debts?: Prisma.DebtUncheckedCreateNestedManyWithoutUserInput
   discussions?: Prisma.DiscussionUncheckedCreateNestedManyWithoutUserInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedCreateNestedManyWithoutUserInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedCreateNestedManyWithoutUserInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedCreateNestedManyWithoutUserInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
   approvedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutApprovedByInput
   rejectedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutRejectedByInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutReviewsInput = {
@@ -2998,21 +2998,21 @@ export type UserUpdateWithoutReviewsInput = {
   privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
-  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
-  otpCodes?: Prisma.OtpCodeUpdateManyWithoutUserNestedInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUpdateManyWithoutUserNestedInput
-  debts?: Prisma.DebtUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
-  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  debts?: Prisma.DebtUpdateManyWithoutUserNestedInput
   discussions?: Prisma.DiscussionUpdateManyWithoutUserNestedInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUpdateManyWithoutUserNestedInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUpdateManyWithoutUserNestedInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUpdateManyWithoutUserNestedInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
   approvedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutApprovedByNestedInput
   rejectedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutRejectedByNestedInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReviewsInput = {
@@ -3030,21 +3030,21 @@ export type UserUncheckedUpdateWithoutReviewsInput = {
   privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
-  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
-  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutUserNestedInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedUpdateManyWithoutUserNestedInput
-  debts?: Prisma.DebtUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
-  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  debts?: Prisma.DebtUncheckedUpdateManyWithoutUserNestedInput
   discussions?: Prisma.DiscussionUncheckedUpdateManyWithoutUserNestedInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedUpdateManyWithoutUserNestedInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   improvementSuggestions?: Prisma.ImprovementSuggestionUncheckedUpdateManyWithoutUserNestedInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
   approvedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutApprovedByNestedInput
   rejectedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutRejectedByNestedInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutImprovementSuggestionsInput = {
@@ -3062,21 +3062,21 @@ export type UserCreateWithoutImprovementSuggestionsInput = {
   privacyAcceptedAt?: Date | string | null
   termsVersion?: string | null
   privacyVersion?: string | null
-  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
-  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
-  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutUserInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeCreateNestedManyWithoutUserInput
-  debts?: Prisma.DebtCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
-  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  debts?: Prisma.DebtCreateNestedManyWithoutUserInput
   discussions?: Prisma.DiscussionCreateNestedManyWithoutUserInput
-  reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutUserInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeCreateNestedManyWithoutUserInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewCreateNestedOneWithoutUserInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
   approvedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutApprovedByInput
   rejectedPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutRejectedByInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutImprovementSuggestionsInput = {
@@ -3094,21 +3094,21 @@ export type UserUncheckedCreateWithoutImprovementSuggestionsInput = {
   privacyAcceptedAt?: Date | string | null
   termsVersion?: string | null
   privacyVersion?: string | null
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
-  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
-  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutUserInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedCreateNestedManyWithoutUserInput
-  debts?: Prisma.DebtUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
-  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  debts?: Prisma.DebtUncheckedCreateNestedManyWithoutUserInput
   discussions?: Prisma.DiscussionUncheckedCreateNestedManyWithoutUserInput
-  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedCreateNestedManyWithoutUserInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedOneWithoutUserInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
   approvedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutApprovedByInput
   rejectedPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutRejectedByInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutImprovementSuggestionsInput = {
@@ -3142,21 +3142,21 @@ export type UserUpdateWithoutImprovementSuggestionsInput = {
   privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
-  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
-  otpCodes?: Prisma.OtpCodeUpdateManyWithoutUserNestedInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUpdateManyWithoutUserNestedInput
-  debts?: Prisma.DebtUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
-  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  debts?: Prisma.DebtUpdateManyWithoutUserNestedInput
   discussions?: Prisma.DiscussionUpdateManyWithoutUserNestedInput
-  reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutUserNestedInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUpdateManyWithoutUserNestedInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUpdateOneWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
   approvedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutApprovedByNestedInput
   rejectedPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutRejectedByNestedInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutImprovementSuggestionsInput = {
@@ -3174,21 +3174,21 @@ export type UserUncheckedUpdateWithoutImprovementSuggestionsInput = {
   privacyAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   termsVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
-  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
-  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutUserNestedInput
-  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedUpdateManyWithoutUserNestedInput
-  debts?: Prisma.DebtUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
-  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  debts?: Prisma.DebtUncheckedUpdateManyWithoutUserNestedInput
   discussions?: Prisma.DiscussionUncheckedUpdateManyWithoutUserNestedInput
-  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
-  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput
+  emailVerificationCodes?: Prisma.EmailVerificationCodeUncheckedUpdateManyWithoutUserNestedInput
+  externalSubscriptions?: Prisma.ExternalSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateOneWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
   approvedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutApprovedByNestedInput
   rejectedPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutRejectedByNestedInput
+  subscriptionPayments?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -3197,39 +3197,37 @@ export type UserUncheckedUpdateWithoutImprovementSuggestionsInput = {
  */
 
 export type UserCountOutputType = {
-  transactions: number
-  categories: number
-  otpCodes: number
-  emailVerificationCodes: number
-  debts: number
   budgets: number
-  pushTokens: number
-  notifications: number
-  externalSubscriptions: number
+  categories: number
+  debts: number
   discussions: number
-  reviews: number
+  emailVerificationCodes: number
+  externalSubscriptions: number
   improvementSuggestions: number
-  subscriptionPayments: number
+  notifications: number
+  otpCodes: number
+  pushTokens: number
   approvedPayments: number
   rejectedPayments: number
+  subscriptionPayments: number
+  transactions: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  transactions?: boolean | UserCountOutputTypeCountTransactionsArgs
-  categories?: boolean | UserCountOutputTypeCountCategoriesArgs
-  otpCodes?: boolean | UserCountOutputTypeCountOtpCodesArgs
-  emailVerificationCodes?: boolean | UserCountOutputTypeCountEmailVerificationCodesArgs
-  debts?: boolean | UserCountOutputTypeCountDebtsArgs
   budgets?: boolean | UserCountOutputTypeCountBudgetsArgs
-  pushTokens?: boolean | UserCountOutputTypeCountPushTokensArgs
-  notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
-  externalSubscriptions?: boolean | UserCountOutputTypeCountExternalSubscriptionsArgs
+  categories?: boolean | UserCountOutputTypeCountCategoriesArgs
+  debts?: boolean | UserCountOutputTypeCountDebtsArgs
   discussions?: boolean | UserCountOutputTypeCountDiscussionsArgs
-  reviews?: boolean | UserCountOutputTypeCountReviewsArgs
+  emailVerificationCodes?: boolean | UserCountOutputTypeCountEmailVerificationCodesArgs
+  externalSubscriptions?: boolean | UserCountOutputTypeCountExternalSubscriptionsArgs
   improvementSuggestions?: boolean | UserCountOutputTypeCountImprovementSuggestionsArgs
-  subscriptionPayments?: boolean | UserCountOutputTypeCountSubscriptionPaymentsArgs
+  notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
+  otpCodes?: boolean | UserCountOutputTypeCountOtpCodesArgs
+  pushTokens?: boolean | UserCountOutputTypeCountPushTokensArgs
   approvedPayments?: boolean | UserCountOutputTypeCountApprovedPaymentsArgs
   rejectedPayments?: boolean | UserCountOutputTypeCountRejectedPaymentsArgs
+  subscriptionPayments?: boolean | UserCountOutputTypeCountSubscriptionPaymentsArgs
+  transactions?: boolean | UserCountOutputTypeCountTransactionsArgs
 }
 
 /**
@@ -3245,8 +3243,8 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.TransactionWhereInput
+export type UserCountOutputTypeCountBudgetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BudgetWhereInput
 }
 
 /**
@@ -3259,50 +3257,8 @@ export type UserCountOutputTypeCountCategoriesArgs<ExtArgs extends runtime.Types
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountOtpCodesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.OtpCodeWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountEmailVerificationCodesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.EmailVerificationCodeWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
 export type UserCountOutputTypeCountDebtsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.DebtWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountBudgetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.BudgetWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountPushTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PushTokenWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.NotificationWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountExternalSubscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ExternalSubscriptionWhereInput
 }
 
 /**
@@ -3315,8 +3271,15 @@ export type UserCountOutputTypeCountDiscussionsArgs<ExtArgs extends runtime.Type
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountReviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ReviewWhereInput
+export type UserCountOutputTypeCountEmailVerificationCodesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EmailVerificationCodeWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountExternalSubscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ExternalSubscriptionWhereInput
 }
 
 /**
@@ -3329,8 +3292,22 @@ export type UserCountOutputTypeCountImprovementSuggestionsArgs<ExtArgs extends r
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountSubscriptionPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.SubscriptionPaymentWhereInput
+export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NotificationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountOtpCodesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OtpCodeWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPushTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PushTokenWhereInput
 }
 
 /**
@@ -3345,6 +3322,20 @@ export type UserCountOutputTypeCountApprovedPaymentsArgs<ExtArgs extends runtime
  */
 export type UserCountOutputTypeCountRejectedPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.SubscriptionPaymentWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSubscriptionPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SubscriptionPaymentWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TransactionWhereInput
 }
 
 
@@ -3363,22 +3354,22 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   privacyAcceptedAt?: boolean
   termsVersion?: boolean
   privacyVersion?: boolean
-  transactions?: boolean | Prisma.User$transactionsArgs<ExtArgs>
-  categories?: boolean | Prisma.User$categoriesArgs<ExtArgs>
-  subscription?: boolean | Prisma.User$subscriptionArgs<ExtArgs>
-  otpCodes?: boolean | Prisma.User$otpCodesArgs<ExtArgs>
-  emailVerificationCodes?: boolean | Prisma.User$emailVerificationCodesArgs<ExtArgs>
-  debts?: boolean | Prisma.User$debtsArgs<ExtArgs>
   budgets?: boolean | Prisma.User$budgetsArgs<ExtArgs>
-  pushTokens?: boolean | Prisma.User$pushTokensArgs<ExtArgs>
-  notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
-  externalSubscriptions?: boolean | Prisma.User$externalSubscriptionsArgs<ExtArgs>
+  categories?: boolean | Prisma.User$categoriesArgs<ExtArgs>
+  debts?: boolean | Prisma.User$debtsArgs<ExtArgs>
   discussions?: boolean | Prisma.User$discussionsArgs<ExtArgs>
-  reviews?: boolean | Prisma.User$reviewsArgs<ExtArgs>
+  emailVerificationCodes?: boolean | Prisma.User$emailVerificationCodesArgs<ExtArgs>
+  externalSubscriptions?: boolean | Prisma.User$externalSubscriptionsArgs<ExtArgs>
   improvementSuggestions?: boolean | Prisma.User$improvementSuggestionsArgs<ExtArgs>
-  subscriptionPayments?: boolean | Prisma.User$subscriptionPaymentsArgs<ExtArgs>
+  notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
+  otpCodes?: boolean | Prisma.User$otpCodesArgs<ExtArgs>
+  pushTokens?: boolean | Prisma.User$pushTokensArgs<ExtArgs>
+  reviews?: boolean | Prisma.User$reviewsArgs<ExtArgs>
+  subscription?: boolean | Prisma.User$subscriptionArgs<ExtArgs>
   approvedPayments?: boolean | Prisma.User$approvedPaymentsArgs<ExtArgs>
   rejectedPayments?: boolean | Prisma.User$rejectedPaymentsArgs<ExtArgs>
+  subscriptionPayments?: boolean | Prisma.User$subscriptionPaymentsArgs<ExtArgs>
+  transactions?: boolean | Prisma.User$transactionsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -3435,22 +3426,22 @@ export type UserSelectScalar = {
 
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "username" | "phone" | "email" | "password" | "isPremium" | "role" | "createdAt" | "updatedAt" | "status" | "termsAcceptedAt" | "privacyAcceptedAt" | "termsVersion" | "privacyVersion", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  transactions?: boolean | Prisma.User$transactionsArgs<ExtArgs>
-  categories?: boolean | Prisma.User$categoriesArgs<ExtArgs>
-  subscription?: boolean | Prisma.User$subscriptionArgs<ExtArgs>
-  otpCodes?: boolean | Prisma.User$otpCodesArgs<ExtArgs>
-  emailVerificationCodes?: boolean | Prisma.User$emailVerificationCodesArgs<ExtArgs>
-  debts?: boolean | Prisma.User$debtsArgs<ExtArgs>
   budgets?: boolean | Prisma.User$budgetsArgs<ExtArgs>
-  pushTokens?: boolean | Prisma.User$pushTokensArgs<ExtArgs>
-  notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
-  externalSubscriptions?: boolean | Prisma.User$externalSubscriptionsArgs<ExtArgs>
+  categories?: boolean | Prisma.User$categoriesArgs<ExtArgs>
+  debts?: boolean | Prisma.User$debtsArgs<ExtArgs>
   discussions?: boolean | Prisma.User$discussionsArgs<ExtArgs>
-  reviews?: boolean | Prisma.User$reviewsArgs<ExtArgs>
+  emailVerificationCodes?: boolean | Prisma.User$emailVerificationCodesArgs<ExtArgs>
+  externalSubscriptions?: boolean | Prisma.User$externalSubscriptionsArgs<ExtArgs>
   improvementSuggestions?: boolean | Prisma.User$improvementSuggestionsArgs<ExtArgs>
-  subscriptionPayments?: boolean | Prisma.User$subscriptionPaymentsArgs<ExtArgs>
+  notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
+  otpCodes?: boolean | Prisma.User$otpCodesArgs<ExtArgs>
+  pushTokens?: boolean | Prisma.User$pushTokensArgs<ExtArgs>
+  reviews?: boolean | Prisma.User$reviewsArgs<ExtArgs>
+  subscription?: boolean | Prisma.User$subscriptionArgs<ExtArgs>
   approvedPayments?: boolean | Prisma.User$approvedPaymentsArgs<ExtArgs>
   rejectedPayments?: boolean | Prisma.User$rejectedPaymentsArgs<ExtArgs>
+  subscriptionPayments?: boolean | Prisma.User$subscriptionPaymentsArgs<ExtArgs>
+  transactions?: boolean | Prisma.User$transactionsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -3459,22 +3450,22 @@ export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
-    transactions: Prisma.$TransactionPayload<ExtArgs>[]
-    categories: Prisma.$CategoryPayload<ExtArgs>[]
-    subscription: Prisma.$SubscriptionPayload<ExtArgs> | null
-    otpCodes: Prisma.$OtpCodePayload<ExtArgs>[]
-    emailVerificationCodes: Prisma.$EmailVerificationCodePayload<ExtArgs>[]
-    debts: Prisma.$DebtPayload<ExtArgs>[]
     budgets: Prisma.$BudgetPayload<ExtArgs>[]
-    pushTokens: Prisma.$PushTokenPayload<ExtArgs>[]
-    notifications: Prisma.$NotificationPayload<ExtArgs>[]
-    externalSubscriptions: Prisma.$ExternalSubscriptionPayload<ExtArgs>[]
+    categories: Prisma.$CategoryPayload<ExtArgs>[]
+    debts: Prisma.$DebtPayload<ExtArgs>[]
     discussions: Prisma.$DiscussionPayload<ExtArgs>[]
-    reviews: Prisma.$ReviewPayload<ExtArgs>[]
+    emailVerificationCodes: Prisma.$EmailVerificationCodePayload<ExtArgs>[]
+    externalSubscriptions: Prisma.$ExternalSubscriptionPayload<ExtArgs>[]
     improvementSuggestions: Prisma.$ImprovementSuggestionPayload<ExtArgs>[]
-    subscriptionPayments: Prisma.$SubscriptionPaymentPayload<ExtArgs>[]
+    notifications: Prisma.$NotificationPayload<ExtArgs>[]
+    otpCodes: Prisma.$OtpCodePayload<ExtArgs>[]
+    pushTokens: Prisma.$PushTokenPayload<ExtArgs>[]
+    reviews: Prisma.$ReviewPayload<ExtArgs> | null
+    subscription: Prisma.$SubscriptionPayload<ExtArgs> | null
     approvedPayments: Prisma.$SubscriptionPaymentPayload<ExtArgs>[]
     rejectedPayments: Prisma.$SubscriptionPaymentPayload<ExtArgs>[]
+    subscriptionPayments: Prisma.$SubscriptionPaymentPayload<ExtArgs>[]
+    transactions: Prisma.$TransactionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3885,22 +3876,22 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  transactions<T extends Prisma.User$transactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  categories<T extends Prisma.User$categoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  subscription<T extends Prisma.User$subscriptionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$subscriptionArgs<ExtArgs>>): Prisma.Prisma__SubscriptionClient<runtime.Types.Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  otpCodes<T extends Prisma.User$otpCodesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$otpCodesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OtpCodePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  emailVerificationCodes<T extends Prisma.User$emailVerificationCodesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$emailVerificationCodesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmailVerificationCodePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  debts<T extends Prisma.User$debtsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$debtsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DebtPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   budgets<T extends Prisma.User$budgetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$budgetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BudgetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  pushTokens<T extends Prisma.User$pushTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$pushTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PushTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  externalSubscriptions<T extends Prisma.User$externalSubscriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$externalSubscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExternalSubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  categories<T extends Prisma.User$categoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  debts<T extends Prisma.User$debtsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$debtsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DebtPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   discussions<T extends Prisma.User$discussionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$discussionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DiscussionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  reviews<T extends Prisma.User$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  emailVerificationCodes<T extends Prisma.User$emailVerificationCodesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$emailVerificationCodesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmailVerificationCodePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  externalSubscriptions<T extends Prisma.User$externalSubscriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$externalSubscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExternalSubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   improvementSuggestions<T extends Prisma.User$improvementSuggestionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$improvementSuggestionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ImprovementSuggestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  subscriptionPayments<T extends Prisma.User$subscriptionPaymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$subscriptionPaymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionPaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  otpCodes<T extends Prisma.User$otpCodesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$otpCodesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OtpCodePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  pushTokens<T extends Prisma.User$pushTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$pushTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PushTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reviews<T extends Prisma.User$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reviewsArgs<ExtArgs>>): Prisma.Prisma__ReviewClient<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  subscription<T extends Prisma.User$subscriptionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$subscriptionArgs<ExtArgs>>): Prisma.Prisma__SubscriptionClient<runtime.Types.Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   approvedPayments<T extends Prisma.User$approvedPaymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$approvedPaymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionPaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   rejectedPayments<T extends Prisma.User$rejectedPaymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$rejectedPaymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionPaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  subscriptionPayments<T extends Prisma.User$subscriptionPaymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$subscriptionPaymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionPaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  transactions<T extends Prisma.User$transactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4332,27 +4323,27 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
- * User.transactions
+ * User.budgets
  */
-export type User$transactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$budgetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Transaction
+   * Select specific fields to fetch from the Budget
    */
-  select?: Prisma.TransactionSelect<ExtArgs> | null
+  select?: Prisma.BudgetSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Transaction
+   * Omit specific fields from the Budget
    */
-  omit?: Prisma.TransactionOmit<ExtArgs> | null
+  omit?: Prisma.BudgetOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.TransactionInclude<ExtArgs> | null
-  where?: Prisma.TransactionWhereInput
-  orderBy?: Prisma.TransactionOrderByWithRelationInput | Prisma.TransactionOrderByWithRelationInput[]
-  cursor?: Prisma.TransactionWhereUniqueInput
+  include?: Prisma.BudgetInclude<ExtArgs> | null
+  where?: Prisma.BudgetWhereInput
+  orderBy?: Prisma.BudgetOrderByWithRelationInput | Prisma.BudgetOrderByWithRelationInput[]
+  cursor?: Prisma.BudgetWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.TransactionScalarFieldEnum | Prisma.TransactionScalarFieldEnum[]
+  distinct?: Prisma.BudgetScalarFieldEnum | Prisma.BudgetScalarFieldEnum[]
 }
 
 /**
@@ -4380,73 +4371,6 @@ export type User$categoriesArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 /**
- * User.subscription
- */
-export type User$subscriptionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Subscription
-   */
-  select?: Prisma.SubscriptionSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Subscription
-   */
-  omit?: Prisma.SubscriptionOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.SubscriptionInclude<ExtArgs> | null
-  where?: Prisma.SubscriptionWhereInput
-}
-
-/**
- * User.otpCodes
- */
-export type User$otpCodesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the OtpCode
-   */
-  select?: Prisma.OtpCodeSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the OtpCode
-   */
-  omit?: Prisma.OtpCodeOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.OtpCodeInclude<ExtArgs> | null
-  where?: Prisma.OtpCodeWhereInput
-  orderBy?: Prisma.OtpCodeOrderByWithRelationInput | Prisma.OtpCodeOrderByWithRelationInput[]
-  cursor?: Prisma.OtpCodeWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.OtpCodeScalarFieldEnum | Prisma.OtpCodeScalarFieldEnum[]
-}
-
-/**
- * User.emailVerificationCodes
- */
-export type User$emailVerificationCodesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the EmailVerificationCode
-   */
-  select?: Prisma.EmailVerificationCodeSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the EmailVerificationCode
-   */
-  omit?: Prisma.EmailVerificationCodeOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.EmailVerificationCodeInclude<ExtArgs> | null
-  where?: Prisma.EmailVerificationCodeWhereInput
-  orderBy?: Prisma.EmailVerificationCodeOrderByWithRelationInput | Prisma.EmailVerificationCodeOrderByWithRelationInput[]
-  cursor?: Prisma.EmailVerificationCodeWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.EmailVerificationCodeScalarFieldEnum | Prisma.EmailVerificationCodeScalarFieldEnum[]
-}
-
-/**
  * User.debts
  */
 export type User$debtsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -4468,102 +4392,6 @@ export type User$debtsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
   take?: number
   skip?: number
   distinct?: Prisma.DebtScalarFieldEnum | Prisma.DebtScalarFieldEnum[]
-}
-
-/**
- * User.budgets
- */
-export type User$budgetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Budget
-   */
-  select?: Prisma.BudgetSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Budget
-   */
-  omit?: Prisma.BudgetOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.BudgetInclude<ExtArgs> | null
-  where?: Prisma.BudgetWhereInput
-  orderBy?: Prisma.BudgetOrderByWithRelationInput | Prisma.BudgetOrderByWithRelationInput[]
-  cursor?: Prisma.BudgetWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.BudgetScalarFieldEnum | Prisma.BudgetScalarFieldEnum[]
-}
-
-/**
- * User.pushTokens
- */
-export type User$pushTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the PushToken
-   */
-  select?: Prisma.PushTokenSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the PushToken
-   */
-  omit?: Prisma.PushTokenOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.PushTokenInclude<ExtArgs> | null
-  where?: Prisma.PushTokenWhereInput
-  orderBy?: Prisma.PushTokenOrderByWithRelationInput | Prisma.PushTokenOrderByWithRelationInput[]
-  cursor?: Prisma.PushTokenWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.PushTokenScalarFieldEnum | Prisma.PushTokenScalarFieldEnum[]
-}
-
-/**
- * User.notifications
- */
-export type User$notificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Notification
-   */
-  select?: Prisma.NotificationSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Notification
-   */
-  omit?: Prisma.NotificationOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.NotificationInclude<ExtArgs> | null
-  where?: Prisma.NotificationWhereInput
-  orderBy?: Prisma.NotificationOrderByWithRelationInput | Prisma.NotificationOrderByWithRelationInput[]
-  cursor?: Prisma.NotificationWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
-}
-
-/**
- * User.externalSubscriptions
- */
-export type User$externalSubscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ExternalSubscription
-   */
-  select?: Prisma.ExternalSubscriptionSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the ExternalSubscription
-   */
-  omit?: Prisma.ExternalSubscriptionOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ExternalSubscriptionInclude<ExtArgs> | null
-  where?: Prisma.ExternalSubscriptionWhereInput
-  orderBy?: Prisma.ExternalSubscriptionOrderByWithRelationInput | Prisma.ExternalSubscriptionOrderByWithRelationInput[]
-  cursor?: Prisma.ExternalSubscriptionWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ExternalSubscriptionScalarFieldEnum | Prisma.ExternalSubscriptionScalarFieldEnum[]
 }
 
 /**
@@ -4591,27 +4419,51 @@ export type User$discussionsArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
- * User.reviews
+ * User.emailVerificationCodes
  */
-export type User$reviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$emailVerificationCodesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Review
+   * Select specific fields to fetch from the EmailVerificationCode
    */
-  select?: Prisma.ReviewSelect<ExtArgs> | null
+  select?: Prisma.EmailVerificationCodeSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Review
+   * Omit specific fields from the EmailVerificationCode
    */
-  omit?: Prisma.ReviewOmit<ExtArgs> | null
+  omit?: Prisma.EmailVerificationCodeOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ReviewInclude<ExtArgs> | null
-  where?: Prisma.ReviewWhereInput
-  orderBy?: Prisma.ReviewOrderByWithRelationInput | Prisma.ReviewOrderByWithRelationInput[]
-  cursor?: Prisma.ReviewWhereUniqueInput
+  include?: Prisma.EmailVerificationCodeInclude<ExtArgs> | null
+  where?: Prisma.EmailVerificationCodeWhereInput
+  orderBy?: Prisma.EmailVerificationCodeOrderByWithRelationInput | Prisma.EmailVerificationCodeOrderByWithRelationInput[]
+  cursor?: Prisma.EmailVerificationCodeWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.ReviewScalarFieldEnum | Prisma.ReviewScalarFieldEnum[]
+  distinct?: Prisma.EmailVerificationCodeScalarFieldEnum | Prisma.EmailVerificationCodeScalarFieldEnum[]
+}
+
+/**
+ * User.externalSubscriptions
+ */
+export type User$externalSubscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ExternalSubscription
+   */
+  select?: Prisma.ExternalSubscriptionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ExternalSubscription
+   */
+  omit?: Prisma.ExternalSubscriptionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ExternalSubscriptionInclude<ExtArgs> | null
+  where?: Prisma.ExternalSubscriptionWhereInput
+  orderBy?: Prisma.ExternalSubscriptionOrderByWithRelationInput | Prisma.ExternalSubscriptionOrderByWithRelationInput[]
+  cursor?: Prisma.ExternalSubscriptionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ExternalSubscriptionScalarFieldEnum | Prisma.ExternalSubscriptionScalarFieldEnum[]
 }
 
 /**
@@ -4639,27 +4491,113 @@ export type User$improvementSuggestionsArgs<ExtArgs extends runtime.Types.Extens
 }
 
 /**
- * User.subscriptionPayments
+ * User.notifications
  */
-export type User$subscriptionPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$notificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the SubscriptionPayment
+   * Select specific fields to fetch from the Notification
    */
-  select?: Prisma.SubscriptionPaymentSelect<ExtArgs> | null
+  select?: Prisma.NotificationSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the SubscriptionPayment
+   * Omit specific fields from the Notification
    */
-  omit?: Prisma.SubscriptionPaymentOmit<ExtArgs> | null
+  omit?: Prisma.NotificationOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.SubscriptionPaymentInclude<ExtArgs> | null
-  where?: Prisma.SubscriptionPaymentWhereInput
-  orderBy?: Prisma.SubscriptionPaymentOrderByWithRelationInput | Prisma.SubscriptionPaymentOrderByWithRelationInput[]
-  cursor?: Prisma.SubscriptionPaymentWhereUniqueInput
+  include?: Prisma.NotificationInclude<ExtArgs> | null
+  where?: Prisma.NotificationWhereInput
+  orderBy?: Prisma.NotificationOrderByWithRelationInput | Prisma.NotificationOrderByWithRelationInput[]
+  cursor?: Prisma.NotificationWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.SubscriptionPaymentScalarFieldEnum | Prisma.SubscriptionPaymentScalarFieldEnum[]
+  distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
+}
+
+/**
+ * User.otpCodes
+ */
+export type User$otpCodesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OtpCode
+   */
+  select?: Prisma.OtpCodeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OtpCode
+   */
+  omit?: Prisma.OtpCodeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OtpCodeInclude<ExtArgs> | null
+  where?: Prisma.OtpCodeWhereInput
+  orderBy?: Prisma.OtpCodeOrderByWithRelationInput | Prisma.OtpCodeOrderByWithRelationInput[]
+  cursor?: Prisma.OtpCodeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OtpCodeScalarFieldEnum | Prisma.OtpCodeScalarFieldEnum[]
+}
+
+/**
+ * User.pushTokens
+ */
+export type User$pushTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PushToken
+   */
+  select?: Prisma.PushTokenSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PushToken
+   */
+  omit?: Prisma.PushTokenOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PushTokenInclude<ExtArgs> | null
+  where?: Prisma.PushTokenWhereInput
+  orderBy?: Prisma.PushTokenOrderByWithRelationInput | Prisma.PushTokenOrderByWithRelationInput[]
+  cursor?: Prisma.PushTokenWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PushTokenScalarFieldEnum | Prisma.PushTokenScalarFieldEnum[]
+}
+
+/**
+ * User.reviews
+ */
+export type User$reviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Review
+   */
+  select?: Prisma.ReviewSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Review
+   */
+  omit?: Prisma.ReviewOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ReviewInclude<ExtArgs> | null
+  where?: Prisma.ReviewWhereInput
+}
+
+/**
+ * User.subscription
+ */
+export type User$subscriptionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Subscription
+   */
+  select?: Prisma.SubscriptionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Subscription
+   */
+  omit?: Prisma.SubscriptionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubscriptionInclude<ExtArgs> | null
+  where?: Prisma.SubscriptionWhereInput
 }
 
 /**
@@ -4708,6 +4646,54 @@ export type User$rejectedPaymentsArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.SubscriptionPaymentScalarFieldEnum | Prisma.SubscriptionPaymentScalarFieldEnum[]
+}
+
+/**
+ * User.subscriptionPayments
+ */
+export type User$subscriptionPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SubscriptionPayment
+   */
+  select?: Prisma.SubscriptionPaymentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SubscriptionPayment
+   */
+  omit?: Prisma.SubscriptionPaymentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubscriptionPaymentInclude<ExtArgs> | null
+  where?: Prisma.SubscriptionPaymentWhereInput
+  orderBy?: Prisma.SubscriptionPaymentOrderByWithRelationInput | Prisma.SubscriptionPaymentOrderByWithRelationInput[]
+  cursor?: Prisma.SubscriptionPaymentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SubscriptionPaymentScalarFieldEnum | Prisma.SubscriptionPaymentScalarFieldEnum[]
+}
+
+/**
+ * User.transactions
+ */
+export type User$transactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Transaction
+   */
+  select?: Prisma.TransactionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Transaction
+   */
+  omit?: Prisma.TransactionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TransactionInclude<ExtArgs> | null
+  where?: Prisma.TransactionWhereInput
+  orderBy?: Prisma.TransactionOrderByWithRelationInput | Prisma.TransactionOrderByWithRelationInput[]
+  cursor?: Prisma.TransactionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TransactionScalarFieldEnum | Prisma.TransactionScalarFieldEnum[]
 }
 
 /**

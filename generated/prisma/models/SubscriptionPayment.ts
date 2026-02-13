@@ -48,6 +48,7 @@ export type SubscriptionPaymentMinAggregateOutputType = {
   rejectedAt: Date | null
   approvedById: string | null
   rejectedById: string | null
+  isRenewal: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -66,6 +67,7 @@ export type SubscriptionPaymentMaxAggregateOutputType = {
   rejectedAt: Date | null
   approvedById: string | null
   rejectedById: string | null
+  isRenewal: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -84,6 +86,7 @@ export type SubscriptionPaymentCountAggregateOutputType = {
   rejectedAt: number
   approvedById: number
   rejectedById: number
+  isRenewal: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -112,6 +115,7 @@ export type SubscriptionPaymentMinAggregateInputType = {
   rejectedAt?: true
   approvedById?: true
   rejectedById?: true
+  isRenewal?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -130,6 +134,7 @@ export type SubscriptionPaymentMaxAggregateInputType = {
   rejectedAt?: true
   approvedById?: true
   rejectedById?: true
+  isRenewal?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -148,6 +153,7 @@ export type SubscriptionPaymentCountAggregateInputType = {
   rejectedAt?: true
   approvedById?: true
   rejectedById?: true
+  isRenewal?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -253,6 +259,7 @@ export type SubscriptionPaymentGroupByOutputType = {
   rejectedAt: Date | null
   approvedById: string | null
   rejectedById: string | null
+  isRenewal: boolean
   createdAt: Date
   updatedAt: Date
   _count: SubscriptionPaymentCountAggregateOutputType | null
@@ -294,11 +301,12 @@ export type SubscriptionPaymentWhereInput = {
   rejectedAt?: Prisma.DateTimeNullableFilter<"SubscriptionPayment"> | Date | string | null
   approvedById?: Prisma.StringNullableFilter<"SubscriptionPayment"> | string | null
   rejectedById?: Prisma.StringNullableFilter<"SubscriptionPayment"> | string | null
+  isRenewal?: Prisma.BoolFilter<"SubscriptionPayment"> | boolean
   createdAt?: Prisma.DateTimeFilter<"SubscriptionPayment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SubscriptionPayment"> | Date | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   approvedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   rejectedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
 export type SubscriptionPaymentOrderByWithRelationInput = {
@@ -315,11 +323,12 @@ export type SubscriptionPaymentOrderByWithRelationInput = {
   rejectedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   approvedById?: Prisma.SortOrderInput | Prisma.SortOrder
   rejectedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  isRenewal?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  user?: Prisma.UserOrderByWithRelationInput
   approvedBy?: Prisma.UserOrderByWithRelationInput
   rejectedBy?: Prisma.UserOrderByWithRelationInput
+  user?: Prisma.UserOrderByWithRelationInput
 }
 
 export type SubscriptionPaymentWhereUniqueInput = Prisma.AtLeast<{
@@ -339,11 +348,12 @@ export type SubscriptionPaymentWhereUniqueInput = Prisma.AtLeast<{
   rejectedAt?: Prisma.DateTimeNullableFilter<"SubscriptionPayment"> | Date | string | null
   approvedById?: Prisma.StringNullableFilter<"SubscriptionPayment"> | string | null
   rejectedById?: Prisma.StringNullableFilter<"SubscriptionPayment"> | string | null
+  isRenewal?: Prisma.BoolFilter<"SubscriptionPayment"> | boolean
   createdAt?: Prisma.DateTimeFilter<"SubscriptionPayment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SubscriptionPayment"> | Date | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   approvedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   rejectedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id">
 
 export type SubscriptionPaymentOrderByWithAggregationInput = {
@@ -360,6 +370,7 @@ export type SubscriptionPaymentOrderByWithAggregationInput = {
   rejectedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   approvedById?: Prisma.SortOrderInput | Prisma.SortOrder
   rejectedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  isRenewal?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.SubscriptionPaymentCountOrderByAggregateInput
@@ -386,6 +397,7 @@ export type SubscriptionPaymentScalarWhereWithAggregatesInput = {
   rejectedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"SubscriptionPayment"> | Date | string | null
   approvedById?: Prisma.StringNullableWithAggregatesFilter<"SubscriptionPayment"> | string | null
   rejectedById?: Prisma.StringNullableWithAggregatesFilter<"SubscriptionPayment"> | string | null
+  isRenewal?: Prisma.BoolWithAggregatesFilter<"SubscriptionPayment"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"SubscriptionPayment"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"SubscriptionPayment"> | Date | string
 }
@@ -401,11 +413,12 @@ export type SubscriptionPaymentCreateInput = {
   rejectionReason?: string | null
   approvedAt?: Date | string | null
   rejectedAt?: Date | string | null
+  isRenewal?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutSubscriptionPaymentsInput
   approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedPaymentsInput
   rejectedBy?: Prisma.UserCreateNestedOneWithoutRejectedPaymentsInput
+  user: Prisma.UserCreateNestedOneWithoutSubscriptionPaymentsInput
 }
 
 export type SubscriptionPaymentUncheckedCreateInput = {
@@ -422,6 +435,7 @@ export type SubscriptionPaymentUncheckedCreateInput = {
   rejectedAt?: Date | string | null
   approvedById?: string | null
   rejectedById?: string | null
+  isRenewal?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -437,11 +451,12 @@ export type SubscriptionPaymentUpdateInput = {
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutSubscriptionPaymentsNestedInput
   approvedBy?: Prisma.UserUpdateOneWithoutApprovedPaymentsNestedInput
   rejectedBy?: Prisma.UserUpdateOneWithoutRejectedPaymentsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutSubscriptionPaymentsNestedInput
 }
 
 export type SubscriptionPaymentUncheckedUpdateInput = {
@@ -458,6 +473,7 @@ export type SubscriptionPaymentUncheckedUpdateInput = {
   rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -476,6 +492,7 @@ export type SubscriptionPaymentCreateManyInput = {
   rejectedAt?: Date | string | null
   approvedById?: string | null
   rejectedById?: string | null
+  isRenewal?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -491,6 +508,7 @@ export type SubscriptionPaymentUpdateManyMutationInput = {
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -509,6 +527,7 @@ export type SubscriptionPaymentUncheckedUpdateManyInput = {
   rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -537,6 +556,7 @@ export type SubscriptionPaymentCountOrderByAggregateInput = {
   rejectedAt?: Prisma.SortOrder
   approvedById?: Prisma.SortOrder
   rejectedById?: Prisma.SortOrder
+  isRenewal?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -559,6 +579,7 @@ export type SubscriptionPaymentMaxOrderByAggregateInput = {
   rejectedAt?: Prisma.SortOrder
   approvedById?: Prisma.SortOrder
   rejectedById?: Prisma.SortOrder
+  isRenewal?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -577,19 +598,13 @@ export type SubscriptionPaymentMinOrderByAggregateInput = {
   rejectedAt?: Prisma.SortOrder
   approvedById?: Prisma.SortOrder
   rejectedById?: Prisma.SortOrder
+  isRenewal?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type SubscriptionPaymentSumOrderByAggregateInput = {
   amount?: Prisma.SortOrder
-}
-
-export type SubscriptionPaymentCreateNestedManyWithoutUserInput = {
-  create?: Prisma.XOR<Prisma.SubscriptionPaymentCreateWithoutUserInput, Prisma.SubscriptionPaymentUncheckedCreateWithoutUserInput> | Prisma.SubscriptionPaymentCreateWithoutUserInput[] | Prisma.SubscriptionPaymentUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.SubscriptionPaymentCreateOrConnectWithoutUserInput | Prisma.SubscriptionPaymentCreateOrConnectWithoutUserInput[]
-  createMany?: Prisma.SubscriptionPaymentCreateManyUserInputEnvelope
-  connect?: Prisma.SubscriptionPaymentWhereUniqueInput | Prisma.SubscriptionPaymentWhereUniqueInput[]
 }
 
 export type SubscriptionPaymentCreateNestedManyWithoutApprovedByInput = {
@@ -606,7 +621,7 @@ export type SubscriptionPaymentCreateNestedManyWithoutRejectedByInput = {
   connect?: Prisma.SubscriptionPaymentWhereUniqueInput | Prisma.SubscriptionPaymentWhereUniqueInput[]
 }
 
-export type SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput = {
+export type SubscriptionPaymentCreateNestedManyWithoutUserInput = {
   create?: Prisma.XOR<Prisma.SubscriptionPaymentCreateWithoutUserInput, Prisma.SubscriptionPaymentUncheckedCreateWithoutUserInput> | Prisma.SubscriptionPaymentCreateWithoutUserInput[] | Prisma.SubscriptionPaymentUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.SubscriptionPaymentCreateOrConnectWithoutUserInput | Prisma.SubscriptionPaymentCreateOrConnectWithoutUserInput[]
   createMany?: Prisma.SubscriptionPaymentCreateManyUserInputEnvelope
@@ -627,18 +642,11 @@ export type SubscriptionPaymentUncheckedCreateNestedManyWithoutRejectedByInput =
   connect?: Prisma.SubscriptionPaymentWhereUniqueInput | Prisma.SubscriptionPaymentWhereUniqueInput[]
 }
 
-export type SubscriptionPaymentUpdateManyWithoutUserNestedInput = {
+export type SubscriptionPaymentUncheckedCreateNestedManyWithoutUserInput = {
   create?: Prisma.XOR<Prisma.SubscriptionPaymentCreateWithoutUserInput, Prisma.SubscriptionPaymentUncheckedCreateWithoutUserInput> | Prisma.SubscriptionPaymentCreateWithoutUserInput[] | Prisma.SubscriptionPaymentUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.SubscriptionPaymentCreateOrConnectWithoutUserInput | Prisma.SubscriptionPaymentCreateOrConnectWithoutUserInput[]
-  upsert?: Prisma.SubscriptionPaymentUpsertWithWhereUniqueWithoutUserInput | Prisma.SubscriptionPaymentUpsertWithWhereUniqueWithoutUserInput[]
   createMany?: Prisma.SubscriptionPaymentCreateManyUserInputEnvelope
-  set?: Prisma.SubscriptionPaymentWhereUniqueInput | Prisma.SubscriptionPaymentWhereUniqueInput[]
-  disconnect?: Prisma.SubscriptionPaymentWhereUniqueInput | Prisma.SubscriptionPaymentWhereUniqueInput[]
-  delete?: Prisma.SubscriptionPaymentWhereUniqueInput | Prisma.SubscriptionPaymentWhereUniqueInput[]
   connect?: Prisma.SubscriptionPaymentWhereUniqueInput | Prisma.SubscriptionPaymentWhereUniqueInput[]
-  update?: Prisma.SubscriptionPaymentUpdateWithWhereUniqueWithoutUserInput | Prisma.SubscriptionPaymentUpdateWithWhereUniqueWithoutUserInput[]
-  updateMany?: Prisma.SubscriptionPaymentUpdateManyWithWhereWithoutUserInput | Prisma.SubscriptionPaymentUpdateManyWithWhereWithoutUserInput[]
-  deleteMany?: Prisma.SubscriptionPaymentScalarWhereInput | Prisma.SubscriptionPaymentScalarWhereInput[]
 }
 
 export type SubscriptionPaymentUpdateManyWithoutApprovedByNestedInput = {
@@ -669,7 +677,7 @@ export type SubscriptionPaymentUpdateManyWithoutRejectedByNestedInput = {
   deleteMany?: Prisma.SubscriptionPaymentScalarWhereInput | Prisma.SubscriptionPaymentScalarWhereInput[]
 }
 
-export type SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput = {
+export type SubscriptionPaymentUpdateManyWithoutUserNestedInput = {
   create?: Prisma.XOR<Prisma.SubscriptionPaymentCreateWithoutUserInput, Prisma.SubscriptionPaymentUncheckedCreateWithoutUserInput> | Prisma.SubscriptionPaymentCreateWithoutUserInput[] | Prisma.SubscriptionPaymentUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.SubscriptionPaymentCreateOrConnectWithoutUserInput | Prisma.SubscriptionPaymentCreateOrConnectWithoutUserInput[]
   upsert?: Prisma.SubscriptionPaymentUpsertWithWhereUniqueWithoutUserInput | Prisma.SubscriptionPaymentUpsertWithWhereUniqueWithoutUserInput[]
@@ -711,6 +719,20 @@ export type SubscriptionPaymentUncheckedUpdateManyWithoutRejectedByNestedInput =
   deleteMany?: Prisma.SubscriptionPaymentScalarWhereInput | Prisma.SubscriptionPaymentScalarWhereInput[]
 }
 
+export type SubscriptionPaymentUncheckedUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.SubscriptionPaymentCreateWithoutUserInput, Prisma.SubscriptionPaymentUncheckedCreateWithoutUserInput> | Prisma.SubscriptionPaymentCreateWithoutUserInput[] | Prisma.SubscriptionPaymentUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.SubscriptionPaymentCreateOrConnectWithoutUserInput | Prisma.SubscriptionPaymentCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.SubscriptionPaymentUpsertWithWhereUniqueWithoutUserInput | Prisma.SubscriptionPaymentUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.SubscriptionPaymentCreateManyUserInputEnvelope
+  set?: Prisma.SubscriptionPaymentWhereUniqueInput | Prisma.SubscriptionPaymentWhereUniqueInput[]
+  disconnect?: Prisma.SubscriptionPaymentWhereUniqueInput | Prisma.SubscriptionPaymentWhereUniqueInput[]
+  delete?: Prisma.SubscriptionPaymentWhereUniqueInput | Prisma.SubscriptionPaymentWhereUniqueInput[]
+  connect?: Prisma.SubscriptionPaymentWhereUniqueInput | Prisma.SubscriptionPaymentWhereUniqueInput[]
+  update?: Prisma.SubscriptionPaymentUpdateWithWhereUniqueWithoutUserInput | Prisma.SubscriptionPaymentUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.SubscriptionPaymentUpdateManyWithWhereWithoutUserInput | Prisma.SubscriptionPaymentUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.SubscriptionPaymentScalarWhereInput | Prisma.SubscriptionPaymentScalarWhereInput[]
+}
+
 export type EnumSubscriptionPlanFieldUpdateOperationsInput = {
   set?: $Enums.SubscriptionPlan
 }
@@ -727,50 +749,6 @@ export type EnumPaymentStatusFieldUpdateOperationsInput = {
   set?: $Enums.PaymentStatus
 }
 
-export type SubscriptionPaymentCreateWithoutUserInput = {
-  id?: string
-  plan: $Enums.SubscriptionPlan
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: $Enums.PaymentStatus
-  waveTransactionId?: string | null
-  senderName?: string | null
-  transferDate?: Date | string | null
-  rejectionReason?: string | null
-  approvedAt?: Date | string | null
-  rejectedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedPaymentsInput
-  rejectedBy?: Prisma.UserCreateNestedOneWithoutRejectedPaymentsInput
-}
-
-export type SubscriptionPaymentUncheckedCreateWithoutUserInput = {
-  id?: string
-  plan: $Enums.SubscriptionPlan
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: $Enums.PaymentStatus
-  waveTransactionId?: string | null
-  senderName?: string | null
-  transferDate?: Date | string | null
-  rejectionReason?: string | null
-  approvedAt?: Date | string | null
-  rejectedAt?: Date | string | null
-  approvedById?: string | null
-  rejectedById?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type SubscriptionPaymentCreateOrConnectWithoutUserInput = {
-  where: Prisma.SubscriptionPaymentWhereUniqueInput
-  create: Prisma.XOR<Prisma.SubscriptionPaymentCreateWithoutUserInput, Prisma.SubscriptionPaymentUncheckedCreateWithoutUserInput>
-}
-
-export type SubscriptionPaymentCreateManyUserInputEnvelope = {
-  data: Prisma.SubscriptionPaymentCreateManyUserInput | Prisma.SubscriptionPaymentCreateManyUserInput[]
-  skipDuplicates?: boolean
-}
-
 export type SubscriptionPaymentCreateWithoutApprovedByInput = {
   id?: string
   plan: $Enums.SubscriptionPlan
@@ -782,10 +760,11 @@ export type SubscriptionPaymentCreateWithoutApprovedByInput = {
   rejectionReason?: string | null
   approvedAt?: Date | string | null
   rejectedAt?: Date | string | null
+  isRenewal?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutSubscriptionPaymentsInput
   rejectedBy?: Prisma.UserCreateNestedOneWithoutRejectedPaymentsInput
+  user: Prisma.UserCreateNestedOneWithoutSubscriptionPaymentsInput
 }
 
 export type SubscriptionPaymentUncheckedCreateWithoutApprovedByInput = {
@@ -801,6 +780,7 @@ export type SubscriptionPaymentUncheckedCreateWithoutApprovedByInput = {
   approvedAt?: Date | string | null
   rejectedAt?: Date | string | null
   rejectedById?: string | null
+  isRenewal?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -826,10 +806,11 @@ export type SubscriptionPaymentCreateWithoutRejectedByInput = {
   rejectionReason?: string | null
   approvedAt?: Date | string | null
   rejectedAt?: Date | string | null
+  isRenewal?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutSubscriptionPaymentsInput
   approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedPaymentsInput
+  user: Prisma.UserCreateNestedOneWithoutSubscriptionPaymentsInput
 }
 
 export type SubscriptionPaymentUncheckedCreateWithoutRejectedByInput = {
@@ -845,6 +826,7 @@ export type SubscriptionPaymentUncheckedCreateWithoutRejectedByInput = {
   approvedAt?: Date | string | null
   rejectedAt?: Date | string | null
   approvedById?: string | null
+  isRenewal?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -859,20 +841,66 @@ export type SubscriptionPaymentCreateManyRejectedByInputEnvelope = {
   skipDuplicates?: boolean
 }
 
-export type SubscriptionPaymentUpsertWithWhereUniqueWithoutUserInput = {
+export type SubscriptionPaymentCreateWithoutUserInput = {
+  id?: string
+  plan: $Enums.SubscriptionPlan
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.PaymentStatus
+  waveTransactionId?: string | null
+  senderName?: string | null
+  transferDate?: Date | string | null
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  rejectedAt?: Date | string | null
+  isRenewal?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedPaymentsInput
+  rejectedBy?: Prisma.UserCreateNestedOneWithoutRejectedPaymentsInput
+}
+
+export type SubscriptionPaymentUncheckedCreateWithoutUserInput = {
+  id?: string
+  plan: $Enums.SubscriptionPlan
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.PaymentStatus
+  waveTransactionId?: string | null
+  senderName?: string | null
+  transferDate?: Date | string | null
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  rejectedAt?: Date | string | null
+  approvedById?: string | null
+  rejectedById?: string | null
+  isRenewal?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type SubscriptionPaymentCreateOrConnectWithoutUserInput = {
   where: Prisma.SubscriptionPaymentWhereUniqueInput
-  update: Prisma.XOR<Prisma.SubscriptionPaymentUpdateWithoutUserInput, Prisma.SubscriptionPaymentUncheckedUpdateWithoutUserInput>
   create: Prisma.XOR<Prisma.SubscriptionPaymentCreateWithoutUserInput, Prisma.SubscriptionPaymentUncheckedCreateWithoutUserInput>
 }
 
-export type SubscriptionPaymentUpdateWithWhereUniqueWithoutUserInput = {
-  where: Prisma.SubscriptionPaymentWhereUniqueInput
-  data: Prisma.XOR<Prisma.SubscriptionPaymentUpdateWithoutUserInput, Prisma.SubscriptionPaymentUncheckedUpdateWithoutUserInput>
+export type SubscriptionPaymentCreateManyUserInputEnvelope = {
+  data: Prisma.SubscriptionPaymentCreateManyUserInput | Prisma.SubscriptionPaymentCreateManyUserInput[]
+  skipDuplicates?: boolean
 }
 
-export type SubscriptionPaymentUpdateManyWithWhereWithoutUserInput = {
+export type SubscriptionPaymentUpsertWithWhereUniqueWithoutApprovedByInput = {
+  where: Prisma.SubscriptionPaymentWhereUniqueInput
+  update: Prisma.XOR<Prisma.SubscriptionPaymentUpdateWithoutApprovedByInput, Prisma.SubscriptionPaymentUncheckedUpdateWithoutApprovedByInput>
+  create: Prisma.XOR<Prisma.SubscriptionPaymentCreateWithoutApprovedByInput, Prisma.SubscriptionPaymentUncheckedCreateWithoutApprovedByInput>
+}
+
+export type SubscriptionPaymentUpdateWithWhereUniqueWithoutApprovedByInput = {
+  where: Prisma.SubscriptionPaymentWhereUniqueInput
+  data: Prisma.XOR<Prisma.SubscriptionPaymentUpdateWithoutApprovedByInput, Prisma.SubscriptionPaymentUncheckedUpdateWithoutApprovedByInput>
+}
+
+export type SubscriptionPaymentUpdateManyWithWhereWithoutApprovedByInput = {
   where: Prisma.SubscriptionPaymentScalarWhereInput
-  data: Prisma.XOR<Prisma.SubscriptionPaymentUpdateManyMutationInput, Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserInput>
+  data: Prisma.XOR<Prisma.SubscriptionPaymentUpdateManyMutationInput, Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutApprovedByInput>
 }
 
 export type SubscriptionPaymentScalarWhereInput = {
@@ -892,24 +920,9 @@ export type SubscriptionPaymentScalarWhereInput = {
   rejectedAt?: Prisma.DateTimeNullableFilter<"SubscriptionPayment"> | Date | string | null
   approvedById?: Prisma.StringNullableFilter<"SubscriptionPayment"> | string | null
   rejectedById?: Prisma.StringNullableFilter<"SubscriptionPayment"> | string | null
+  isRenewal?: Prisma.BoolFilter<"SubscriptionPayment"> | boolean
   createdAt?: Prisma.DateTimeFilter<"SubscriptionPayment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SubscriptionPayment"> | Date | string
-}
-
-export type SubscriptionPaymentUpsertWithWhereUniqueWithoutApprovedByInput = {
-  where: Prisma.SubscriptionPaymentWhereUniqueInput
-  update: Prisma.XOR<Prisma.SubscriptionPaymentUpdateWithoutApprovedByInput, Prisma.SubscriptionPaymentUncheckedUpdateWithoutApprovedByInput>
-  create: Prisma.XOR<Prisma.SubscriptionPaymentCreateWithoutApprovedByInput, Prisma.SubscriptionPaymentUncheckedCreateWithoutApprovedByInput>
-}
-
-export type SubscriptionPaymentUpdateWithWhereUniqueWithoutApprovedByInput = {
-  where: Prisma.SubscriptionPaymentWhereUniqueInput
-  data: Prisma.XOR<Prisma.SubscriptionPaymentUpdateWithoutApprovedByInput, Prisma.SubscriptionPaymentUncheckedUpdateWithoutApprovedByInput>
-}
-
-export type SubscriptionPaymentUpdateManyWithWhereWithoutApprovedByInput = {
-  where: Prisma.SubscriptionPaymentScalarWhereInput
-  data: Prisma.XOR<Prisma.SubscriptionPaymentUpdateManyMutationInput, Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutApprovedByInput>
 }
 
 export type SubscriptionPaymentUpsertWithWhereUniqueWithoutRejectedByInput = {
@@ -928,21 +941,20 @@ export type SubscriptionPaymentUpdateManyWithWhereWithoutRejectedByInput = {
   data: Prisma.XOR<Prisma.SubscriptionPaymentUpdateManyMutationInput, Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutRejectedByInput>
 }
 
-export type SubscriptionPaymentCreateManyUserInput = {
-  id?: string
-  plan: $Enums.SubscriptionPlan
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: $Enums.PaymentStatus
-  waveTransactionId?: string | null
-  senderName?: string | null
-  transferDate?: Date | string | null
-  rejectionReason?: string | null
-  approvedAt?: Date | string | null
-  rejectedAt?: Date | string | null
-  approvedById?: string | null
-  rejectedById?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
+export type SubscriptionPaymentUpsertWithWhereUniqueWithoutUserInput = {
+  where: Prisma.SubscriptionPaymentWhereUniqueInput
+  update: Prisma.XOR<Prisma.SubscriptionPaymentUpdateWithoutUserInput, Prisma.SubscriptionPaymentUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.SubscriptionPaymentCreateWithoutUserInput, Prisma.SubscriptionPaymentUncheckedCreateWithoutUserInput>
+}
+
+export type SubscriptionPaymentUpdateWithWhereUniqueWithoutUserInput = {
+  where: Prisma.SubscriptionPaymentWhereUniqueInput
+  data: Prisma.XOR<Prisma.SubscriptionPaymentUpdateWithoutUserInput, Prisma.SubscriptionPaymentUncheckedUpdateWithoutUserInput>
+}
+
+export type SubscriptionPaymentUpdateManyWithWhereWithoutUserInput = {
+  where: Prisma.SubscriptionPaymentScalarWhereInput
+  data: Prisma.XOR<Prisma.SubscriptionPaymentUpdateManyMutationInput, Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutUserInput>
 }
 
 export type SubscriptionPaymentCreateManyApprovedByInput = {
@@ -958,6 +970,7 @@ export type SubscriptionPaymentCreateManyApprovedByInput = {
   approvedAt?: Date | string | null
   rejectedAt?: Date | string | null
   rejectedById?: string | null
+  isRenewal?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -975,8 +988,135 @@ export type SubscriptionPaymentCreateManyRejectedByInput = {
   approvedAt?: Date | string | null
   rejectedAt?: Date | string | null
   approvedById?: string | null
+  isRenewal?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+}
+
+export type SubscriptionPaymentCreateManyUserInput = {
+  id?: string
+  plan: $Enums.SubscriptionPlan
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: $Enums.PaymentStatus
+  waveTransactionId?: string | null
+  senderName?: string | null
+  transferDate?: Date | string | null
+  rejectionReason?: string | null
+  approvedAt?: Date | string | null
+  rejectedAt?: Date | string | null
+  approvedById?: string | null
+  rejectedById?: string | null
+  isRenewal?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type SubscriptionPaymentUpdateWithoutApprovedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.EnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  waveTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  senderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rejectedBy?: Prisma.UserUpdateOneWithoutRejectedPaymentsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutSubscriptionPaymentsNestedInput
+}
+
+export type SubscriptionPaymentUncheckedUpdateWithoutApprovedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.EnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  waveTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  senderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type SubscriptionPaymentUncheckedUpdateManyWithoutApprovedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.EnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  waveTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  senderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type SubscriptionPaymentUpdateWithoutRejectedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.EnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  waveTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  senderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedBy?: Prisma.UserUpdateOneWithoutApprovedPaymentsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutSubscriptionPaymentsNestedInput
+}
+
+export type SubscriptionPaymentUncheckedUpdateWithoutRejectedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.EnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  waveTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  senderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type SubscriptionPaymentUncheckedUpdateManyWithoutRejectedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.EnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  waveTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  senderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transferDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type SubscriptionPaymentUpdateWithoutUserInput = {
@@ -990,6 +1130,7 @@ export type SubscriptionPaymentUpdateWithoutUserInput = {
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   approvedBy?: Prisma.UserUpdateOneWithoutApprovedPaymentsNestedInput
@@ -1009,6 +1150,7 @@ export type SubscriptionPaymentUncheckedUpdateWithoutUserInput = {
   rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1026,108 +1168,7 @@ export type SubscriptionPaymentUncheckedUpdateManyWithoutUserInput = {
   rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type SubscriptionPaymentUpdateWithoutApprovedByInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  plan?: Prisma.EnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-  waveTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  senderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transferDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutSubscriptionPaymentsNestedInput
-  rejectedBy?: Prisma.UserUpdateOneWithoutRejectedPaymentsNestedInput
-}
-
-export type SubscriptionPaymentUncheckedUpdateWithoutApprovedByInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  plan?: Prisma.EnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-  waveTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  senderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transferDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type SubscriptionPaymentUncheckedUpdateManyWithoutApprovedByInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  plan?: Prisma.EnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-  waveTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  senderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transferDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type SubscriptionPaymentUpdateWithoutRejectedByInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  plan?: Prisma.EnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-  waveTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  senderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transferDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutSubscriptionPaymentsNestedInput
-  approvedBy?: Prisma.UserUpdateOneWithoutApprovedPaymentsNestedInput
-}
-
-export type SubscriptionPaymentUncheckedUpdateWithoutRejectedByInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  plan?: Prisma.EnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-  waveTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  senderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transferDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type SubscriptionPaymentUncheckedUpdateManyWithoutRejectedByInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  plan?: Prisma.EnumSubscriptionPlanFieldUpdateOperationsInput | $Enums.SubscriptionPlan
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
-  waveTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  senderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  transferDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1148,11 +1189,12 @@ export type SubscriptionPaymentSelect<ExtArgs extends runtime.Types.Extensions.I
   rejectedAt?: boolean
   approvedById?: boolean
   rejectedById?: boolean
+  isRenewal?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   approvedBy?: boolean | Prisma.SubscriptionPayment$approvedByArgs<ExtArgs>
   rejectedBy?: boolean | Prisma.SubscriptionPayment$rejectedByArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["subscriptionPayment"]>
 
 export type SubscriptionPaymentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1169,11 +1211,12 @@ export type SubscriptionPaymentSelectCreateManyAndReturn<ExtArgs extends runtime
   rejectedAt?: boolean
   approvedById?: boolean
   rejectedById?: boolean
+  isRenewal?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   approvedBy?: boolean | Prisma.SubscriptionPayment$approvedByArgs<ExtArgs>
   rejectedBy?: boolean | Prisma.SubscriptionPayment$rejectedByArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["subscriptionPayment"]>
 
 export type SubscriptionPaymentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1190,11 +1233,12 @@ export type SubscriptionPaymentSelectUpdateManyAndReturn<ExtArgs extends runtime
   rejectedAt?: boolean
   approvedById?: boolean
   rejectedById?: boolean
+  isRenewal?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   approvedBy?: boolean | Prisma.SubscriptionPayment$approvedByArgs<ExtArgs>
   rejectedBy?: boolean | Prisma.SubscriptionPayment$rejectedByArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["subscriptionPayment"]>
 
 export type SubscriptionPaymentSelectScalar = {
@@ -1211,33 +1255,34 @@ export type SubscriptionPaymentSelectScalar = {
   rejectedAt?: boolean
   approvedById?: boolean
   rejectedById?: boolean
+  isRenewal?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type SubscriptionPaymentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "plan" | "amount" | "status" | "waveTransactionId" | "senderName" | "transferDate" | "rejectionReason" | "approvedAt" | "rejectedAt" | "approvedById" | "rejectedById" | "createdAt" | "updatedAt", ExtArgs["result"]["subscriptionPayment"]>
+export type SubscriptionPaymentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "plan" | "amount" | "status" | "waveTransactionId" | "senderName" | "transferDate" | "rejectionReason" | "approvedAt" | "rejectedAt" | "approvedById" | "rejectedById" | "isRenewal" | "createdAt" | "updatedAt", ExtArgs["result"]["subscriptionPayment"]>
 export type SubscriptionPaymentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   approvedBy?: boolean | Prisma.SubscriptionPayment$approvedByArgs<ExtArgs>
   rejectedBy?: boolean | Prisma.SubscriptionPayment$rejectedByArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type SubscriptionPaymentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   approvedBy?: boolean | Prisma.SubscriptionPayment$approvedByArgs<ExtArgs>
   rejectedBy?: boolean | Prisma.SubscriptionPayment$rejectedByArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type SubscriptionPaymentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   approvedBy?: boolean | Prisma.SubscriptionPayment$approvedByArgs<ExtArgs>
   rejectedBy?: boolean | Prisma.SubscriptionPayment$rejectedByArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
 export type $SubscriptionPaymentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "SubscriptionPayment"
   objects: {
-    user: Prisma.$UserPayload<ExtArgs>
     approvedBy: Prisma.$UserPayload<ExtArgs> | null
     rejectedBy: Prisma.$UserPayload<ExtArgs> | null
+    user: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1253,6 +1298,7 @@ export type $SubscriptionPaymentPayload<ExtArgs extends runtime.Types.Extensions
     rejectedAt: Date | null
     approvedById: string | null
     rejectedById: string | null
+    isRenewal: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["subscriptionPayment"]>
@@ -1649,9 +1695,9 @@ readonly fields: SubscriptionPaymentFieldRefs;
  */
 export interface Prisma__SubscriptionPaymentClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   approvedBy<T extends Prisma.SubscriptionPayment$approvedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SubscriptionPayment$approvedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   rejectedBy<T extends Prisma.SubscriptionPayment$rejectedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SubscriptionPayment$rejectedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1694,6 +1740,7 @@ export interface SubscriptionPaymentFieldRefs {
   readonly rejectedAt: Prisma.FieldRef<"SubscriptionPayment", 'DateTime'>
   readonly approvedById: Prisma.FieldRef<"SubscriptionPayment", 'String'>
   readonly rejectedById: Prisma.FieldRef<"SubscriptionPayment", 'String'>
+  readonly isRenewal: Prisma.FieldRef<"SubscriptionPayment", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"SubscriptionPayment", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"SubscriptionPayment", 'DateTime'>
 }

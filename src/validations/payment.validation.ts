@@ -10,6 +10,7 @@ export const initiatePaymentSchema = {
     plan: z.enum(["MONTHLY", "ANNUAL"], {
       message: "Le plan doit être MONTHLY ou ANNUAL",
     }),
+    isRenewal: z.boolean().optional(),
   }),
 };
 
@@ -17,7 +18,6 @@ export const confirmPaymentSchema = {
   body: z.object({
     paymentId: z.string().min(1, "paymentId requis"),
     waveTransactionId: z.string().min(1, "L'ID Wave est requis").trim(),
-    senderName: z.string().min(1, "Le nom de l'expéditeur est requis").trim(),
     transferDate: flexibleDateSchema,
   }),
 };

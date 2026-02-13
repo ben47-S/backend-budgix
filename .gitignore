@@ -32,7 +32,7 @@ yarn-error.log*
 # OS
 .expo/
 
-
+.tmpclaude-*
 
 # Other
 test-admin-login.ps1

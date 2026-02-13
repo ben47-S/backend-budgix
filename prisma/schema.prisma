@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
@@ -13,12 +7,329 @@ datasource db {
   provider = "postgresql"
 }
 
-enum UserStatus {
-  PENDING_CONSENT // OTP validé mais CGU/Privacy non acceptées
-  ACTIVE          // Utilisateur actif
-  SUSPENDED       // Compte suspendu (admin)
+model User {
+  id                     String                  @id @default(cuid())
+  username               String?                 @unique
+  phone                  String?                 @unique
+  email                  String?                 @unique
+  password               String?
+  isPremium              Boolean                 @default(false)
+  role                   UserRole                @default(USER)
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+  status                 UserStatus              @default(PENDING_CONSENT)
+  termsAcceptedAt        DateTime?
+  privacyAcceptedAt      DateTime?
+  termsVersion           String?
+  privacyVersion         String?
+  budgets                Budget[]
+  categories             Category[]
+  debts                  Debt[]
+  discussions            Discussion[]
+  emailVerificationCodes EmailVerificationCode[]
+  externalSubscriptions  ExternalSubscription[]
+  improvementSuggestions ImprovementSuggestion[]
+  notifications          Notification[]
+  otpCodes               OtpCode[]
+  pushTokens             PushToken[]
+  reviews                Review?
+  subscription           Subscription?
+  approvedPayments       SubscriptionPayment[]   @relation("PaymentApprovedBy")
+  rejectedPayments       SubscriptionPayment[]   @relation("PaymentRejectedBy")
+  subscriptionPayments   SubscriptionPayment[]
+  transactions           Transaction[]
 }
 
+/// Modèle pour gérer les paiements d'abonnement premium
+model SubscriptionPayment {
+  id                String           @id @default(cuid())
+  userId            String
+  plan              SubscriptionPlan
+  amount            Decimal
+  status            PaymentStatus    @default(PENDING)
+  waveTransactionId String?
+  senderName        String?
+  transferDate      DateTime?
+  rejectionReason   String?
+  approvedAt        DateTime?
+  rejectedAt        DateTime?
+  approvedById      String?
+  rejectedById      String?
+  isRenewal         Boolean          @default(false)
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  approvedBy        User?            @relation("PaymentApprovedBy", fields: [approvedById], references: [id])
+  rejectedBy        User?            @relation("PaymentRejectedBy", fields: [rejectedById], references: [id])
+  user              User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+  @@index([waveTransactionId])
+}
+
+model OtpCode {
+  id        String   @id @default(cuid())
+  code      String
+  phone     String
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([phone, expiresAt])
+  @@index([code, phone])
+}
+
+model EmailVerificationCode {
+  id        String   @id @default(cuid())
+  code      String
+  email     String
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([email, expiresAt])
+  @@index([code, email])
+}
+
+model Category {
+  id                    String                 @id @default(cuid())
+  name                  String
+  type                  CategoryType
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  userId                String?
+  budgets               Budget[]
+  user                  User?                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  externalSubscriptions ExternalSubscription[]
+  transactions          Transaction[]
+
+  @@unique([userId, name, type])
+}
+
+model Transaction {
+  id         String   @id @default(cuid())
+  amount     Decimal
+  date       DateTime @default(now())
+  note       String?
+  userId     String
+  categoryId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([date])
+  @@index([userId])
+  @@index([categoryId])
+  @@index([userId, date])
+}
+
+model Subscription {
+  id        String           @id @default(cuid())
+  plan      SubscriptionPlan
+  price     Decimal
+  startDate DateTime         @default(now())
+  endDate   DateTime?
+  updatedAt DateTime         @updatedAt
+  userId    String           @unique
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, endDate])
+}
+
+model Debt {
+  id          String   @id @default(cuid())
+  type        DebtType
+  contactName String
+  amount      Decimal
+  isPaid      Boolean  @default(false)
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isPaid])
+  @@index([userId, type])
+}
+
+/// Modèle pour gérer les budgets (fonctionnalité premium)
+model Budget {
+  id          String     @id @default(cuid())
+  amount      Decimal
+  type        BudgetType @default(CUSTOM)
+  periodStart DateTime
+  periodEnd   DateTime
+  userId      String
+  categoryId  String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  category    Category?  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, periodStart, periodEnd])
+  @@index([userId, categoryId, periodStart, periodEnd])
+  @@index([userId, type])
+  @@index([userId, type, periodStart, periodEnd])
+}
+
+/// Modèle pour gérer les tokens de notification push Expo
+model PushToken {
+  id                    String   @id @default(cuid())
+  token                 String   @unique
+  platform              String
+  deviceId              String?
+  userId                String
+  enabled               Boolean  @default(true)
+  budgetAlerts          Boolean  @default(true)
+  reminders             Boolean  @default(true)
+  subscriptionReminders Boolean  @default(true)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([token])
+}
+
+/// Modèle pour sauvegarder les notifications envoyées aux utilisateurs
+model Notification {
+  id        String           @id @default(cuid())
+  type      NotificationType
+  title     String
+  body      String
+  data      Json?
+  read      Boolean          @default(false)
+  userId    String
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([userId, read])
+  @@index([userId, createdAt])
+  @@index([type])
+}
+
+/// Modèle pour gérer les abonnements externes (Netflix, Spotify, etc.)
+model ExternalSubscription {
+  id              String       @id @default(cuid())
+  userId          String
+  name            String
+  amount          Int
+  startDate       DateTime
+  billingCycle    BillingCycle
+  customDays      Int?
+  nextBillingDate DateTime
+  categoryId      String?
+  notes           String?
+  isActive        Boolean      @default(true)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  category        Category?    @relation(fields: [categoryId], references: [id])
+  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([userId, isActive])
+  @@index([userId, nextBillingDate])
+  @@index([nextBillingDate])
+}
+
+/// Modèle pour gérer les discussions de support client
+model Discussion {
+  id             String           @id @default(cuid())
+  userId         String
+  status         DiscussionStatus @default(OPEN)
+  lastActivityAt DateTime         @default(now())
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages       Message[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([lastActivityAt])
+  @@index([userId, status])
+}
+
+/// Modèle pour gérer les messages dans les discussions
+model Message {
+  id           String            @id @default(cuid())
+  discussionId String
+  senderId     String?
+  senderType   MessageSenderType
+  content      String
+  read         Boolean           @default(false)
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  discussion   Discussion        @relation(fields: [discussionId], references: [id], onDelete: Cascade)
+
+  @@index([discussionId])
+  @@index([discussionId, createdAt])
+  @@index([senderId])
+}
+
+/// Modèle pour gérer les avis utilisateurs (note + commentaire)
+/// Un utilisateur ne peut avoir qu'un seul avis
+model Review {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([rating])
+  @@index([createdAt])
+}
+
+/// Modèle pour gérer les suggestions d'amélioration
+/// Un utilisateur peut avoir plusieurs suggestions
+model ImprovementSuggestion {
+  id        String   @id @default(cuid())
+  userId    String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([createdAt])
+  @@index([userId, createdAt])
+}
+
+/// Logs centralisés pour audit et dashboard admin
+model Log {
+  id        String   @id @default(cuid())
+  level     LogLevel @default(INFO)
+  scope     LogScope @default(USER)
+  action    String
+  userId    String?
+  adminId   String?
+  targetId  String?
+  ip        String?
+  userAgent String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([adminId])
+  @@index([scope])
+  @@index([action])
+  @@index([createdAt])
+}
+
+enum UserStatus {
+  PENDING_CONSENT
+  ACTIVE
+  SUSPENDED
+}
 
 enum CategoryType {
   INCOME
@@ -31,8 +342,8 @@ enum SubscriptionPlan {
 }
 
 enum DebtType {
-  OWED_TO_ME // Personne qui me doit
-  I_OWE // Personne que je dois
+  OWED_TO_ME
+  I_OWE
 }
 
 enum LogLevel {
@@ -42,407 +353,63 @@ enum LogLevel {
 }
 
 enum LogScope {
-  USER      // Logs liés aux actions utilisateurs
-  BUSINESS  // Logs liés aux événements métiers (transactions, budgets)
-  SECURITY  // Tentatives suspectes, accès refusés
-  ADMIN     // Actions admin
-  SYSTEM    // Erreurs système
+  USER
+  BUSINESS
+  SECURITY
+  ADMIN
+  SYSTEM
 }
 
 enum NotificationType {
-  BUDGET_WARNING // Avertissement de budget (70-99%)
-  BUDGET_ALERT // Alerte de budget (100% ou dépassé)
-  TRANSACTION_REMINDER // Rappel de transaction
-  WEEKLY_SUMMARY // Résumé hebdomadaire
-  SUBSCRIPTION_RENEWAL_REMINDER // Rappel de renouvellement d'abonnement externe
-  PAYMENT_PENDING_VERIFICATION // Paiement soumis, en attente de validation admin
-  PAYMENT_APPROVED // Paiement approuvé
-  PAYMENT_REJECTED // Paiement refusé
+  BUDGET_WARNING
+  BUDGET_ALERT
+  TRANSACTION_REMINDER
+  WEEKLY_SUMMARY
+  SUBSCRIPTION_RENEWAL_REMINDER
+  PAYMENT_PENDING_VERIFICATION
+  PAYMENT_APPROVED
+  PAYMENT_REJECTED
+  PREMIUM_SUBSCRIPTION_EXPIRATION_REMINDER
+  DEBT_REMINDER
 }
 
 enum PaymentStatus {
-  PENDING // Paiement initié
-  PENDING_VERIFICATION // Paiement soumis, en attente de validation admin
-  APPROVED // Paiement approuvé
-  REJECTED // Paiement refusé
+  PENDING
+  PENDING_VERIFICATION
+  APPROVED
+  REJECTED
 }
 
 enum BillingCycle {
-  MONTHLY // Mensuel
-  QUARTERLY // Trimestriel
-  ANNUAL // Annuel
-  CUSTOM // Personnalisé (nécessite customDays)
+  MONTHLY
+  QUARTERLY
+  ANNUAL
+  CUSTOM
 }
 
 enum BudgetType {
-  MONTHLY // Budget mensuel (mois en cours ou mois passés)
-  CUSTOM // Budget personnalisé (dates personnalisées)
+  MONTHLY
+  CUSTOM
 }
 
 enum BudgetStatus {
-  DEPASSE // Budget dépassé (dépenses > limite)
-  EN_COURS // Budget en cours (période actuelle et dépenses < limite)
-  A_VENIR // Budget à venir (période future)
+  DEPASSE
+  EN_COURS
+  A_VENIR
 }
 
 enum MessageSenderType {
-  USER // Message envoyé par un utilisateur
-  ADMIN // Message envoyé par un administrateur/service client
+  USER
+  ADMIN
 }
 
 enum UserRole {
-  USER // Utilisateur standard
-  ADMIN // Administrateur
+  USER
+  ADMIN
 }
 
 enum DiscussionStatus {
-  OPEN // Discussion ouverte
-  CLOSED // Discussion fermée
-  ARCHIVED // Discussion archivée
+  OPEN
+  CLOSED
+  ARCHIVED
 }
-
-model User {
-  id        String   @id @default(cuid())
-  username  String?  @unique
-  phone     String?  @unique // Pour authentification par téléphone
-  email     String?  @unique // Pour authentification OAuth
-  password  String? // Mot de passe hashé (optionnel, principalement pour les admins)
-  isPremium Boolean  @default(false) // Statut premium
-  role      UserRole @default(USER) // Rôle utilisateur (USER ou ADMIN)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  status UserStatus @default(PENDING_CONSENT)
-
-  termsAcceptedAt    DateTime? // Date d'acceptation des CGU
-  privacyAcceptedAt DateTime? // Date d'acceptation de la politique de confidentialité
-  termsVersion      String? // ex: "v1.0"
-  privacyVersion    String? // ex: "v1.0" 
-
-  transactions           Transaction[]
-  categories             Category[]
-  subscription           Subscription?
-  otpCodes               OtpCode[] // Codes OTP pour authentification
-  emailVerificationCodes EmailVerificationCode[] // Codes de vérification d'email
-  debts                  Debt[] // Dettes (fonctionnalité premium)
-  budgets                Budget[] // Budgets (fonctionnalité premium)
-  pushTokens             PushToken[] // Tokens de notification push
-  notifications          Notification[] // Notifications sauvegardées
-  externalSubscriptions  ExternalSubscription[] // Abonnements externes (Netflix, Spotify, etc.)
-  discussions            Discussion[] // Discussions de support client
-  reviews                Review[] // Avis utilisateurs (note + commentaire)
-  improvementSuggestions ImprovementSuggestion[] // Suggestions d'amélioration (plusieurs par utilisateur)
-  subscriptionPayments   SubscriptionPayment[] // Paiements d'abonnements premium
-  approvedPayments       SubscriptionPayment[] @relation("PaymentApprovedBy")
-  rejectedPayments       SubscriptionPayment[] @relation("PaymentRejectedBy")
-}
-
-/// Modèle pour gérer les paiements d'abonnement premium
-model SubscriptionPayment {
-  id                String           @id @default(cuid())
-  userId            String
-  user              User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  plan              SubscriptionPlan // MONTHLY ou ANNUAL
-  amount            Decimal // Montant en XOF (FCFA)
-  status            PaymentStatus    @default(PENDING)
-  waveTransactionId String?
-  senderName        String?
-  transferDate      DateTime?
-  rejectionReason   String?
-
-  approvedAt  DateTime?
-  rejectedAt  DateTime?
-  approvedById String?
-  rejectedById String?
-  approvedBy  User? @relation("PaymentApprovedBy", fields: [approvedById], references: [id], onDelete: SetNull)
-  rejectedBy  User? @relation("PaymentRejectedBy", fields: [rejectedById], references: [id], onDelete: SetNull)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([userId])
-  @@index([status])
-  @@index([createdAt])
-  @@index([waveTransactionId])
-}
-
-// Modèle pour gérer les codes OTP (valides 5 minutes)
-model OtpCode {
-  id        String   @id @default(cuid())
-  code      String // Code OTP à 6 chiffres généralement
-  phone     String // Numéro de téléphone associé
-  expiresAt DateTime // Date d'expiration (5 minutes après création)
-  used      Boolean  @default(false) // Si le code a déjà été utilisé
-  createdAt DateTime @default(now())
-
-  userId String?
-  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([phone, expiresAt])
-  @@index([code, phone])
-}
-
-// Modèle pour gérer les codes de vérification d'email (valides 5 minutes)
-model EmailVerificationCode {
-  id        String   @id @default(cuid())
-  code      String // Code de vérification à 6 chiffres
-  email     String // Email associé
-  expiresAt DateTime // Date d'expiration (5 minutes après création)
-  used      Boolean  @default(false) // Si le code a déjà été utilisé
-  createdAt DateTime @default(now())
-
-  userId String?
-  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([email, expiresAt])
-  @@index([code, email])
-}
-
-model Category {
-  id        String       @id @default(cuid())
-  name      String
-  type      CategoryType
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
-
-  // catégorie globale (userId = null) ou privée (userId != null)
-  userId String?
-  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  transactions          Transaction[]
-  budgets               Budget[]
-  externalSubscriptions ExternalSubscription[]
-
-  @@unique([userId, name, type])
-}
-
-model Transaction {
-  id     String   @id @default(cuid())
-  amount Decimal
-  date   DateTime @default(now()) // Date et heure de la transaction
-  note   String? // Remarque optionnelle
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  categoryId String
-  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([date])
-  @@index([userId])
-  @@index([categoryId])
-  @@index([userId, date])
-}
-
-model Subscription {
-  id        String           @id @default(cuid())
-  plan      SubscriptionPlan // MONTHLY ou ANNUAL
-  price     Decimal // Prix de l'abonnement
-  startDate DateTime         @default(now())
-  endDate   DateTime? // null si abonnement actif, date de fin si terminé
-  updatedAt DateTime         @updatedAt
-
-  userId String @unique
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId, endDate])
-}
-
-// Modèle pour gérer les dettes (fonctionnalité premium - à implémenter plus tard)
-model Debt {
-  id          String   @id @default(cuid())
-  type        DebtType // OWED_TO_ME ou I_OWE
-  contactName String // Nom de la personne
-  amount      Decimal // Montant de la dette
-  isPaid      Boolean  @default(false) // Si la dette est réglée
-  notes       String? // Notes optionnelles
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId, isPaid])
-  @@index([userId, type])
-}
-
-/// Modèle pour gérer les budgets (fonctionnalité premium)
-model Budget {
-  id     String     @id @default(cuid())
-  amount Decimal // Montant limite de budget pour la période
-  type   BudgetType @default(CUSTOM) // Type de budget (MONTHLY ou CUSTOM)
-
-  // Période couverte par ce budget (inclusif)
-  periodStart DateTime
-  periodEnd   DateTime
-
-  // Budget global (toutes catégories) ou ciblé sur une catégorie
-  userId     String
-  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  categoryId String? // null = budget global
-  category   Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([userId, periodStart, periodEnd])
-  @@index([userId, categoryId, periodStart, periodEnd])
-  @@index([userId, type])
-  @@index([userId, type, periodStart, periodEnd])
-}
-
-/// Modèle pour gérer les tokens de notification push Expo
-model PushToken {
-  id       String  @id @default(cuid())
-  token    String  @unique // Token Expo (format: ExponentPushToken[...])
-  platform String // "ios" | "android" | "web"
-  deviceId String? // Identifiant unique de l'appareil (optionnel)
-  userId   String // Utilisateur propriétaire du token
-  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  // Préférences de notification pour cet appareil
-  enabled               Boolean @default(true) // Si l'utilisateur a activé les notifications sur cet appareil
-  budgetAlerts          Boolean @default(true) // Alertes de budget dépassé
-  reminders             Boolean @default(true) // Rappels de transaction
-  subscriptionReminders Boolean @default(true) // Rappels de renouvellement d'abonnements externes
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([userId])
-  @@index([token])
-}
-
-/// Modèle pour sauvegarder les notifications envoyées aux utilisateurs
-model Notification {
-  id     String           @id @default(cuid())
-  type   NotificationType // Type de notification
-  title  String // Titre de la notification
-  body   String // Corps de la notification
-  data   Json? // Données supplémentaires (optionnel)
-  read   Boolean          @default(false) // Si la notification a été lue
-  userId String // Utilisateur destinataire
-  user   User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([userId])
-  @@index([userId, read])
-  @@index([userId, createdAt])
-  @@index([type])
-}
-
-/// Modèle pour gérer les abonnements externes (Netflix, Spotify, etc.)
-model ExternalSubscription {
-  id              String       @id @default(cuid())
-  userId          String
-  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  name            String // Nom de l'abonnement (ex: "Netflix")
-  amount          Int // Montant en FCFA (entier)
-  startDate       DateTime // Date de début
-  billingCycle    BillingCycle // Cycle de facturation
-  customDays      Int? // Nombre de jours pour cycle personnalisé (si billingCycle = CUSTOM)
-  nextBillingDate DateTime // Date du prochain renouvellement
-  categoryId      String? // Catégorie optionnelle
-  category        Category?    @relation(fields: [categoryId], references: [id], onDelete: SetNull)
-  notes           String? // Notes optionnelles
-  isActive        Boolean      @default(true) // Si l'abonnement est actif
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
-
-  @@index([userId])
-  @@index([userId, isActive])
-  @@index([userId, nextBillingDate])
-  @@index([nextBillingDate])
-}
-
-/// Modèle pour gérer les discussions de support client
-model Discussion {
-  id             String           @id @default(cuid())
-  userId         String // Utilisateur qui a créé la discussion
-  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  status         DiscussionStatus @default(OPEN) // Statut de la discussion
-  lastActivityAt DateTime         @default(now()) // Dernière activité (message envoyé ou reçu)
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-
-  messages Message[] // Messages de la discussion
-
-  @@index([userId])
-  @@index([status])
-  @@index([lastActivityAt])
-  @@index([userId, status])
-}
-
-/// Modèle pour gérer les messages dans les discussions
-model Message {
-  id           String            @id @default(cuid())
-  discussionId String // Discussion à laquelle appartient le message
-  discussion   Discussion        @relation(fields: [discussionId], references: [id], onDelete: Cascade)
-  senderId     String? // ID de l'expéditeur (null si c'est un admin/service client)
-  senderType   MessageSenderType // Type d'expéditeur (USER ou ADMIN)
-  content      String // Contenu du message
-  read         Boolean           @default(false) // Si le message a été lu
-  createdAt    DateTime          @default(now())
-  updatedAt    DateTime          @updatedAt
-
-  @@index([discussionId])
-  @@index([discussionId, createdAt])
-  @@index([senderId])
-}
-
-/// Modèle pour gérer les avis utilisateurs (note + commentaire)
-/// Un utilisateur ne peut avoir qu'un seul avis
-model Review {
-  id        String   @id @default(cuid())
-  userId    String   @unique // Un utilisateur ne peut avoir qu'un seul avis
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  rating    Int      // Note de 1 à 5 étoiles
-  comment   String?  // Commentaire optionnel
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([rating])
-  @@index([createdAt])
-}
-
-/// Modèle pour gérer les suggestions d'amélioration
-/// Un utilisateur peut avoir plusieurs suggestions
-model ImprovementSuggestion {
-  id        String   @id @default(cuid())
-  userId    String   // Utilisateur qui a créé la suggestion
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  content   String   // Contenu de la suggestion d'amélioration
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([userId])
-  @@index([createdAt])
-  @@index([userId, createdAt])
-}
-
-/// Logs centralisés pour audit et dashboard admin
-model Log {
-  id        String    @id @default(cuid())
-  level     LogLevel  @default(INFO)
-  scope     LogScope  @default(USER)
-  action    String    // ex: "USER_LOGIN_SUCCESS", "TRANSACTION_CREATED"
-  userId    String?   // ID du user concerné
-  adminId   String?   // ID admin ayant effectué l'action
-  targetId  String?   // ID de l'entité impactée (transactionId, categoryId, budgetId, etc.)
-  ip        String?   // IP anonymisée
-  userAgent String?   // User agent (optionnel)
-  metadata  Json?     // Contexte minimal
-  createdAt DateTime  @default(now())
-
-  @@index([userId])
-  @@index([adminId])
-  @@index([scope])
-  @@index([action])
-  @@index([createdAt])
-}
-

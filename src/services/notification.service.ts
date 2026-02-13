@@ -397,7 +397,8 @@ export async function sendWeeklySummary(
 
 /**
  * Envoie une notification de rappel de renouvellement d'abonnement externe
- * 
+ *
+ * @deprecated Utilisez sendGroupedSubscriptionReminders pour le nouveau système de notifications groupées quotidiennes
  * @param userId - ID de l'utilisateur
  * @param subscriptionId - ID de l'abonnement
  * @param subscriptionName - Nom de l'abonnement
@@ -435,8 +436,156 @@ export async function sendSubscriptionRenewalReminder(
 }
 
 /**
+ * Envoie une notification groupée pour plusieurs abonnements d'un utilisateur
+ *
+ * Cette fonction envoie UNE notification par jour listant TOUS les abonnements
+ * qui expirent bientôt ou qui sont déjà expirés.
+ *
+ * Formats de messages:
+ * - Un seul abonnement:
+ *   - J-3 à J-2: "Votre abonnement pour [NOM] prend fin dans [X] jours"
+ *   - J-1: "Votre abonnement pour [NOM] prend fin dans 1 jour"
+ *   - J: "Votre abonnement [NOM] est terminé. Renouvelez-le"
+ *
+ * - Plusieurs abonnements:
+ *   - Tous actifs: "3 abonnements expirent bientôt: Netflix (3j), Spotify (2j), Disney+ (1j)"
+ *   - Tous expirés: "2 abonnements terminés: Netflix, Spotify"
+ *   - Mixte: "2 expirent bientôt: Spotify (2j), Disney+ (3j) + 1 terminé: Netflix"
+ *
+ * @param userId - ID de l'utilisateur
+ * @param subscriptions - Liste des abonnements avec leurs jours restants
+ */
+export async function sendGroupedSubscriptionReminders(
+  userId: string,
+  subscriptions: Array<{
+    id: string;
+    name: string;
+    nextBillingDate: Date;
+    daysUntilRenewal: number;
+  }>
+) {
+  let title: string;
+  let body: string;
+
+  // Séparer les abonnements terminés (J) des autres
+  const expiredSubs = subscriptions.filter(s => s.daysUntilRenewal === 0);
+  const activeSubs = subscriptions.filter(s => s.daysUntilRenewal > 0);
+
+  // CAS 1: Un seul abonnement
+  if (subscriptions.length === 1) {
+    const sub = subscriptions[0]!; // Safe car length === 1
+
+    if (sub.daysUntilRenewal === 0) {
+      title = 'Abonnement terminé';
+      body = `Votre abonnement ${sub.name} est terminé. Renouvelez-le`;
+    } else if (sub.daysUntilRenewal === 1) {
+      title = 'Abonnement bientôt terminé';
+      body = `Votre abonnement pour ${sub.name} prend fin dans 1 jour`;
+    } else {
+      title = 'Abonnement bientôt terminé';
+      body = `Votre abonnement pour ${sub.name} prend fin dans ${sub.daysUntilRenewal} jours`;
+    }
+  }
+  // CAS 2: Plusieurs abonnements
+  else {
+    title = 'Abonnements à renouveler';
+
+    // Liste des abonnements actifs avec jours restants
+    const activeList = activeSubs
+      .map(s => `${s.name} (${s.daysUntilRenewal}j)`)
+      .join(', ');
+
+    // Construire le message
+    if (activeSubs.length > 0 && expiredSubs.length === 0) {
+      // Seulement des abonnements actifs
+      body = `${activeSubs.length} abonnement${activeSubs.length > 1 ? 's' : ''} expire${activeSubs.length > 1 ? 'nt' : ''} bientôt: ${activeList}`;
+    } else if (activeSubs.length === 0 && expiredSubs.length > 0) {
+      // Seulement des abonnements terminés
+      const expiredList = expiredSubs.map(s => s.name).join(', ');
+      body = `${expiredSubs.length} abonnement${expiredSubs.length > 1 ? 's' : ''} terminé${expiredSubs.length > 1 ? 's' : ''}: ${expiredList}`;
+    } else {
+      // Mélange d'actifs et terminés
+      const expiredList = expiredSubs.map(s => s.name).join(', ');
+      body = `${activeSubs.length} expire${activeSubs.length > 1 ? 'nt' : ''} bientôt: ${activeList} + ${expiredSubs.length} terminé${expiredSubs.length > 1 ? 's' : ''}: ${expiredList}`;
+    }
+  }
+
+  // Préparer les données pour la notification
+  const data = {
+    type: 'SUBSCRIPTION_RENEWAL_REMINDER',
+    subscriptions: subscriptions.map(s => ({
+      subscriptionId: s.id,
+      subscriptionName: s.name,
+      nextBillingDate: s.nextBillingDate.toISOString(),
+      daysUntilRenewal: s.daysUntilRenewal,
+    })),
+    count: subscriptions.length,
+  };
+
+  return sendNotificationToUser(
+    userId,
+    title,
+    body,
+    data,
+    false, // requireBudgetAlerts
+    false, // requireReminders
+    true   // requireSubscriptionReminders
+  );
+}
+
+/**
+ * Envoie une notification de rappel de renouvellement d'abonnement premium Budgix
+ *
+ * @param userId - ID de l'utilisateur
+ * @param data - Données de l'abonnement (plan, endDate, daysUntilRenewal)
+ */
+export async function sendPremiumSubscriptionRenewalReminder(
+  userId: string,
+  data: {
+    plan: 'MONTHLY' | 'ANNUAL';
+    endDate: Date;
+    daysUntilRenewal: number;
+  }
+) {
+  let title: string;
+  let body: string;
+
+  const planLabel = data.plan === 'MONTHLY' ? 'mensuel' : 'annuel';
+
+  // Messages selon les jours restants
+  if (data.daysUntilRenewal === 0) {
+    title = 'Abonnement premium expiré';
+    body = `Votre abonnement premium ${planLabel} est terminé. Renouvelez-le pour continuer à profiter de toutes les fonctionnalités`;
+  } else if (data.daysUntilRenewal === 1) {
+    title = 'Abonnement premium expire demain';
+    body = `Votre abonnement premium ${planLabel} prend fin dans 1 jour`;
+  } else {
+    title = 'Abonnement premium bientôt terminé';
+    body = `Votre abonnement premium ${planLabel} prend fin dans ${data.daysUntilRenewal} jours`;
+  }
+
+  // Préparer les données pour la notification
+  const notificationData = {
+    type: 'PREMIUM_SUBSCRIPTION_EXPIRATION_REMINDER',
+    plan: data.plan,
+    endDate: data.endDate.toISOString(),
+    daysUntilRenewal: data.daysUntilRenewal,
+  };
+
+  return sendNotificationToUser(
+    userId,
+    title,
+    body,
+    notificationData,
+    false, // requireBudgetAlerts
+    false, // requireReminders
+    true   // requireSubscriptionReminders - Utilise le même flag que les abonnements externes
+  );
+}
+
+/**
  * Sauvegarde une notification dans la base de données
- * 
+ *
  * @param options - Options pour sauvegarder la notification
  */
 async function saveNotificationToDatabase(options: {
@@ -449,8 +598,8 @@ async function saveNotificationToDatabase(options: {
   const { userId, type, title, body, data } = options;
 
   // Mapper le type de notification au type Prisma
-  let notificationType: 'BUDGET_WARNING' | 'BUDGET_ALERT' | 'TRANSACTION_REMINDER' | 'WEEKLY_SUMMARY' | 'SUBSCRIPTION_RENEWAL_REMINDER' | 'PAYMENT_PENDING_VERIFICATION' | 'PAYMENT_APPROVED' | 'PAYMENT_REJECTED';
-  
+  let notificationType: 'BUDGET_WARNING' | 'BUDGET_ALERT' | 'TRANSACTION_REMINDER' | 'WEEKLY_SUMMARY' | 'SUBSCRIPTION_RENEWAL_REMINDER' | 'PREMIUM_SUBSCRIPTION_EXPIRATION_REMINDER' | 'PAYMENT_PENDING_VERIFICATION' | 'PAYMENT_APPROVED' | 'PAYMENT_REJECTED';
+
   switch (type) {
     case 'BUDGET_WARNING':
       notificationType = 'BUDGET_WARNING';
@@ -466,6 +615,9 @@ async function saveNotificationToDatabase(options: {
       break;
     case 'SUBSCRIPTION_RENEWAL_REMINDER':
       notificationType = 'SUBSCRIPTION_RENEWAL_REMINDER';
+      break;
+    case 'PREMIUM_SUBSCRIPTION_EXPIRATION_REMINDER':
+      notificationType = 'PREMIUM_SUBSCRIPTION_EXPIRATION_REMINDER';
       break;
     case 'PAYMENT_PENDING_VERIFICATION':
       notificationType = 'PAYMENT_PENDING_VERIFICATION';

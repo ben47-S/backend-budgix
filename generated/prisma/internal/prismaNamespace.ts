@@ -1751,6 +1751,7 @@ export const SubscriptionPaymentScalarFieldEnum = {
   rejectedAt: 'rejectedAt',
   approvedById: 'approvedById',
   rejectedById: 'rejectedById',
+  isRenewal: 'isRenewal',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

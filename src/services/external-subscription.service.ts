@@ -392,7 +392,8 @@ export async function getExternalSubscriptions(
     };
   });
 
-  // Calculer le total mensuel des abonnements actifs (exclure ceux à échéance)
+  // Calculer le total de tous les abonnements actifs (exclure ceux à échéance)
+  // Note: Somme brute sans conversion de période
   const activeSubscriptions = await prisma.externalSubscription.findMany({
     where: {
       userId,
@@ -404,27 +405,10 @@ export async function getExternalSubscriptions(
     },
   });
 
+  // Somme simple de tous les montants (sans conversion)
   let totalMonthly = 0;
   for (const sub of activeSubscriptions) {
-    const amount = sub.amount;
-    switch (sub.billingCycle) {
-      case "MONTHLY":
-        totalMonthly += amount;
-        break;
-      case "QUARTERLY":
-        totalMonthly += amount / 3; // Diviser par 3 pour avoir le montant mensuel
-        break;
-      case "ANNUAL":
-        totalMonthly += amount / 12; // Diviser par 12 pour avoir le montant mensuel
-        break;
-      case "CUSTOM":
-        if (sub.customDays) {
-          // Calculer le montant mensuel basé sur le nombre de jours
-          const monthlyAmount = (amount / sub.customDays) * 30;
-          totalMonthly += monthlyAmount;
-        }
-        break;
-    }
+    totalMonthly += sub.amount;
   }
 
   // Compter le total
@@ -438,7 +422,7 @@ export async function getExternalSubscriptions(
   return {
     subscriptions: subscriptionsWithStatus,
     total,
-    totalMonthly: Math.round(totalMonthly), // Arrondir à l'entier (exclut les abonnements à échéance)
+    totalMonthly: Math.round(totalMonthly), // Somme brute de tous les montants (exclut les abonnements à échéance)
   };
 }
 

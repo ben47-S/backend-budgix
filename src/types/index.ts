@@ -69,12 +69,12 @@ export interface CreateSubscriptionRequest {
 // Types pour les paiements Wave
 export interface InitiatePaymentRequest {
   plan: "MONTHLY" | "ANNUAL";
+  isRenewal?: boolean;
 }
 
 export interface ConfirmPaymentRequest {
   paymentId: string;
   waveTransactionId: string;
-  senderName: string;
   transferDate: Date;
 }
 

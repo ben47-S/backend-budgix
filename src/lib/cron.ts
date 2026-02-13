@@ -6,7 +6,7 @@
  */
 
 import cron from "node-cron";
-import { checkAndSendRenewalReminders } from "../services/subscription-reminder.service";
+import { checkAndSendRenewalReminders, checkAndSendPremiumRenewalReminders } from "../services/subscription-reminder.service";
 import { cleanupInactiveDiscussions } from "../services/discussion.service";
 import logger from "./logger";
 
@@ -16,14 +16,20 @@ import logger from "./logger";
 export function startCronJobs() {
   logger.info("⏰ Initialisation des tâches cron...");
 
-  // Tâche quotidienne à 9h00 UTC pour vérifier les renouvellements d'abonnements
+  // Tâche quotidienne à 9h00 UTC pour vérifier les renouvellements
   // Format cron: "0 9 * * *" = chaque jour à 9h00 UTC
   cron.schedule("0 9 * * *", async () => {
-    logger.info("🔔 Exécution de la tâche cron: vérification des renouvellements d'abonnements");
-    
+    logger.info("🔔 Exécution de la tâche cron: vérification des renouvellements");
+
     try {
-      const result = await checkAndSendRenewalReminders();
-      logger.info("✅ Tâche cron terminée avec succès", result);
+      // 1. Vérifier les abonnements EXTERNES
+      const externalResult = await checkAndSendRenewalReminders();
+      logger.info("✅ Abonnements externes vérifiés", externalResult);
+
+      // 2. Vérifier les abonnements PREMIUM
+      const premiumResult = await checkAndSendPremiumRenewalReminders();
+      logger.info("✅ Abonnements premium vérifiés", premiumResult);
+
     } catch (error) {
       logger.error("❌ Erreur lors de l'exécution de la tâche cron", {
         error: error instanceof Error ? error.message : "Erreur inconnue",
@@ -53,7 +59,8 @@ export function startCronJobs() {
   });
 
   logger.info("✅ Tâches cron initialisées");
-  logger.info("  - Vérification des renouvellements: chaque jour à 9h00 UTC");
+  logger.info("  - Vérification des renouvellements externes: chaque jour à 9h00 UTC");
+  logger.info("  - Vérification des renouvellements premium: chaque jour à 9h00 UTC");
   logger.info("  - Nettoyage des discussions inactives: toutes les 5 minutes");
 }
 
