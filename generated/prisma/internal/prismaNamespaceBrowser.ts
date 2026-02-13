@@ -60,6 +60,7 @@ export const ModelName = {
   Subscription: 'Subscription',
   Debt: 'Debt',
   Budget: 'Budget',
+  BudgetNotificationThreshold: 'BudgetNotificationThreshold',
   PushToken: 'PushToken',
   Notification: 'Notification',
   ExternalSubscription: 'ExternalSubscription',
@@ -120,9 +121,9 @@ export const SubscriptionPaymentScalarFieldEnum = {
   rejectedAt: 'rejectedAt',
   approvedById: 'approvedById',
   rejectedById: 'rejectedById',
-  isRenewal: 'isRenewal',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  isRenewal: 'isRenewal'
 } as const
 
 export type SubscriptionPaymentScalarFieldEnum = (typeof SubscriptionPaymentScalarFieldEnum)[keyof typeof SubscriptionPaymentScalarFieldEnum]
@@ -221,6 +222,17 @@ export const BudgetScalarFieldEnum = {
 } as const
 
 export type BudgetScalarFieldEnum = (typeof BudgetScalarFieldEnum)[keyof typeof BudgetScalarFieldEnum]
+
+
+export const BudgetNotificationThresholdScalarFieldEnum = {
+  id: 'id',
+  budgetId: 'budgetId',
+  threshold: 'threshold',
+  notifiedAt: 'notifiedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type BudgetNotificationThresholdScalarFieldEnum = (typeof BudgetNotificationThresholdScalarFieldEnum)[keyof typeof BudgetNotificationThresholdScalarFieldEnum]
 
 
 export const PushTokenScalarFieldEnum = {

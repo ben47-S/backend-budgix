@@ -55,9 +55,9 @@ model SubscriptionPayment {
   rejectedAt        DateTime?
   approvedById      String?
   rejectedById      String?
-  isRenewal         Boolean          @default(false)
   createdAt         DateTime         @default(now())
   updatedAt         DateTime         @updatedAt
+  isRenewal         Boolean          @default(false)
   approvedBy        User?            @relation("PaymentApprovedBy", fields: [approvedById], references: [id])
   rejectedBy        User?            @relation("PaymentRejectedBy", fields: [rejectedById], references: [id])
   user              User             @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -171,11 +171,26 @@ model Budget {
   updatedAt   DateTime   @updatedAt
   category    Category?  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notificationThresholds BudgetNotificationThreshold[]
 
   @@index([userId, periodStart, periodEnd])
   @@index([userId, categoryId, periodStart, periodEnd])
   @@index([userId, type])
   @@index([userId, type, periodStart, periodEnd])
+}
+
+/// Modèle pour tracker les seuils de notification de budget déjà envoyés
+model BudgetNotificationThreshold {
+  id          String   @id @default(cuid())
+  budgetId    String
+  threshold   Int      // 80, 95, ou 100
+  notifiedAt  DateTime @default(now())
+  createdAt   DateTime @default(now())
+  budget      Budget   @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+
+  @@unique([budgetId, threshold])
+  @@index([budgetId])
+  @@index([budgetId, threshold])
 }
 
 /// Modèle pour gérer les tokens de notification push Expo

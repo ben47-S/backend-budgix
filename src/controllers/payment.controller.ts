@@ -8,6 +8,7 @@ import {
   initiatePayment,
   confirmPayment,
   getPaymentStatus,
+  getUserPendingPayment,
   listPendingPayments,
   listPayments,
   approvePayment,
@@ -104,6 +105,28 @@ res.json(formatDatesToISO({
   }
 }
 
+export async function getUserPendingPaymentController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const userId = req.userId;
+    if (!userId) {
+      throw createError("Authentification requise", 401, "UNAUTHORIZED");
+    }
+
+    const payment = await getUserPendingPayment(userId);
+
+res.json(formatDatesToISO({
+      success: true,
+      data: { payment: payment || null },
+    }));
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function listPendingPaymentsController(
   req: Request,
   res: Response,
@@ -182,7 +205,7 @@ res.json(formatDatesToISO({
 }
 
 export async function approvePaymentController(
-  req: Request<{ paymentId: string }, {}, { plan?: "MONTHLY" | "ANNUAL" }>,
+  req: Request<{ paymentId: string }, {}, { plan?: "MONTHLY" | "ANNUAL"; message?: string }>,
   res: Response,
   next: NextFunction
 ) {
@@ -193,9 +216,9 @@ export async function approvePaymentController(
     }
 
     const { paymentId } = req.params;
-    const { plan } = req.body || {};
+    const { plan, message } = req.body || {};
 
-    const result = await approvePayment(adminId, paymentId, plan);
+    const result = await approvePayment(adminId, paymentId, plan, message);
 
 res.json(formatDatesToISO({
       success: true,

@@ -13,6 +13,7 @@ import {
   initiatePaymentController,
   confirmPaymentController,
   getPaymentStatusController,
+  getUserPendingPaymentController,
 } from "../controllers";
 import { requireAuth } from "../middleware/auth";
 import { validate } from "../middleware/validation";
@@ -122,6 +123,25 @@ router.get(
   generalRateLimiter,
   validate(paymentStatusSchema),
   getPaymentStatusController
+);
+
+/**
+ * @swagger
+ * /payments/pending:
+ *   get:
+ *     summary: Récupère le paiement en attente de l'utilisateur
+ *     tags: [Payments]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Paiement en attente (null si aucun)
+ */
+router.get(
+  "/pending",
+  requireAuth,
+  generalRateLimiter,
+  getUserPendingPaymentController
 );
 
 export default router;

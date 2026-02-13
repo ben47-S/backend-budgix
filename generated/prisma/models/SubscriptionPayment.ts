@@ -48,9 +48,9 @@ export type SubscriptionPaymentMinAggregateOutputType = {
   rejectedAt: Date | null
   approvedById: string | null
   rejectedById: string | null
-  isRenewal: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
+  isRenewal: boolean | null
 }
 
 export type SubscriptionPaymentMaxAggregateOutputType = {
@@ -67,9 +67,9 @@ export type SubscriptionPaymentMaxAggregateOutputType = {
   rejectedAt: Date | null
   approvedById: string | null
   rejectedById: string | null
-  isRenewal: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
+  isRenewal: boolean | null
 }
 
 export type SubscriptionPaymentCountAggregateOutputType = {
@@ -86,9 +86,9 @@ export type SubscriptionPaymentCountAggregateOutputType = {
   rejectedAt: number
   approvedById: number
   rejectedById: number
-  isRenewal: number
   createdAt: number
   updatedAt: number
+  isRenewal: number
   _all: number
 }
 
@@ -115,9 +115,9 @@ export type SubscriptionPaymentMinAggregateInputType = {
   rejectedAt?: true
   approvedById?: true
   rejectedById?: true
-  isRenewal?: true
   createdAt?: true
   updatedAt?: true
+  isRenewal?: true
 }
 
 export type SubscriptionPaymentMaxAggregateInputType = {
@@ -134,9 +134,9 @@ export type SubscriptionPaymentMaxAggregateInputType = {
   rejectedAt?: true
   approvedById?: true
   rejectedById?: true
-  isRenewal?: true
   createdAt?: true
   updatedAt?: true
+  isRenewal?: true
 }
 
 export type SubscriptionPaymentCountAggregateInputType = {
@@ -153,9 +153,9 @@ export type SubscriptionPaymentCountAggregateInputType = {
   rejectedAt?: true
   approvedById?: true
   rejectedById?: true
-  isRenewal?: true
   createdAt?: true
   updatedAt?: true
+  isRenewal?: true
   _all?: true
 }
 
@@ -259,9 +259,9 @@ export type SubscriptionPaymentGroupByOutputType = {
   rejectedAt: Date | null
   approvedById: string | null
   rejectedById: string | null
-  isRenewal: boolean
   createdAt: Date
   updatedAt: Date
+  isRenewal: boolean
   _count: SubscriptionPaymentCountAggregateOutputType | null
   _avg: SubscriptionPaymentAvgAggregateOutputType | null
   _sum: SubscriptionPaymentSumAggregateOutputType | null
@@ -301,9 +301,9 @@ export type SubscriptionPaymentWhereInput = {
   rejectedAt?: Prisma.DateTimeNullableFilter<"SubscriptionPayment"> | Date | string | null
   approvedById?: Prisma.StringNullableFilter<"SubscriptionPayment"> | string | null
   rejectedById?: Prisma.StringNullableFilter<"SubscriptionPayment"> | string | null
-  isRenewal?: Prisma.BoolFilter<"SubscriptionPayment"> | boolean
   createdAt?: Prisma.DateTimeFilter<"SubscriptionPayment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SubscriptionPayment"> | Date | string
+  isRenewal?: Prisma.BoolFilter<"SubscriptionPayment"> | boolean
   approvedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   rejectedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -323,9 +323,9 @@ export type SubscriptionPaymentOrderByWithRelationInput = {
   rejectedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   approvedById?: Prisma.SortOrderInput | Prisma.SortOrder
   rejectedById?: Prisma.SortOrderInput | Prisma.SortOrder
-  isRenewal?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  isRenewal?: Prisma.SortOrder
   approvedBy?: Prisma.UserOrderByWithRelationInput
   rejectedBy?: Prisma.UserOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
@@ -348,9 +348,9 @@ export type SubscriptionPaymentWhereUniqueInput = Prisma.AtLeast<{
   rejectedAt?: Prisma.DateTimeNullableFilter<"SubscriptionPayment"> | Date | string | null
   approvedById?: Prisma.StringNullableFilter<"SubscriptionPayment"> | string | null
   rejectedById?: Prisma.StringNullableFilter<"SubscriptionPayment"> | string | null
-  isRenewal?: Prisma.BoolFilter<"SubscriptionPayment"> | boolean
   createdAt?: Prisma.DateTimeFilter<"SubscriptionPayment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SubscriptionPayment"> | Date | string
+  isRenewal?: Prisma.BoolFilter<"SubscriptionPayment"> | boolean
   approvedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   rejectedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -370,9 +370,9 @@ export type SubscriptionPaymentOrderByWithAggregationInput = {
   rejectedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   approvedById?: Prisma.SortOrderInput | Prisma.SortOrder
   rejectedById?: Prisma.SortOrderInput | Prisma.SortOrder
-  isRenewal?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  isRenewal?: Prisma.SortOrder
   _count?: Prisma.SubscriptionPaymentCountOrderByAggregateInput
   _avg?: Prisma.SubscriptionPaymentAvgOrderByAggregateInput
   _max?: Prisma.SubscriptionPaymentMaxOrderByAggregateInput
@@ -397,9 +397,9 @@ export type SubscriptionPaymentScalarWhereWithAggregatesInput = {
   rejectedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"SubscriptionPayment"> | Date | string | null
   approvedById?: Prisma.StringNullableWithAggregatesFilter<"SubscriptionPayment"> | string | null
   rejectedById?: Prisma.StringNullableWithAggregatesFilter<"SubscriptionPayment"> | string | null
-  isRenewal?: Prisma.BoolWithAggregatesFilter<"SubscriptionPayment"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"SubscriptionPayment"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"SubscriptionPayment"> | Date | string
+  isRenewal?: Prisma.BoolWithAggregatesFilter<"SubscriptionPayment"> | boolean
 }
 
 export type SubscriptionPaymentCreateInput = {
@@ -413,9 +413,9 @@ export type SubscriptionPaymentCreateInput = {
   rejectionReason?: string | null
   approvedAt?: Date | string | null
   rejectedAt?: Date | string | null
-  isRenewal?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  isRenewal?: boolean
   approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedPaymentsInput
   rejectedBy?: Prisma.UserCreateNestedOneWithoutRejectedPaymentsInput
   user: Prisma.UserCreateNestedOneWithoutSubscriptionPaymentsInput
@@ -435,9 +435,9 @@ export type SubscriptionPaymentUncheckedCreateInput = {
   rejectedAt?: Date | string | null
   approvedById?: string | null
   rejectedById?: string | null
-  isRenewal?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  isRenewal?: boolean
 }
 
 export type SubscriptionPaymentUpdateInput = {
@@ -451,9 +451,9 @@ export type SubscriptionPaymentUpdateInput = {
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   approvedBy?: Prisma.UserUpdateOneWithoutApprovedPaymentsNestedInput
   rejectedBy?: Prisma.UserUpdateOneWithoutRejectedPaymentsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutSubscriptionPaymentsNestedInput
@@ -473,9 +473,9 @@ export type SubscriptionPaymentUncheckedUpdateInput = {
   rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type SubscriptionPaymentCreateManyInput = {
@@ -492,9 +492,9 @@ export type SubscriptionPaymentCreateManyInput = {
   rejectedAt?: Date | string | null
   approvedById?: string | null
   rejectedById?: string | null
-  isRenewal?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  isRenewal?: boolean
 }
 
 export type SubscriptionPaymentUpdateManyMutationInput = {
@@ -508,9 +508,9 @@ export type SubscriptionPaymentUpdateManyMutationInput = {
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type SubscriptionPaymentUncheckedUpdateManyInput = {
@@ -527,9 +527,9 @@ export type SubscriptionPaymentUncheckedUpdateManyInput = {
   rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type SubscriptionPaymentListRelationFilter = {
@@ -556,9 +556,9 @@ export type SubscriptionPaymentCountOrderByAggregateInput = {
   rejectedAt?: Prisma.SortOrder
   approvedById?: Prisma.SortOrder
   rejectedById?: Prisma.SortOrder
-  isRenewal?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  isRenewal?: Prisma.SortOrder
 }
 
 export type SubscriptionPaymentAvgOrderByAggregateInput = {
@@ -579,9 +579,9 @@ export type SubscriptionPaymentMaxOrderByAggregateInput = {
   rejectedAt?: Prisma.SortOrder
   approvedById?: Prisma.SortOrder
   rejectedById?: Prisma.SortOrder
-  isRenewal?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  isRenewal?: Prisma.SortOrder
 }
 
 export type SubscriptionPaymentMinOrderByAggregateInput = {
@@ -598,9 +598,9 @@ export type SubscriptionPaymentMinOrderByAggregateInput = {
   rejectedAt?: Prisma.SortOrder
   approvedById?: Prisma.SortOrder
   rejectedById?: Prisma.SortOrder
-  isRenewal?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  isRenewal?: Prisma.SortOrder
 }
 
 export type SubscriptionPaymentSumOrderByAggregateInput = {
@@ -760,9 +760,9 @@ export type SubscriptionPaymentCreateWithoutApprovedByInput = {
   rejectionReason?: string | null
   approvedAt?: Date | string | null
   rejectedAt?: Date | string | null
-  isRenewal?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  isRenewal?: boolean
   rejectedBy?: Prisma.UserCreateNestedOneWithoutRejectedPaymentsInput
   user: Prisma.UserCreateNestedOneWithoutSubscriptionPaymentsInput
 }
@@ -780,9 +780,9 @@ export type SubscriptionPaymentUncheckedCreateWithoutApprovedByInput = {
   approvedAt?: Date | string | null
   rejectedAt?: Date | string | null
   rejectedById?: string | null
-  isRenewal?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  isRenewal?: boolean
 }
 
 export type SubscriptionPaymentCreateOrConnectWithoutApprovedByInput = {
@@ -806,9 +806,9 @@ export type SubscriptionPaymentCreateWithoutRejectedByInput = {
   rejectionReason?: string | null
   approvedAt?: Date | string | null
   rejectedAt?: Date | string | null
-  isRenewal?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  isRenewal?: boolean
   approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedPaymentsInput
   user: Prisma.UserCreateNestedOneWithoutSubscriptionPaymentsInput
 }
@@ -826,9 +826,9 @@ export type SubscriptionPaymentUncheckedCreateWithoutRejectedByInput = {
   approvedAt?: Date | string | null
   rejectedAt?: Date | string | null
   approvedById?: string | null
-  isRenewal?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  isRenewal?: boolean
 }
 
 export type SubscriptionPaymentCreateOrConnectWithoutRejectedByInput = {
@@ -852,9 +852,9 @@ export type SubscriptionPaymentCreateWithoutUserInput = {
   rejectionReason?: string | null
   approvedAt?: Date | string | null
   rejectedAt?: Date | string | null
-  isRenewal?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  isRenewal?: boolean
   approvedBy?: Prisma.UserCreateNestedOneWithoutApprovedPaymentsInput
   rejectedBy?: Prisma.UserCreateNestedOneWithoutRejectedPaymentsInput
 }
@@ -872,9 +872,9 @@ export type SubscriptionPaymentUncheckedCreateWithoutUserInput = {
   rejectedAt?: Date | string | null
   approvedById?: string | null
   rejectedById?: string | null
-  isRenewal?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  isRenewal?: boolean
 }
 
 export type SubscriptionPaymentCreateOrConnectWithoutUserInput = {
@@ -920,9 +920,9 @@ export type SubscriptionPaymentScalarWhereInput = {
   rejectedAt?: Prisma.DateTimeNullableFilter<"SubscriptionPayment"> | Date | string | null
   approvedById?: Prisma.StringNullableFilter<"SubscriptionPayment"> | string | null
   rejectedById?: Prisma.StringNullableFilter<"SubscriptionPayment"> | string | null
-  isRenewal?: Prisma.BoolFilter<"SubscriptionPayment"> | boolean
   createdAt?: Prisma.DateTimeFilter<"SubscriptionPayment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SubscriptionPayment"> | Date | string
+  isRenewal?: Prisma.BoolFilter<"SubscriptionPayment"> | boolean
 }
 
 export type SubscriptionPaymentUpsertWithWhereUniqueWithoutRejectedByInput = {
@@ -970,9 +970,9 @@ export type SubscriptionPaymentCreateManyApprovedByInput = {
   approvedAt?: Date | string | null
   rejectedAt?: Date | string | null
   rejectedById?: string | null
-  isRenewal?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  isRenewal?: boolean
 }
 
 export type SubscriptionPaymentCreateManyRejectedByInput = {
@@ -988,9 +988,9 @@ export type SubscriptionPaymentCreateManyRejectedByInput = {
   approvedAt?: Date | string | null
   rejectedAt?: Date | string | null
   approvedById?: string | null
-  isRenewal?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  isRenewal?: boolean
 }
 
 export type SubscriptionPaymentCreateManyUserInput = {
@@ -1006,9 +1006,9 @@ export type SubscriptionPaymentCreateManyUserInput = {
   rejectedAt?: Date | string | null
   approvedById?: string | null
   rejectedById?: string | null
-  isRenewal?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  isRenewal?: boolean
 }
 
 export type SubscriptionPaymentUpdateWithoutApprovedByInput = {
@@ -1022,9 +1022,9 @@ export type SubscriptionPaymentUpdateWithoutApprovedByInput = {
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   rejectedBy?: Prisma.UserUpdateOneWithoutRejectedPaymentsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutSubscriptionPaymentsNestedInput
 }
@@ -1042,9 +1042,9 @@ export type SubscriptionPaymentUncheckedUpdateWithoutApprovedByInput = {
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   rejectedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type SubscriptionPaymentUncheckedUpdateManyWithoutApprovedByInput = {
@@ -1060,9 +1060,9 @@ export type SubscriptionPaymentUncheckedUpdateManyWithoutApprovedByInput = {
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   rejectedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type SubscriptionPaymentUpdateWithoutRejectedByInput = {
@@ -1076,9 +1076,9 @@ export type SubscriptionPaymentUpdateWithoutRejectedByInput = {
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   approvedBy?: Prisma.UserUpdateOneWithoutApprovedPaymentsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutSubscriptionPaymentsNestedInput
 }
@@ -1096,9 +1096,9 @@ export type SubscriptionPaymentUncheckedUpdateWithoutRejectedByInput = {
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type SubscriptionPaymentUncheckedUpdateManyWithoutRejectedByInput = {
@@ -1114,9 +1114,9 @@ export type SubscriptionPaymentUncheckedUpdateManyWithoutRejectedByInput = {
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type SubscriptionPaymentUpdateWithoutUserInput = {
@@ -1130,9 +1130,9 @@ export type SubscriptionPaymentUpdateWithoutUserInput = {
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   approvedBy?: Prisma.UserUpdateOneWithoutApprovedPaymentsNestedInput
   rejectedBy?: Prisma.UserUpdateOneWithoutRejectedPaymentsNestedInput
 }
@@ -1150,9 +1150,9 @@ export type SubscriptionPaymentUncheckedUpdateWithoutUserInput = {
   rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type SubscriptionPaymentUncheckedUpdateManyWithoutUserInput = {
@@ -1168,9 +1168,9 @@ export type SubscriptionPaymentUncheckedUpdateManyWithoutUserInput = {
   rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   approvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isRenewal?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 
@@ -1189,9 +1189,9 @@ export type SubscriptionPaymentSelect<ExtArgs extends runtime.Types.Extensions.I
   rejectedAt?: boolean
   approvedById?: boolean
   rejectedById?: boolean
-  isRenewal?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  isRenewal?: boolean
   approvedBy?: boolean | Prisma.SubscriptionPayment$approvedByArgs<ExtArgs>
   rejectedBy?: boolean | Prisma.SubscriptionPayment$rejectedByArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1211,9 +1211,9 @@ export type SubscriptionPaymentSelectCreateManyAndReturn<ExtArgs extends runtime
   rejectedAt?: boolean
   approvedById?: boolean
   rejectedById?: boolean
-  isRenewal?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  isRenewal?: boolean
   approvedBy?: boolean | Prisma.SubscriptionPayment$approvedByArgs<ExtArgs>
   rejectedBy?: boolean | Prisma.SubscriptionPayment$rejectedByArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1233,9 +1233,9 @@ export type SubscriptionPaymentSelectUpdateManyAndReturn<ExtArgs extends runtime
   rejectedAt?: boolean
   approvedById?: boolean
   rejectedById?: boolean
-  isRenewal?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  isRenewal?: boolean
   approvedBy?: boolean | Prisma.SubscriptionPayment$approvedByArgs<ExtArgs>
   rejectedBy?: boolean | Prisma.SubscriptionPayment$rejectedByArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1255,12 +1255,12 @@ export type SubscriptionPaymentSelectScalar = {
   rejectedAt?: boolean
   approvedById?: boolean
   rejectedById?: boolean
-  isRenewal?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  isRenewal?: boolean
 }
 
-export type SubscriptionPaymentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "plan" | "amount" | "status" | "waveTransactionId" | "senderName" | "transferDate" | "rejectionReason" | "approvedAt" | "rejectedAt" | "approvedById" | "rejectedById" | "isRenewal" | "createdAt" | "updatedAt", ExtArgs["result"]["subscriptionPayment"]>
+export type SubscriptionPaymentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "plan" | "amount" | "status" | "waveTransactionId" | "senderName" | "transferDate" | "rejectionReason" | "approvedAt" | "rejectedAt" | "approvedById" | "rejectedById" | "createdAt" | "updatedAt" | "isRenewal", ExtArgs["result"]["subscriptionPayment"]>
 export type SubscriptionPaymentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   approvedBy?: boolean | Prisma.SubscriptionPayment$approvedByArgs<ExtArgs>
   rejectedBy?: boolean | Prisma.SubscriptionPayment$rejectedByArgs<ExtArgs>
@@ -1298,9 +1298,9 @@ export type $SubscriptionPaymentPayload<ExtArgs extends runtime.Types.Extensions
     rejectedAt: Date | null
     approvedById: string | null
     rejectedById: string | null
-    isRenewal: boolean
     createdAt: Date
     updatedAt: Date
+    isRenewal: boolean
   }, ExtArgs["result"]["subscriptionPayment"]>
   composites: {}
 }
@@ -1740,9 +1740,9 @@ export interface SubscriptionPaymentFieldRefs {
   readonly rejectedAt: Prisma.FieldRef<"SubscriptionPayment", 'DateTime'>
   readonly approvedById: Prisma.FieldRef<"SubscriptionPayment", 'String'>
   readonly rejectedById: Prisma.FieldRef<"SubscriptionPayment", 'String'>
-  readonly isRenewal: Prisma.FieldRef<"SubscriptionPayment", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"SubscriptionPayment", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"SubscriptionPayment", 'DateTime'>
+  readonly isRenewal: Prisma.FieldRef<"SubscriptionPayment", 'Boolean'>
 }
     
 

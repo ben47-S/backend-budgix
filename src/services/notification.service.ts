@@ -351,8 +351,43 @@ export async function sendBudgetWarning(
 }
 
 /**
+ * Envoie un avertissement de budget avec message personnalisé
+ *
+ * @param userId - ID de l'utilisateur
+ * @param title - Titre personnalisé
+ * @param body - Corps personnalisé
+ * @param budgetName - Nom du budget
+ * @param spentAmount - Montant dépensé
+ * @param limitAmount - Montant limite
+ * @param percentage - Pourcentage atteint
+ */
+export async function sendBudgetWarningWithCustomMessage(
+  userId: string,
+  title: string,
+  body: string,
+  budgetName: string,
+  spentAmount: number,
+  limitAmount: number,
+  percentage: number
+) {
+  return sendNotificationToUser(
+    userId,
+    title,
+    body,
+    {
+      type: 'BUDGET_WARNING',
+      budgetName,
+      spentAmount,
+      limitAmount,
+      percentage,
+    },
+    true // requireBudgetAlerts
+  );
+}
+
+/**
  * Envoie un rappel de transaction
- * 
+ *
  * @param userId - ID de l'utilisateur
  */
 export async function sendTransactionReminder(userId: string) {

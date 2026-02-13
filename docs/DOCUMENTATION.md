@@ -428,7 +428,9 @@ Ce document détaille les conditions exactes d'envoi des notifications push pour
 ### 🔔 Types de notifications
 
 #### 1. BUDGET_WARNING (Avertissement)
-Notification envoyée quand le budget est entre **70% et 99.99%**.
+Notification envoyée quand le budget atteint **80%** ou **95%**.
+- **80%** : "Attention budget" - Avertissement simple
+- **95%** : "Alerte budget critique" - Avertissement renforcé
 
 #### 2. BUDGET_ALERT (Alerte)
 Notification envoyée quand le budget est **atteint (100%)** ou **dépassé (> 100%)**.
@@ -558,8 +560,12 @@ src/
 
 ### 🔔 Types de notifications
 
-1. **BUDGET_WARNING** - Avertissement (70% à 99.99%)
+1. **BUDGET_WARNING** - Avertissement (80% et 95%)
+   - 80% : "Attention budget" - Avertissement simple
+   - 95% : "Alerte budget critique" - Avertissement renforcé avant dépassement
 2. **BUDGET_ALERT** - Alerte (100% ou dépassé)
+   - "Budget atteint" (= 100%)
+   - "Budget dépassé" (> 100%)
 3. **TRANSACTION_REMINDER** - Rappel de transaction
 4. **SUBSCRIPTION_RENEWAL** - Renouvellement d'abonnement
 5. **DEBT_REMINDER** - Rappel de dette

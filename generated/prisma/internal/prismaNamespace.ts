@@ -393,6 +393,7 @@ export const ModelName = {
   Subscription: 'Subscription',
   Debt: 'Debt',
   Budget: 'Budget',
+  BudgetNotificationThreshold: 'BudgetNotificationThreshold',
   PushToken: 'PushToken',
   Notification: 'Notification',
   ExternalSubscription: 'ExternalSubscription',
@@ -416,7 +417,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "subscriptionPayment" | "otpCode" | "emailVerificationCode" | "category" | "transaction" | "subscription" | "debt" | "budget" | "pushToken" | "notification" | "externalSubscription" | "discussion" | "message" | "review" | "improvementSuggestion" | "log"
+    modelProps: "user" | "subscriptionPayment" | "otpCode" | "emailVerificationCode" | "category" | "transaction" | "subscription" | "debt" | "budget" | "budgetNotificationThreshold" | "pushToken" | "notification" | "externalSubscription" | "discussion" | "message" | "review" | "improvementSuggestion" | "log"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1086,6 +1087,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    BudgetNotificationThreshold: {
+      payload: Prisma.$BudgetNotificationThresholdPayload<ExtArgs>
+      fields: Prisma.BudgetNotificationThresholdFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BudgetNotificationThresholdFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BudgetNotificationThresholdPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BudgetNotificationThresholdFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BudgetNotificationThresholdPayload>
+        }
+        findFirst: {
+          args: Prisma.BudgetNotificationThresholdFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BudgetNotificationThresholdPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BudgetNotificationThresholdFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BudgetNotificationThresholdPayload>
+        }
+        findMany: {
+          args: Prisma.BudgetNotificationThresholdFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BudgetNotificationThresholdPayload>[]
+        }
+        create: {
+          args: Prisma.BudgetNotificationThresholdCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BudgetNotificationThresholdPayload>
+        }
+        createMany: {
+          args: Prisma.BudgetNotificationThresholdCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BudgetNotificationThresholdCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BudgetNotificationThresholdPayload>[]
+        }
+        delete: {
+          args: Prisma.BudgetNotificationThresholdDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BudgetNotificationThresholdPayload>
+        }
+        update: {
+          args: Prisma.BudgetNotificationThresholdUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BudgetNotificationThresholdPayload>
+        }
+        deleteMany: {
+          args: Prisma.BudgetNotificationThresholdDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BudgetNotificationThresholdUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BudgetNotificationThresholdUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BudgetNotificationThresholdPayload>[]
+        }
+        upsert: {
+          args: Prisma.BudgetNotificationThresholdUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BudgetNotificationThresholdPayload>
+        }
+        aggregate: {
+          args: Prisma.BudgetNotificationThresholdAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBudgetNotificationThreshold>
+        }
+        groupBy: {
+          args: Prisma.BudgetNotificationThresholdGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BudgetNotificationThresholdGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BudgetNotificationThresholdCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BudgetNotificationThresholdCountAggregateOutputType> | number
+        }
+      }
+    }
     PushToken: {
       payload: Prisma.$PushTokenPayload<ExtArgs>
       fields: Prisma.PushTokenFieldRefs
@@ -1751,9 +1826,9 @@ export const SubscriptionPaymentScalarFieldEnum = {
   rejectedAt: 'rejectedAt',
   approvedById: 'approvedById',
   rejectedById: 'rejectedById',
-  isRenewal: 'isRenewal',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  isRenewal: 'isRenewal'
 } as const
 
 export type SubscriptionPaymentScalarFieldEnum = (typeof SubscriptionPaymentScalarFieldEnum)[keyof typeof SubscriptionPaymentScalarFieldEnum]
@@ -1852,6 +1927,17 @@ export const BudgetScalarFieldEnum = {
 } as const
 
 export type BudgetScalarFieldEnum = (typeof BudgetScalarFieldEnum)[keyof typeof BudgetScalarFieldEnum]
+
+
+export const BudgetNotificationThresholdScalarFieldEnum = {
+  id: 'id',
+  budgetId: 'budgetId',
+  threshold: 'threshold',
+  notifiedAt: 'notifiedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type BudgetNotificationThresholdScalarFieldEnum = (typeof BudgetNotificationThresholdScalarFieldEnum)[keyof typeof BudgetNotificationThresholdScalarFieldEnum]
 
 
 export const PushTokenScalarFieldEnum = {
@@ -2166,6 +2252,20 @@ export type ListEnumBudgetTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$P
 
 
 /**
+ * Reference to a field of type 'Int'
+ */
+export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+/**
+ * Reference to a field of type 'Int[]'
+ */
+export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
  * Reference to a field of type 'NotificationType'
  */
 export type EnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationType'>
@@ -2190,20 +2290,6 @@ export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'J
  * Reference to a field of type 'QueryMode'
  */
 export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
-    
-
-
-/**
- * Reference to a field of type 'Int'
- */
-export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-/**
- * Reference to a field of type 'Int[]'
- */
-export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 
@@ -2394,6 +2480,7 @@ export type GlobalOmitConfig = {
   subscription?: Prisma.SubscriptionOmit
   debt?: Prisma.DebtOmit
   budget?: Prisma.BudgetOmit
+  budgetNotificationThreshold?: Prisma.BudgetNotificationThresholdOmit
   pushToken?: Prisma.PushTokenOmit
   notification?: Prisma.NotificationOmit
   externalSubscription?: Prisma.ExternalSubscriptionOmit

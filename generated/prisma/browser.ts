@@ -63,6 +63,11 @@ export type Debt = Prisma.DebtModel
  */
 export type Budget = Prisma.BudgetModel
 /**
+ * Model BudgetNotificationThreshold
+ * Modèle pour tracker les seuils de notification de budget déjà envoyés
+ */
+export type BudgetNotificationThreshold = Prisma.BudgetNotificationThresholdModel
+/**
  * Model PushToken
  * Modèle pour gérer les tokens de notification push Expo
  */

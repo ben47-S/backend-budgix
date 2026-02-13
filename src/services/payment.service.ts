@@ -214,6 +214,16 @@ export async function getPaymentStatus(userId: string, paymentId: string) {
   return payment;
 }
 
+export async function getUserPendingPayment(userId: string) {
+  return prismaClient.subscriptionPayment.findFirst({
+    where: {
+      userId,
+      status: "PENDING_VERIFICATION",
+    },
+    orderBy: { createdAt: "desc" },
+  });
+}
+
 export async function listPendingPayments() {
   return prismaClient.subscriptionPayment.findMany({
     where: { status: "PENDING_VERIFICATION" },
@@ -336,7 +346,8 @@ export async function listPayments(filters: ListPaymentsFilters) {
 export async function approvePayment(
   adminId: string,
   paymentId: string,
-  customPlan?: SubscriptionPlan
+  customPlan?: SubscriptionPlan,
+  customMessage?: string
 ) {
   const payment = await prismaClient.subscriptionPayment.findUnique({
     where: { id: paymentId },
@@ -372,17 +383,24 @@ export async function approvePayment(
     payment.isRenewal || false
   );
 
-  // Message de notification adaptée selon le plan et le contexte
-  const planText = finalPlan === "MONTHLY" ? "mensuel" : "annuel";
-  const isRenewal = payment.isRenewal || false;
-
+  // Utiliser le message personnalisé si fourni, sinon générer un message automatique
   let notificationMessage: string;
-  if (customPlan && customPlan !== payment.plan) {
-    notificationMessage = `Votre paiement a été approuvé. Votre abonnement premium ${planText} est activé ✅`;
-  } else if (isRenewal) {
-    notificationMessage = `Votre renouvellement a été approuvé. Votre abonnement premium ${planText} a été prolongé ✅`;
+
+  if (customMessage) {
+    // Message personnalisé par l'admin
+    notificationMessage = customMessage;
   } else {
-    notificationMessage = "Votre paiement a été approuvé. Votre abonnement premium est activé ✅";
+    // Message de notification adaptée selon le plan et le contexte
+    const planText = finalPlan === "MONTHLY" ? "mensuel" : "annuel";
+    const isRenewal = payment.isRenewal || false;
+
+    if (customPlan && customPlan !== payment.plan) {
+      notificationMessage = `Votre paiement a été approuvé. Votre abonnement premium ${planText} est activé ✅`;
+    } else if (isRenewal) {
+      notificationMessage = `Votre renouvellement a été approuvé. Votre abonnement premium ${planText} a été prolongé ✅`;
+    } else {
+      notificationMessage = "Votre paiement a été approuvé. Votre abonnement premium est activé ✅";
+    }
   }
 
   await sendNotificationToUser(

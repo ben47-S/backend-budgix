@@ -629,14 +629,6 @@ export type ExternalSubscriptionUncheckedUpdateManyWithoutCategoryNestedInput = 
   deleteMany?: Prisma.ExternalSubscriptionScalarWhereInput | Prisma.ExternalSubscriptionScalarWhereInput[]
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type EnumBillingCycleFieldUpdateOperationsInput = {
   set?: $Enums.BillingCycle
 }

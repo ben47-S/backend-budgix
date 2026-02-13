@@ -10,7 +10,7 @@
 
 import { prisma } from "../lib/prisma";
 import { createError } from "../middleware/errorHandler";
-import { sendBudgetWarning, sendBudgetAlert } from "./notification.service";
+import { sendBudgetWarning, sendBudgetAlert, sendBudgetWarningWithCustomMessage } from "./notification.service";
 import logger from "../lib/logger";
 import type { BudgetType, BudgetStatus } from "../../generated/prisma/client";
 
@@ -836,9 +836,90 @@ export async function checkAllBudgetsForUser(userId: string) {
 }
 
 /**
+ * Vérifie si un seuil de notification a déjà été envoyé pour ce budget
+ *
+ * @param budgetId - ID du budget
+ * @param threshold - Seuil à vérifier (80, 95, 100)
+ * @returns true si le seuil a déjà été notifié
+ */
+async function isThresholdAlreadyNotified(budgetId: string, threshold: number): Promise<boolean> {
+  const existing = await prisma.budgetNotificationThreshold.findUnique({
+    where: {
+      budgetId_threshold: {
+        budgetId,
+        threshold,
+      },
+    },
+  });
+  return existing !== null;
+}
+
+/**
+ * Enregistre qu'un seuil de notification a été envoyé pour ce budget
+ *
+ * @param budgetId - ID du budget
+ * @param threshold - Seuil notifié (80, 95, 100)
+ */
+async function markThresholdAsNotified(budgetId: string, threshold: number): Promise<void> {
+  await prisma.budgetNotificationThreshold.upsert({
+    where: {
+      budgetId_threshold: {
+        budgetId,
+        threshold,
+      },
+    },
+    create: {
+      budgetId,
+      threshold,
+    },
+    update: {
+      notifiedAt: new Date(),
+    },
+  });
+}
+
+/**
+ * Détermine le seuil de notification le plus élevé à envoyer
+ * en évitant les doublons
+ *
+ * @param percentage - Pourcentage actuel du budget
+ * @param budgetId - ID du budget
+ * @returns Le seuil à notifier ou null si aucun
+ */
+async function determineThresholdToNotify(
+  percentage: number,
+  budgetId: string
+): Promise<number | null> {
+  // Déterminer tous les seuils atteints
+  const reachedThresholds: number[] = [];
+  if (percentage >= 80) reachedThresholds.push(80);
+  if (percentage >= 95) reachedThresholds.push(95);
+  if (percentage >= 100) reachedThresholds.push(100);
+
+  // Si aucun seuil atteint, pas de notification
+  if (reachedThresholds.length === 0) return null;
+
+  // Vérifier quels seuils n'ont pas encore été notifiés (du plus élevé au plus bas)
+  for (let i = reachedThresholds.length - 1; i >= 0; i--) {
+    const threshold = reachedThresholds[i];
+    if (threshold === undefined) continue; // Type guard
+
+    const alreadyNotified = await isThresholdAlreadyNotified(budgetId, threshold);
+
+    if (!alreadyNotified) {
+      // Retourner le seuil le plus élevé non encore notifié
+      return threshold;
+    }
+  }
+
+  // Tous les seuils ont déjà été notifiés
+  return null;
+}
+
+/**
  * Vérifie la progression d'un budget et programme l'envoi d'une notification
  * si le budget est presque atteint (>= 70%) avec un délai de 15 secondes.
- * 
+ *
  * @param options - Options pour vérifier le budget
  */
 async function checkBudgetAndScheduleNotification(options: {
@@ -875,6 +956,9 @@ async function checkBudgetAndScheduleNotification(options: {
   const spentAmount = Number(aggregation._sum.amount ?? 0);
   const percentage = limitAmount > 0 ? (spentAmount / limitAmount) * 100 : 0;
 
+  // Déterminer le seuil de notification à envoyer
+  const thresholdToNotify = await determineThresholdToNotify(percentage, budgetId);
+
   // Logger la progression du budget
   logger.info('📊 Vérification de la progression du budget', {
     budgetId,
@@ -883,18 +967,43 @@ async function checkBudgetAndScheduleNotification(options: {
     spentAmount,
     limitAmount,
     percentage: percentage.toFixed(2),
-    isAlmostFull: percentage >= 70,
+    thresholdToNotify,
     isOverLimit: spentAmount >= limitAmount,
   });
 
-  // Gérer trois cas :
-  // 1. Budget entre 70% et 99.99% → Notification d'avertissement (programmée avec délai)
-  // 2. Budget = 100% ou dépassé → Notification d'alerte (immédiate)
-  
-  if (spentAmount >= limitAmount) {
-    // Budget atteint (100%) ou dépassé (> 100%)
-    const budgetName = categoryName || "Toutes catégories";
-    
+  // Gérer trois seuils de notification :
+  // 1. 80% : Notification d'avertissement (programmée avec délai)
+  // 2. 95% : Notification d'avertissement critique (programmée avec délai)
+  // 3. 100% : Notification d'alerte (immédiate)
+
+  if (thresholdToNotify === null) {
+    // Aucun nouveau seuil à notifier
+    if (percentage < 80) {
+      logger.info('ℹ️ Budget pas encore à 80% - Aucune notification', {
+        budgetId,
+        userId,
+        budgetName: categoryName || "Toutes catégories",
+        spentAmount,
+        limitAmount,
+        percentage: percentage.toFixed(2),
+      });
+    } else {
+      logger.info('ℹ️ Tous les seuils atteints ont déjà été notifiés', {
+        budgetId,
+        userId,
+        budgetName: categoryName || "Toutes catégories",
+        spentAmount,
+        limitAmount,
+        percentage: percentage.toFixed(2),
+      });
+    }
+    return;
+  }
+
+  const budgetName = categoryName || "Toutes catégories";
+
+  // Traiter le seuil de 100% (alerte immédiate)
+  if (thresholdToNotify === 100) {
     logger.warn('🚨 [ALERT] Budget atteint ou dépassé - Notification immédiate', {
       status: 'BUDGET_EXCEEDED',
       budgetId,
@@ -903,20 +1012,21 @@ async function checkBudgetAndScheduleNotification(options: {
       spentAmount,
       limitAmount,
       percentage: percentage.toFixed(2),
+      threshold: 100,
     });
-    
-    // Log supplémentaire très visible avec couleurs
+
+    // Log coloré
     const red = '\x1b[31m';
     const reset = '\x1b[0m';
     console.log('\n' + red + '='.repeat(80) + reset);
-    console.log(red + '🚨 [STATUS: BUDGET_EXCEEDED] BUDGET ATTEINT OU DÉPASSÉ - NOTIFICATION IMMÉDIATE' + reset);
+    console.log(red + '🚨 [THRESHOLD: 100%] BUDGET ATTEINT OU DÉPASSÉ - NOTIFICATION IMMÉDIATE' + reset);
     console.log(red + '='.repeat(80) + reset);
     console.log(`📊 Budget: ${budgetName}`);
     console.log(`💰 Dépenses: ${spentAmount.toLocaleString()} FCFA / ${limitAmount.toLocaleString()} FCFA`);
     console.log(`📈 Pourcentage: ${percentage.toFixed(2)}%`);
     console.log(red + '='.repeat(80) + reset + '\n');
-    
-    // Envoyer immédiatement une notification d'alerte (pas de délai)
+
+    // Envoyer immédiatement une notification d'alerte
     const result = await sendBudgetAlert(
       userId,
       budgetName,
@@ -924,59 +1034,39 @@ async function checkBudgetAndScheduleNotification(options: {
       limitAmount,
       categoryName || undefined
     );
-    
+
     if (result.sent) {
-      logger.info("✅ [SUCCESS] Notification d'alerte de budget envoyée avec succès", {
+      // Marquer le seuil comme notifié
+      await markThresholdAsNotified(budgetId, 100);
+
+      logger.info("✅ [SUCCESS] Notification d'alerte 100% envoyée", {
         status: 'SUCCESS',
         userId,
         budgetId,
         budgetName,
-        spentAmount,
-        limitAmount,
-        percentage: percentage.toFixed(2),
+        threshold: 100,
         tokensCount: result.count,
-        ticketsCount: result.tickets?.length || 0,
-        errorsCount: result.errors || 0,
       });
-      // Log supplémentaire très visible avec couleurs
-      const green = '\x1b[32m';
-      const reset = '\x1b[0m';
-      console.log('\n' + green + '='.repeat(80) + reset);
-      console.log(green + '✅ [STATUS: SUCCESS] NOTIFICATION D\'ALERTE DE BUDGET ENVOYÉE AVEC SUCCÈS' + reset);
-      console.log(green + '='.repeat(80) + reset);
-      console.log(`📊 Budget: ${budgetName}`);
-      console.log(`💰 Dépenses: ${spentAmount.toLocaleString()} FCFA / ${limitAmount.toLocaleString()} FCFA`);
-      console.log(`📈 Pourcentage: ${percentage.toFixed(2)}%`);
-      console.log(`📱 Tokens: ${result.count} | Tickets: ${result.tickets?.length || 0} | Erreurs: ${result.errors || 0}`);
-      console.log(green + '='.repeat(80) + reset + '\n');
     } else {
-      logger.error("❌ [ERROR] Notification d'alerte de budget NON envoyée", {
+      logger.error("❌ [ERROR] Notification d'alerte 100% NON envoyée", {
         status: 'ERROR',
         userId,
         budgetId,
         budgetName,
+        threshold: 100,
         reason: result.reason,
-        spentAmount,
-        limitAmount,
-        percentage: percentage.toFixed(2),
       });
-      // Log supplémentaire très visible avec couleurs
-      const red = '\x1b[31m';
-      const reset = '\x1b[0m';
-      console.log('\n' + red + '='.repeat(80) + reset);
-      console.log(red + '❌ [STATUS: ERROR] NOTIFICATION D\'ALERTE DE BUDGET NON ENVOYÉE' + reset);
-      console.log(red + '='.repeat(80) + reset);
-      console.log(`📊 Budget: ${budgetName}`);
-      console.log(`💰 Dépenses: ${spentAmount.toLocaleString()} FCFA / ${limitAmount.toLocaleString()} FCFA`);
-      console.log(`📈 Pourcentage: ${percentage.toFixed(2)}%`);
-      console.log(`⚠️  Raison: ${result.reason}`);
-      console.log(red + '='.repeat(80) + reset + '\n');
     }
-  } else if (percentage >= 70) {
-    // Budget entre 70% et 99.99% → Notification d'avertissement (programmée)
-    const budgetName = categoryName || "Toutes catégories";
+    return;
+  }
 
-    logger.warn('⚠️  [WARN] Budget presque atteint - Notification programmée', {
+  // Traiter les seuils de 80% et 95% (avertissements programmés)
+  if (thresholdToNotify === 80 || thresholdToNotify === 95) {
+    const isHighThreshold = thresholdToNotify === 95;
+    const logColor = isHighThreshold ? '\x1b[33m' : '\x1b[35m'; // Jaune pour 95%, Magenta pour 80%
+    const reset = '\x1b[0m';
+
+    logger.warn(`⚠️  [WARN] Budget à ${thresholdToNotify}% - Notification programmée`, {
       status: 'SCHEDULED',
       budgetId,
       userId,
@@ -984,87 +1074,55 @@ async function checkBudgetAndScheduleNotification(options: {
       spentAmount,
       limitAmount,
       percentage: percentage.toFixed(2),
+      threshold: thresholdToNotify,
       delay: '15 secondes',
-      timestamp: new Date().toISOString(),
     });
-    // Log supplémentaire très visible avec couleurs
-    const yellow = '\x1b[33m';
-    const reset = '\x1b[0m';
-    console.log('\n' + yellow + '='.repeat(80) + reset);
-    console.log(yellow + '⚠️  [STATUS: SCHEDULED] BUDGET PRESQUE ATTEINT - NOTIFICATION PROGRAMMÉE' + reset);
-    console.log(yellow + '='.repeat(80) + reset);
+
+    // Log coloré
+    console.log('\n' + logColor + '='.repeat(80) + reset);
+    console.log(logColor + `⚠️  [THRESHOLD: ${thresholdToNotify}%] BUDGET PRESQUE ATTEINT - NOTIFICATION PROGRAMMÉE` + reset);
+    console.log(logColor + '='.repeat(80) + reset);
     console.log(`📊 Budget: ${budgetName}`);
     console.log(`💰 Dépenses: ${spentAmount.toLocaleString()} FCFA / ${limitAmount.toLocaleString()} FCFA`);
-    console.log(`📈 Pourcentage: ${percentage.toFixed(2)}% (seuil: >= 70%)`);
+    console.log(`📈 Pourcentage: ${percentage.toFixed(2)}% (seuil: ${thresholdToNotify}%)`);
     console.log(`⏰ Notification sera envoyée dans: 15 secondes`);
-    console.log(yellow + '='.repeat(80) + reset + '\n');
+    console.log(logColor + '='.repeat(80) + reset + '\n');
 
-    // Programmer l'envoi de la notification avec un délai de 15 secondes (15 000 ms)
-    const scheduledTime = new Date(Date.now() + 15 * 1000);
-    const timeoutId = setTimeout(async () => {
-      const now = new Date();
-      logger.info('⏰ Délai de 15 secondes écoulé - Vérification avant envoi de notification', {
-        budgetId,
-        userId,
-        budgetName,
-        scheduledAt: scheduledTime.toISOString(),
-        executedAt: now.toISOString(),
-        delayMs: 15 * 1000,
-      });
+    // Programmer l'envoi avec délai de 15 secondes
+    setTimeout(async () => {
       try {
-        // Vérifier à nouveau que le budget existe toujours et appartient toujours au même utilisateur
-        // (important pour éviter d'envoyer des notifications à un autre utilisateur qui s'est connecté sur le même appareil)
+        // Vérifications de sécurité (budget existe, utilisateur toujours premium, etc.)
         const budgetStillExists = await prisma.budget.findUnique({
           where: { id: budgetId },
-          select: {
-            id: true,
-            userId: true,
-          },
+          select: { id: true, userId: true },
         });
 
         if (!budgetStillExists) {
-          logger.warn('❌ Notification annulée - Budget supprimé', {
-            budgetId,
-            userId,
-            budgetName,
-          });
+          logger.warn('❌ Notification annulée - Budget supprimé', { budgetId });
           return;
         }
 
-        // Vérifier que le budget appartient toujours au même utilisateur
-        // (protection contre les changements d'utilisateur sur le même appareil)
         if (budgetStillExists.userId !== userId) {
-          logger.warn('❌ Notification annulée - Budget appartient à un autre utilisateur', {
-            budgetId,
-            originalUserId: userId,
-            currentUserId: budgetStillExists.userId,
-            budgetName,
-          });
+          logger.warn('❌ Notification annulée - Budget appartient à un autre utilisateur', { budgetId });
           return;
         }
 
-        // Vérifier que l'utilisateur est toujours premium
-        // (protection contre la perte du statut premium entre-temps)
         const user = await prisma.user.findUnique({
           where: { id: userId },
           select: { id: true, isPremium: true },
         });
 
-        if (!user) {
-          logger.warn('❌ Notification annulée - Utilisateur non trouvé', {
-            budgetId,
-            userId,
-            budgetName,
-          });
+        if (!user || !user.isPremium) {
+          logger.warn('❌ Notification annulée - Utilisateur non premium', { budgetId, userId });
           return;
         }
 
-        if (!user.isPremium) {
-          logger.warn('❌ Notification annulée - Utilisateur n\'est plus premium', {
+        // Vérifier que le seuil n'a pas déjà été notifié entre temps
+        const alreadyNotified = await isThresholdAlreadyNotified(budgetId, thresholdToNotify);
+        if (alreadyNotified) {
+          logger.info('ℹ️ Notification annulée - Seuil déjà notifié', {
             budgetId,
-            userId,
-            budgetName,
-            isPremium: user.isPremium,
+            threshold: thresholdToNotify,
           });
           return;
         }
@@ -1078,209 +1136,97 @@ async function checkBudgetAndScheduleNotification(options: {
         const currentSpentAmount = Number(currentAggregation._sum.amount ?? 0);
         const currentPercentage = limitAmount > 0 ? (currentSpentAmount / limitAmount) * 100 : 0;
 
-        logger.info('📊 Vérification finale avant envoi de notification', {
-          budgetId,
-          userId,
-          budgetName,
-          currentSpentAmount,
-          limitAmount,
-          currentPercentage: currentPercentage.toFixed(2),
-          isInRange: currentPercentage >= 70 && currentSpentAmount < limitAmount,
-        });
-
-        // Gérer trois cas au moment de l'envoi :
-        // 1. Budget entre 70% et 99.99% → Notification d'avertissement
-        // 2. Budget = 100% ou dépassé → Notification d'alerte immédiate
-        
-        if (currentSpentAmount >= limitAmount) {
-          // Budget atteint ou dépassé → Envoyer une alerte immédiate
-          logger.warn('🚨 [ALERT] Budget atteint ou dépassé au moment de l\'envoi - Notification immédiate', {
-            status: 'BUDGET_EXCEEDED',
+        // Vérifier que le pourcentage est toujours dans la plage appropriée
+        if (currentPercentage < thresholdToNotify) {
+          logger.warn('❌ Notification annulée - Pourcentage inférieur au seuil', {
             budgetId,
-            userId,
-            budgetName,
-            currentSpentAmount,
-            limitAmount,
+            threshold: thresholdToNotify,
             currentPercentage: currentPercentage.toFixed(2),
           });
-          
-          const result = await sendBudgetAlert(
+          return;
+        }
+
+        // Si le budget a atteint 100% entre temps, envoyer une alerte au lieu d'un warning
+        if (currentSpentAmount >= limitAmount) {
+          const alertResult = await sendBudgetAlert(
             userId,
             budgetName,
             currentSpentAmount,
             limitAmount,
             categoryName || undefined
           );
-          
-          if (result.sent) {
-            logger.info("✅ [SUCCESS] Notification d'alerte de budget envoyée avec succès", {
-              status: 'SUCCESS',
+
+          if (alertResult.sent) {
+            await markThresholdAsNotified(budgetId, 100);
+            logger.info("✅ Notification d'alerte 100% envoyée (upgrade depuis warning)", {
               userId,
               budgetId,
-              budgetName,
-              spentAmount: currentSpentAmount,
-              limitAmount,
-              percentage: currentPercentage.toFixed(2),
-              tokensCount: result.count,
-              ticketsCount: result.tickets?.length || 0,
-              errorsCount: result.errors || 0,
+              originalThreshold: thresholdToNotify,
+              finalThreshold: 100,
             });
-            // Log supplémentaire très visible avec couleurs
-            const green = '\x1b[32m';
-            const reset = '\x1b[0m';
-            console.log('\n' + green + '='.repeat(80) + reset);
-            console.log(green + '✅ [STATUS: SUCCESS] NOTIFICATION D\'ALERTE DE BUDGET ENVOYÉE AVEC SUCCÈS' + reset);
-            console.log(green + '='.repeat(80) + reset);
-            console.log(`📊 Budget: ${budgetName}`);
-            console.log(`💰 Dépenses: ${currentSpentAmount.toLocaleString()} FCFA / ${limitAmount.toLocaleString()} FCFA`);
-            console.log(`📈 Pourcentage: ${currentPercentage.toFixed(2)}%`);
-            console.log(`📱 Tokens: ${result.count} | Tickets: ${result.tickets?.length || 0} | Erreurs: ${result.errors || 0}`);
-            console.log(green + '='.repeat(80) + reset + '\n');
-          } else {
-            logger.error("❌ [ERROR] Notification d'alerte de budget NON envoyée", {
-              status: 'ERROR',
-              userId,
-              budgetId,
-              budgetName,
-              reason: result.reason,
-              spentAmount: currentSpentAmount,
-              limitAmount,
-              percentage: currentPercentage.toFixed(2),
-            });
-            // Log supplémentaire très visible avec couleurs
-            const red = '\x1b[31m';
-            const reset = '\x1b[0m';
-            console.log('\n' + red + '='.repeat(80) + reset);
-            console.log(red + '❌ [STATUS: ERROR] NOTIFICATION D\'ALERTE DE BUDGET NON ENVOYÉE' + reset);
-            console.log(red + '='.repeat(80) + reset);
-            console.log(`📊 Budget: ${budgetName}`);
-            console.log(`💰 Dépenses: ${currentSpentAmount.toLocaleString()} FCFA / ${limitAmount.toLocaleString()} FCFA`);
-            console.log(`📈 Pourcentage: ${currentPercentage.toFixed(2)}%`);
-            console.log(`⚠️  Raison: ${result.reason}`);
-            console.log(red + '='.repeat(80) + reset + '\n');
           }
-        } else if (currentPercentage >= 70) {
-          // Budget entre 70% et 99.99% → Notification d'avertissement
-          logger.info('🚀 [SENDING] Envoi de la notification de budget...', {
-            status: 'SENDING',
-            budgetId,
+          return;
+        }
+
+        // Déterminer le titre et le corps du message selon le seuil
+        let customTitle: string;
+        let customBody: string;
+
+        if (thresholdToNotify === 80) {
+          customTitle = 'Attention budget';
+          customBody = `Votre budget "${budgetName}" atteint 80% : ${currentSpentAmount.toFixed(2)} FCFA / ${limitAmount.toFixed(2)} FCFA`;
+        } else { // 95%
+          customTitle = 'Alerte budget critique';
+          customBody = `Votre budget "${budgetName}" atteint 95% : ${currentSpentAmount.toFixed(2)} FCFA / ${limitAmount.toFixed(2)} FCFA. Attention au dépassement !`;
+        }
+
+        // Envoyer la notification avec le message personnalisé
+        const result = await sendBudgetWarningWithCustomMessage(
+          userId,
+          customTitle,
+          customBody,
+          budgetName,
+          currentSpentAmount,
+          limitAmount,
+          currentPercentage
+        );
+
+        if (result.sent) {
+          // Marquer le seuil comme notifié
+          await markThresholdAsNotified(budgetId, thresholdToNotify);
+
+          logger.info(`✅ [SUCCESS] Notification de ${thresholdToNotify}% envoyée`, {
             userId,
+            budgetId,
             budgetName,
-            currentSpentAmount,
-            limitAmount,
-            currentPercentage: currentPercentage.toFixed(2),
+            threshold: thresholdToNotify,
+            tokensCount: result.count,
           });
-          // Log supplémentaire très visible avec couleurs
-          const cyan = '\x1b[36m';
-          const reset = '\x1b[0m';
-          console.log('\n' + cyan + '='.repeat(80) + reset);
-          console.log(cyan + '🚀 [STATUS: SENDING] ENVOI DE NOTIFICATION DE BUDGET' + reset);
-          console.log(cyan + '='.repeat(80) + reset);
-          console.log(`📊 Budget: ${budgetName}`);
-          console.log(`💰 Dépenses: ${currentSpentAmount.toLocaleString()} FCFA / ${limitAmount.toLocaleString()} FCFA`);
-          console.log(`📈 Pourcentage: ${currentPercentage.toFixed(2)}%`);
-          console.log(`⏰ Délai écoulé: 15 secondes`);
-          console.log(cyan + '='.repeat(80) + reset + '\n');
-
-          const result = await sendBudgetWarning(
-            userId,
-            budgetName,
-            currentSpentAmount,
-            limitAmount,
-            currentPercentage
-          );
-
-          if (result.sent) {
-            logger.info("✅ [SUCCESS] Notification de budget envoyée avec succès (15s après détection)", {
-              status: 'SUCCESS',
-              userId,
-              budgetId,
-              budgetName,
-              spentAmount: currentSpentAmount,
-              limitAmount,
-              percentage: currentPercentage.toFixed(2),
-              tokensCount: result.count,
-              ticketsCount: result.tickets?.length || 0,
-              errorsCount: result.errors || 0,
-            });
-            // Log supplémentaire très visible avec couleurs
-            const green = '\x1b[32m';
-            const reset = '\x1b[0m';
-            console.log('\n' + green + '='.repeat(80) + reset);
-            console.log(green + '✅ [STATUS: SUCCESS] NOTIFICATION DE BUDGET ENVOYÉE AVEC SUCCÈS' + reset);
-            console.log(green + '='.repeat(80) + reset);
-            console.log(`📊 Budget: ${budgetName}`);
-            console.log(`💰 Dépenses: ${currentSpentAmount.toLocaleString()} FCFA / ${limitAmount.toLocaleString()} FCFA`);
-            console.log(`📈 Pourcentage: ${currentPercentage.toFixed(2)}%`);
-            console.log(`📱 Tokens: ${result.count} | Tickets: ${result.tickets?.length || 0} | Erreurs: ${result.errors || 0}`);
-            console.log(green + '='.repeat(80) + reset + '\n');
-          } else {
-            logger.error("❌ [ERROR] Notification de budget NON envoyée", {
-              status: 'ERROR',
-              userId,
-              budgetId,
-              budgetName,
-              reason: result.reason,
-              spentAmount: currentSpentAmount,
-              limitAmount,
-              percentage: currentPercentage.toFixed(2),
-            });
-            // Log supplémentaire très visible avec couleurs
-            const red = '\x1b[31m';
-            const reset = '\x1b[0m';
-            console.log('\n' + red + '='.repeat(80) + reset);
-            console.log(red + '❌ [STATUS: ERROR] NOTIFICATION DE BUDGET NON ENVOYÉE' + reset);
-            console.log(red + '='.repeat(80) + reset);
-            console.log(`📊 Budget: ${budgetName}`);
-            console.log(`💰 Dépenses: ${currentSpentAmount.toLocaleString()} FCFA / ${limitAmount.toLocaleString()} FCFA`);
-            console.log(`📈 Pourcentage: ${currentPercentage.toFixed(2)}%`);
-            console.log(`⚠️  Raison: ${result.reason}`);
-            console.log(red + '='.repeat(80) + reset + '\n');
-          }
         } else {
-          logger.warn('❌ Notification annulée - Budget hors de la plage 70-100%', {
-            budgetId,
+          logger.error(`❌ [ERROR] Notification de ${thresholdToNotify}% NON envoyée`, {
             userId,
+            budgetId,
             budgetName,
-            currentPercentage: currentPercentage.toFixed(2),
-            currentSpentAmount,
-            limitAmount,
-            reason: currentPercentage < 70 
-              ? 'Pourcentage inférieur à 70%' 
-              : 'Budget déjà traité (atteint ou dépassé)',
+            threshold: thresholdToNotify,
+            reason: result.reason,
           });
         }
       } catch (error) {
-        logger.error("❌ Erreur lors de l'envoi de la notification de budget programmée", {
+        logger.error("❌ Erreur lors de l'envoi de la notification programmée", {
           budgetId,
           userId,
-          budgetName,
+          threshold: thresholdToNotify,
           error: error instanceof Error ? error.message : 'Erreur inconnue',
-          stack: error instanceof Error ? error.stack : undefined,
         });
       }
-    }, 15 * 1000); // 15 secondes en millisecondes
+    }, 15 * 1000);
 
-    logger.info("✅ Notification de budget programmée avec setTimeout", {
+    logger.info("✅ Notification programmée avec setTimeout", {
       userId,
       budgetId,
       budgetName,
-      spentAmount,
-      limitAmount,
-      percentage: percentage.toFixed(2),
+      threshold: thresholdToNotify,
       delayMs: 15 * 1000,
-      scheduledFor: scheduledTime.toISOString(),
-      timeoutId: timeoutId.toString(),
-    });
-  } else {
-    logger.info('ℹ️ Budget pas encore à 70% - Aucune notification programmée', {
-      budgetId,
-      userId,
-      budgetName: categoryName || "Toutes catégories",
-      spentAmount,
-      limitAmount,
-      percentage: percentage.toFixed(2),
-      reason: percentage < 70 ? 'Pourcentage inférieur à 70%' : 'Budget déjà dépassé',
     });
   }
 }
