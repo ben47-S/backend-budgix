@@ -35,9 +35,10 @@ if (isLeTextoConfigured) {
  * Interface pour la réponse de l'API LeTexto (succès)
  */
 interface LeTextoSuccessResponse {
-  statut: "submitted";
+  status: "submitted";
   id: string;
   partCount: number;
+  createdAt?: string;
 }
 
 /**
@@ -65,6 +66,15 @@ function formatPhoneForLeTexto(phone: string): string {
 }
 
 /**
+ * Masque partiellement le token API pour les logs
+ * Affiche uniquement les 8 premiers caractères
+ */
+function maskToken(token: string | undefined): string {
+  if (!token) return "NON_CONFIGURÉ";
+  return token.substring(0, 8) + "..." + token.substring(token.length - 4);
+}
+
+/**
  * Envoie un SMS via l'API LeTexto
  *
  * @param phone - Numéro de téléphone destinataire (format international: +225...)
@@ -77,28 +87,59 @@ async function sendViaLeTexto(
 ): Promise<string | null> {
   const formattedPhone = formatPhoneForLeTexto(phone);
 
+  // Logger la tentative d'envoi
+  logger.info("📤 [LeTexto] Tentative d'envoi de SMS", {
+    phone: formattedPhone,
+    messageLength: message.length,
+    sender: LETEXTO_SENDER_ID,
+    apiToken: maskToken(LETEXTO_API_TOKEN),
+  });
+
   try {
+    const requestBody = {
+      from: LETEXTO_SENDER_ID,
+      to: formattedPhone,
+      content: message,
+    };
+
+    // Logger les détails de la requête en développement
+    if (process.env.NODE_ENV === "development") {
+      console.log("\n🔍 [LeTexto DEBUG] Requête sortante:");
+      console.log("  URL:", `${LETEXTO_API_URL}/messages/send`);
+      console.log("  Method: POST");
+      console.log("  Headers:", {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${maskToken(LETEXTO_API_TOKEN)}`,
+      });
+      console.log("  Body:", requestBody);
+    }
+
     const response = await fetch(`${LETEXTO_API_URL}/messages/send`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${LETEXTO_API_TOKEN}`,
       },
-      body: JSON.stringify({
-        from: LETEXTO_SENDER_ID,
-        to: formattedPhone,
-        content: message,
-      }),
+      body: JSON.stringify(requestBody),
     });
 
     const data = (await response.json()) as LeTextoResponse;
 
+    // Logger la réponse complète en développement
+    if (process.env.NODE_ENV === "development") {
+      console.log("\n📥 [LeTexto DEBUG] Réponse reçue:");
+      console.log("  Status:", response.status, response.statusText);
+      console.log("  Headers:", Object.fromEntries(response.headers.entries()));
+      console.log("  Body:", JSON.stringify(data, null, 2));
+    }
+
     // Vérifier si c'est une réponse de succès
-    if (response.ok && "statut" in data && data.statut === "submitted") {
-      logger.info("SMS envoyé via LeTexto", {
+    if (response.ok && "status" in data && data.status === "submitted") {
+      logger.info("✅ [LeTexto] SMS envoyé avec succès", {
         phone: formattedPhone,
         messageId: data.id,
         partCount: data.partCount,
+        status: data.status,
       });
       return data.id;
     }
@@ -109,17 +150,19 @@ async function sendViaLeTexto(
       ? errorData.message.join(", ")
       : errorData.message;
 
-    logger.error("Erreur LeTexto API", {
+    logger.error("❌ [LeTexto] Erreur API", {
       phone: formattedPhone,
       statusCode: errorData.statusCode || response.status,
       error: errorMessage,
+      fullErrorData: errorData,
     });
 
     return null;
   } catch (error) {
-    logger.error("Erreur lors de l'appel à LeTexto", {
+    logger.error("❌ [LeTexto] Erreur lors de l'appel à l'API", {
       phone: formattedPhone,
       error: error instanceof Error ? error.message : "Unknown error",
+      stack: error instanceof Error ? error.stack : undefined,
     });
     return null;
   }
@@ -201,28 +244,44 @@ export async function sendSMS(
  */
 export async function getBalance(): Promise<number | null> {
   if (!isLeTextoConfigured) {
-    logger.warn("LeTexto non configuré - Impossible de récupérer le solde");
+    logger.warn("⚠️ [LeTexto] Non configuré - Impossible de récupérer le solde");
     return null;
   }
 
+  logger.info("📊 [LeTexto] Vérification du solde");
+
   try {
-    const response = await fetch(
-      `${LETEXTO_API_URL}/users/balance?token=${LETEXTO_API_TOKEN}`
-    );
+    const url = `${LETEXTO_API_URL}/users/balance?token=${LETEXTO_API_TOKEN}`;
+
+    if (process.env.NODE_ENV === "development") {
+      console.log("\n🔍 [LeTexto DEBUG] Requête balance:");
+      console.log("  URL:", url.replace(LETEXTO_API_TOKEN || "", maskToken(LETEXTO_API_TOKEN)));
+      console.log("  Method: GET");
+    }
+
+    const response = await fetch(url);
+    const data = (await response.json()) as { balance: number };
+
+    if (process.env.NODE_ENV === "development") {
+      console.log("\n📥 [LeTexto DEBUG] Réponse balance:");
+      console.log("  Status:", response.status);
+      console.log("  Body:", JSON.stringify(data, null, 2));
+    }
 
     if (response.ok) {
-      const data = (await response.json()) as { balance: number };
-      logger.info("Solde LeTexto récupéré", { balance: data.balance });
+      logger.info("✅ [LeTexto] Solde récupéré", { balance: data.balance });
       return data.balance;
     }
 
-    logger.error("Erreur lors de la récupération du solde LeTexto", {
+    logger.error("❌ [LeTexto] Erreur lors de la récupération du solde", {
       status: response.status,
+      data,
     });
     return null;
   } catch (error) {
-    logger.error("Erreur lors de l'appel à LeTexto (balance)", {
+    logger.error("❌ [LeTexto] Erreur lors de l'appel à l'API (balance)", {
       error: error instanceof Error ? error.message : "Unknown error",
+      stack: error instanceof Error ? error.stack : undefined,
     });
     return null;
   }
@@ -238,25 +297,50 @@ export async function getMessageStatus(
   messageId: string
 ): Promise<string | null> {
   if (!isLeTextoConfigured) {
-    logger.warn("LeTexto non configuré - Impossible de vérifier le statut");
+    logger.warn("⚠️ [LeTexto] Non configuré - Impossible de vérifier le statut");
     return null;
   }
 
+  logger.info("🔍 [LeTexto] Vérification du statut du message", { messageId });
+
   try {
-    const response = await fetch(
-      `${LETEXTO_API_URL}/messages/${messageId}/status?token=${LETEXTO_API_TOKEN}`
-    );
+    const url = `${LETEXTO_API_URL}/messages/${messageId}/status?token=${LETEXTO_API_TOKEN}`;
+
+    if (process.env.NODE_ENV === "development") {
+      console.log("\n🔍 [LeTexto DEBUG] Requête statut:");
+      console.log("  URL:", url.replace(LETEXTO_API_TOKEN || "", maskToken(LETEXTO_API_TOKEN)));
+      console.log("  Method: GET");
+      console.log("  MessageId:", messageId);
+    }
+
+    const response = await fetch(url);
+    const data = (await response.json()) as { statuts: string };
+
+    if (process.env.NODE_ENV === "development") {
+      console.log("\n📥 [LeTexto DEBUG] Réponse statut:");
+      console.log("  Status:", response.status);
+      console.log("  Body:", JSON.stringify(data, null, 2));
+    }
 
     if (response.ok) {
-      const data = (await response.json()) as { statuts: string };
+      logger.info("✅ [LeTexto] Statut récupéré", {
+        messageId,
+        status: data.statuts,
+      });
       return data.statuts;
     }
 
+    logger.error("❌ [LeTexto] Erreur lors de la récupération du statut", {
+      messageId,
+      status: response.status,
+      data,
+    });
     return null;
   } catch (error) {
-    logger.error("Erreur lors de la vérification du statut", {
+    logger.error("❌ [LeTexto] Erreur lors de la vérification du statut", {
       messageId,
       error: error instanceof Error ? error.message : "Unknown error",
+      stack: error instanceof Error ? error.stack : undefined,
     });
     return null;
   }
