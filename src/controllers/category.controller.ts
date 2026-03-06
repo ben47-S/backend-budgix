@@ -9,7 +9,7 @@
 import type { Request, Response, NextFunction } from "express";
 import { getCategories, createCategory } from "../services/category.service";
 import { createError } from "../middleware/errorHandler";
-import type { CategoryType } from "../../generated/prisma/client";
+import type { CategoryType } from "../generated/prisma/client";
 
 /**
  * Récupère toutes les catégories disponibles pour l'utilisateur connecté

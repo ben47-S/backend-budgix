@@ -13,7 +13,9 @@
 import type { Request, Response, NextFunction } from "express";
 import { sendSMS, sendOTPSMS, getBalance, getMessageStatus } from "../services/sms.service";
 import { createOTP } from "../services/otp.service";
+import { sendVerificationEmail, verifyEmailConnection } from "../services/email.service";
 import { isValidPhone, normalizePhone } from "../utils/validation";
+import { isValidEmail } from "../services/email-verification.service";
 import { createError } from "../middleware/errorHandler";
 import logger from "../lib/logger";
 
@@ -206,6 +208,97 @@ export async function testCheckSMSStatus(
         "Impossible de récupérer le statut du message. Vérifiez l'ID du message.",
         500,
         "STATUS_FETCH_FAILED"
+      );
+    }
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * Teste l'envoi d'un email de vérification
+ *
+ * POST /test/email/send
+ * Body: { email: string }
+ */
+export async function testSendEmail(
+  req: Request<{}, {}, { email: string }>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { email } = req.body;
+
+    // Valider l'email
+    if (!email || !isValidEmail(email)) {
+      throw createError(
+        "Adresse email invalide",
+        400,
+        "INVALID_EMAIL"
+      );
+    }
+
+    logger.info("[TEST EMAIL] Tentative d'envoi d'email de test", {
+      email,
+    });
+
+    // Générer un code de test
+    const testCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+    // Envoyer l'email
+    const success = await sendVerificationEmail(email, testCode);
+
+    if (success) {
+      res.json({
+        success: true,
+        message: "Email de vérification envoyé avec succès",
+        data: {
+          email,
+          code: testCode, // À retirer en production !
+        },
+      });
+    } else {
+      throw createError(
+        "Échec de l'envoi de l'email. Vérifiez la configuration et les logs.",
+        500,
+        "EMAIL_SEND_FAILED"
+      );
+    }
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * Vérifie la connexion au serveur SMTP
+ *
+ * GET /test/email/verify-connection
+ */
+export async function testEmailConnection(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    logger.info("[TEST EMAIL] Vérification de la connexion SMTP");
+
+    const isConnected = await verifyEmailConnection();
+
+    if (isConnected) {
+      res.json({
+        success: true,
+        message: "Connexion SMTP vérifiée avec succès",
+        data: {
+          host: process.env.EMAIL_HOST || "smtp.gmail.com",
+          port: process.env.EMAIL_PORT || 587,
+          user: process.env.EMAIL_USER,
+        },
+      });
+    } else {
+      throw createError(
+        "Impossible de se connecter au serveur SMTP. Vérifiez la configuration.",
+        500,
+        "SMTP_CONNECTION_FAILED"
       );
     }
   } catch (error) {

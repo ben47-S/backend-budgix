@@ -9,7 +9,7 @@
 
 import { prisma } from "../lib/prisma";
 import { createError } from "../middleware/errorHandler";
-import type { CategoryType } from "../../generated/prisma/client";
+import type { CategoryType } from "../generated/prisma/client";
 
 /**
  * Récupère toutes les catégories disponibles pour un utilisateur

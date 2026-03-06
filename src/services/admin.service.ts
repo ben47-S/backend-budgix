@@ -16,7 +16,7 @@ import { sendNotificationToUser } from "./notification.service";
 import { getActivePushTokens } from "./pushToken.service";
 import { emitToUser } from "./websocket.service";
 import logger from "../lib/logger";
-import { Prisma } from "../../generated/prisma/client";
+import { Prisma } from "../generated/prisma/client";
 import {
   createOrUpdateSubscription,
   cancelSubscription,

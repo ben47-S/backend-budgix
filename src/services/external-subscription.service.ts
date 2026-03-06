@@ -12,7 +12,7 @@
 import { prisma } from "../lib/prisma";
 import { createError } from "../middleware/errorHandler";
 import { getUserById } from "./auth.service";
-import type { BillingCycle } from "../../generated/prisma/client";
+import type { BillingCycle } from "../generated/prisma/client";
 
 /**
  * Calcule la date du prochain renouvellement selon le cycle de facturation

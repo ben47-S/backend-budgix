@@ -12,6 +12,8 @@
 import { prisma } from "../lib/prisma";
 import { createError } from "../middleware/errorHandler";
 import { generateOTP } from "./otp.service"; // Réutiliser la fonction de génération OTP
+import { sendVerificationEmail } from "./email.service"; // Service d'envoi d'email
+import logger from "../lib/logger";
 import * as crypto from "crypto";
 
 /**
@@ -110,13 +112,29 @@ export async function createEmailVerificationCode(
     },
   });
 
-  // TODO: Envoyer l'email avec le code (intégration avec un service d'email)
-  // Log uniquement en développement
-  if (process.env.NODE_ENV === "development") {
-    console.log(`📧 Code de vérification pour ${normalizedEmail}: ${code}`);
+  // Envoyer l'email avec le code de vérification
+  try {
+    const emailSent = await sendVerificationEmail(normalizedEmail, code);
+
+    if (emailSent) {
+      logger.info(`Code de vérification email envoyé à ${normalizedEmail}`);
+    } else {
+      logger.warn(`Échec d'envoi du code de vérification à ${normalizedEmail}`);
+      // En développement, afficher le code dans les logs
+      if (process.env.NODE_ENV === "development") {
+        logger.info(`📧 Code de vérification pour ${normalizedEmail}: ${code}`);
+      }
+    }
+  } catch (error) {
+    logger.error("Erreur lors de l'envoi de l'email de vérification", {
+      error: error instanceof Error ? error.message : "Unknown error",
+      email: normalizedEmail,
+    });
+    // Ne pas bloquer le processus si l'email n'est pas envoyé
+    // Le code est quand même créé dans la DB
   }
 
-  // Retourner le code en clair (sera envoyé par email)
+  // Retourner le code en clair (pour le stockage en DB et potentiellement pour les tests)
   return code;
 }
 

@@ -21,7 +21,7 @@ import {
 } from "../services/debt.service";
 import { formatDatesToISO } from "../utils/date-formatter";
 import type { CreateDebtRequest, UpdateDebtRequest } from "../types";
-import type { DebtType } from "../../generated/prisma/client";
+import type { DebtType } from "../generated/prisma/client";
 
 /**
  * Crée une nouvelle dette

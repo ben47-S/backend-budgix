@@ -12,7 +12,7 @@ import { prisma } from "../lib/prisma";
 import { createError } from "../middleware/errorHandler";
 import { sendBudgetWarning, sendBudgetAlert, sendBudgetWarningWithCustomMessage } from "./notification.service";
 import logger from "../lib/logger";
-import type { BudgetType, BudgetStatus } from "../../generated/prisma/client";
+import type { BudgetType, BudgetStatus } from "../generated/prisma/client";
 
 /**
  * Calcule le statut d'un budget en fonction de la période et des dépenses

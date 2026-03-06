@@ -12,7 +12,7 @@
 import { prisma } from "../lib/prisma";
 import { createError } from "../middleware/errorHandler";
 import { getUserById } from "./auth.service";
-import type { SubscriptionPlan } from "../../generated/prisma/client";
+import type { SubscriptionPlan } from "../generated/prisma/client";
 
 // Prix de base des abonnements (en XOF - FCFA)
 export const MONTHLY_PRICE = 450; // Prix mensuel en XOF

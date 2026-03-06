@@ -10,6 +10,8 @@ import {
   testSendOTP,
   testGetBalance,
   testCheckSMSStatus,
+  testSendEmail,
+  testEmailConnection,
 } from "../controllers/test.controller";
 import { validate } from "../middleware/validation";
 import { testSendSMSSchema, testSendOTPSchema } from "../validations/test.validation";
@@ -226,6 +228,92 @@ router.get("/sms/balance", testGetBalance);
  *         description: Routes de test non disponibles en production
  */
 router.get("/sms/status/:messageId", testCheckSMSStatus);
+
+/**
+ * @swagger
+ * /test/email/send:
+ *   post:
+ *     summary: Envoyer un email de vérification de test (DEV uniquement)
+ *     description: Envoie un email avec un code de vérification. Disponible uniquement en mode développement.
+ *     tags: [Test]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: "test@example.com"
+ *                 description: Adresse email du destinataire
+ *     responses:
+ *       200:
+ *         description: Email envoyé avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "Email de vérification envoyé avec succès"
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     email:
+ *                       type: string
+ *                     code:
+ *                       type: string
+ *                       description: Code de vérification à 6 chiffres
+ *       403:
+ *         description: Routes de test non disponibles en production
+ */
+router.post("/email/send", testSendEmail);
+
+/**
+ * @swagger
+ * /test/email/verify-connection:
+ *   get:
+ *     summary: Vérifier la connexion SMTP (DEV uniquement)
+ *     description: Teste la connexion au serveur SMTP configuré. Disponible uniquement en mode développement.
+ *     tags: [Test]
+ *     responses:
+ *       200:
+ *         description: Connexion SMTP vérifiée avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "Connexion SMTP vérifiée avec succès"
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     host:
+ *                       type: string
+ *                       example: "smtp.gmail.com"
+ *                     port:
+ *                       type: number
+ *                       example: 587
+ *                     user:
+ *                       type: string
+ *                       example: "noreply@budgix.com"
+ *       403:
+ *         description: Routes de test non disponibles en production
+ */
+router.get("/email/verify-connection", testEmailConnection);
 
 export default router;
 

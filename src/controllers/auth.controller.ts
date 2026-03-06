@@ -160,16 +160,16 @@ export async function verifyOTPController(
     logEvent({
       level: "INFO",
       scope: "SECURITY",
-      action: isNewUser ? "USER_REGISTER_SUCCESS" : "USER_LOGIN_SUCCESS",
+      action: isNewUser ? "CREATE_USER" : "LOGIN_USER",
       userId: user.id,
       metadata: {
-        phone: normalizedPhone,
-        isNewUser,
-        needsConsent,
-        userAgent: req.headers["user-agent"],
+        phone: user.phone || phone,
+        isNewUser: isNewUser,
+        needsConsent: needsConsent,
+        userAgent: req.headers["user-agent"] || ""
       },
-      ip: req.ip || undefined,
-      userAgent: req.headers["user-agent"] || undefined,
+      ip: req.ip || "",
+      userAgent: req.headers["user-agent"] || ""
     });
 
     res.json({

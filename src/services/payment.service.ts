@@ -11,7 +11,7 @@ import { prisma } from "../lib/prisma";
 import { createError } from "../middleware/errorHandler";
 import { calculateSubscriptionPrice, createOrUpdateSubscription, renewOrCreateSubscription } from "./subscription.service";
 import { sendNotificationToUser } from "./notification.service";
-import type { SubscriptionPlan } from "../../generated/prisma/client";
+import type { SubscriptionPlan } from "../generated/prisma/client";
 
 const prismaClient = prisma as any;
 

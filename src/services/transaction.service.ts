@@ -11,7 +11,7 @@ import { prisma } from "../lib/prisma";
 import { createError } from "../middleware/errorHandler";
 import { getPeriodDates, buildTransactionDate } from "../utils/date";
 import type { PeriodFilter } from "../types/index";
-import type { CategoryType } from "../../generated/prisma/client";
+import type { CategoryType } from "../generated/prisma/client";
 import { checkBudgetsAfterTransaction } from "./budget.service";
 import logger from "../lib/logger";
 

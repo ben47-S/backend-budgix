@@ -1,5 +1,5 @@
 import { prisma } from "../lib/prisma"
-import { LogLevel, LogScope } from "../../generated/prisma/client"
+import { LogLevel, LogScope } from "../generated/prisma/client"
 
 /**
  * Tronque un ID pour n'afficher que les 8 premiers caractères
@@ -13,25 +13,33 @@ function truncateId(id: string | null): string | null {
 /**
  * Tronque les métadonnées pour limiter leur taille
  */
-function truncateMetadata(metadata: Record<string, any> | null): Record<string, any> | null {
-  if (!metadata) return null
+function truncateMetadata(metadata: unknown): Record<string, any> | null {
+  if (!metadata) return null;
 
-  const truncated: Record<string, any> = {}
-  const entries = Object.entries(metadata).slice(0, 3) // Max 3 entrées
+  if (typeof metadata === "string") {
+    return { message: metadata }; // transforme string en objet
+  }
+
+  if (typeof metadata !== "object" || Array.isArray(metadata)) {
+    return { value: metadata }; // transforme tout autre type en objet
+  }
+
+  const truncated: Record<string, any> = {};
+  const entries = Object.entries(metadata as Record<string, any>).slice(0, 3);
 
   for (const [key, value] of entries) {
     if (typeof value === "string" && value.length > 20) {
-      truncated[key] = value.substring(0, 20) + "..."
+      truncated[key] = value.substring(0, 20) + "...";
     } else if (Array.isArray(value)) {
-      truncated[key] = `[${value.length} items]`
+      truncated[key] = `[${value.length} items]`;
     } else if (typeof value === "object" && value !== null) {
-      truncated[key] = "{...}"
+      truncated[key] = "{...}";
     } else {
-      truncated[key] = value
+      truncated[key] = value;
     }
   }
 
-  return truncated
+  return truncated;
 }
 
 export interface LogEventParams {

@@ -12,7 +12,7 @@
 import { prisma } from "../lib/prisma";
 import { createError } from "../middleware/errorHandler";
 import { getUserById } from "./auth.service";
-import type { DebtType } from "../../generated/prisma/client";
+import type { DebtType } from "../generated/prisma/client";
 
 /**
  * Crée une nouvelle dette
