@@ -9,16 +9,16 @@
 
 import type { Router } from "express";
 import { Router as ExpressRouter } from "express";
-import { requireAuth, requirePremium } from "../middleware/auth";
-import { generalRateLimiter } from "../middleware/rateLimit";
-import { validate } from "../middleware/validation";
+import { requireAuth, requirePremium } from "../middleware/auth.js";
+import { generalRateLimiter } from "../middleware/rateLimit.js";
+import { validate } from "../middleware/validation.js";
 import {
   upsertBudgetSchema,
   getBudgetsOverviewSchema,
   deleteBudgetSchema,
   upsertMonthlyBudgetSchema,
   getMonthlyBudgetsSchema,
-} from "../validations/budget.validation";
+} from "../validations/budget.validation.js";
 import {
   upsertBudgetController,
   getBudgetsOverviewController,
@@ -27,7 +27,7 @@ import {
   upsertMonthlyBudgetController,
   getMonthlyBudgetsController,
   getAllBudgetsController,
-} from "../controllers";
+} from "../controllers/index.js";
 
 const router: Router = ExpressRouter();
 

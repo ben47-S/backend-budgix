@@ -9,7 +9,7 @@
  *   pnpm tsx src/scripts/create-admin.ts --phone <phone>
  */
 
-import { prisma } from "../lib/prisma";
+import { prisma } from "../lib/prisma.js";
 
 async function createAdmin() {
   const args = process.argv.slice(2);

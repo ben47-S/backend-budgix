@@ -3,7 +3,7 @@
  */
 
 import { z } from "zod";
-import { dateSchemaJJMMYYYY } from "../utils/date-validation";
+import { dateSchemaJJMMYYYY } from "../utils/date-validation.js";
 
 /**
  * Schéma pour les paramètres de requête de liste des utilisateurs

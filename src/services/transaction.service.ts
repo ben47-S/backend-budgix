@@ -7,13 +7,13 @@
  * - Le calcul des totaux (dépenses, revenus, différence)
  */
 
-import { prisma } from "../lib/prisma";
-import { createError } from "../middleware/errorHandler";
-import { getPeriodDates, buildTransactionDate } from "../utils/date";
-import type { PeriodFilter } from "../types/index";
-import type { CategoryType } from "../generated/prisma/client";
-import { checkBudgetsAfterTransaction } from "./budget.service";
-import logger from "../lib/logger";
+import { prisma } from "../lib/prisma.js";
+import { createError } from "../middleware/errorHandler.js";
+import { getPeriodDates, buildTransactionDate } from "../utils/date.js";
+import type { PeriodFilter } from "../types/index.js";
+import type { CategoryType } from "../generated/prisma/client.js";
+import { checkBudgetsAfterTransaction } from "./budget.service.js";
+import logger from "../lib/logger.js";
 
 /**
  * Crée une nouvelle transaction

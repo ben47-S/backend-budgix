@@ -11,9 +11,8 @@
  */
 
 import 'dotenv/config';
-import { prisma } from '../lib/prisma';
-import { upsertBudgetForPeriod } from '../services/budget.service';
-import logger from '../lib/logger';
+import { prisma } from '../lib/prisma.js';
+import { upsertBudgetForPeriod } from '../services/budget.service.js';
 
 // Récupérer les arguments de la ligne de commande
 const args = process.argv.slice(2);

@@ -7,13 +7,13 @@
  * - La vérification des informations avant mise à jour
  */
 
-import { prisma } from "../lib/prisma";
-import { createError } from "../middleware/errorHandler";
-import { getUserById } from "./auth.service";
-import { verifyOTP } from "./otp.service";
-import { verifyEmailCode } from "./email-verification.service";
-import { normalizePhone, isValidPhone } from "../utils/validation";
-import { normalizeEmail, isValidEmail } from "./email-verification.service";
+import { prisma } from "../lib/prisma.js";
+import { createError } from "../middleware/errorHandler.js";
+import { getUserById } from "./auth.service.js";
+import { verifyOTP } from "./otp.service.js";
+import { verifyEmailCode } from "./email-verification.service.js";
+import { normalizePhone, isValidPhone } from "../utils/validation.js";
+import { normalizeEmail, isValidEmail } from "./email-verification.service.js";
 
 /**
  * Met à jour le numéro de téléphone d'un utilisateur après vérification OTP

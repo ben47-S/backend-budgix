@@ -9,8 +9,8 @@
  * - Le hashage des codes avant stockage
  */
 
-import { prisma } from "../lib/prisma";
-import { createError } from "../middleware/errorHandler";
+import { prisma } from "../lib/prisma.js";
+import { createError } from "../middleware/errorHandler.js";
 import * as crypto from "crypto";
 
 // Durée de validité d'un code OTP en millisecondes (5 minutes)

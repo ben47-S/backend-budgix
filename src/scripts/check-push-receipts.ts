@@ -12,7 +12,7 @@
 
 import 'dotenv/config';
 import { Expo } from 'expo-server-sdk';
-import logger from '../lib/logger';
+import logger from '../lib/logger.js';
 
 const expo = new Expo({
   ...(process.env.EXPO_ACCESS_TOKEN && { accessToken: process.env.EXPO_ACCESS_TOKEN }),

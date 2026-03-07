@@ -10,9 +10,9 @@
 
 import { Server as SocketIOServer, Socket } from "socket.io";
 import { Server as HTTPServer } from "http";
-import { verifyToken } from "./jwt.service";
-import { sendMessage, getDiscussionById } from "./discussion.service";
-import logger from "../lib/logger";
+import { verifyToken } from "./jwt.service.js";
+import { sendMessage, getDiscussionById } from "./discussion.service.js";
+import logger from "../lib/logger.js";
 
 // Interface pour les données utilisateur stockées dans la socket
 interface SocketUser {
@@ -187,7 +187,7 @@ export function initWebSocket(httpServer: HTTPServer): SocketIOServer {
         await getDiscussionById(discussionId, userId, isAdmin);
 
         // Mettre à jour les messages comme lus (via le service)
-        const { markDiscussionAsRead } = await import("./discussion.service");
+        const { markDiscussionAsRead } = await import("./discussion.service.js");
         await markDiscussionAsRead(discussionId, userId, isAdmin);
 
         // Notifier les autres participants

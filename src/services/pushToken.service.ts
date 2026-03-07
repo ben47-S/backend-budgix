@@ -8,9 +8,9 @@
  * - La gestion des préférences de notification
  */
 
-import { prisma } from '../lib/prisma';
-import { createError } from '../middleware/errorHandler';
-import { isExpoPushToken } from './expo-notification.service';
+import { prisma } from '../lib/prisma.js';
+import { createError } from '../middleware/errorHandler.js';
+import { isExpoPushToken } from './expo-notification.service.js';
 
 /**
  * Enregistre ou met à jour un token de notification push

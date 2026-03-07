@@ -13,11 +13,11 @@ import {
   getTransactions,
   getTransactionSummary,
   deleteAllUserTransactions,
-} from "../services/transaction.service";
-import { createError } from "../middleware/errorHandler";
-import { logEvent } from "../services/log.service";
-import type { CreateTransactionRequest, PeriodFilter } from "../types/index";
-import { formatDatesToISO } from "../utils/date-formatter";
+} from "../services/transaction.service.js";
+import { createError } from "../middleware/errorHandler.js";
+import { logEvent } from "../services/log.service.js";
+import type { CreateTransactionRequest, PeriodFilter } from "../types/index.js";
+import { formatDatesToISO } from "../utils/date-formatter.js";
 
 /**
  * Récupère les transactions de l'utilisateur connecté

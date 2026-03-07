@@ -8,9 +8,9 @@
  * - La mise à jour de lastActivityAt à chaque message
  */
 
-import { prisma } from "../lib/prisma";
-import { createError } from "../middleware/errorHandler";
-import logger from "../lib/logger";
+import { prisma } from "../lib/prisma.js";
+import { createError } from "../middleware/errorHandler.js";
+import logger from "../lib/logger.js";
 
 // Durée d'inactivité avant suppression (25 minutes en millisecondes)
 const INACTIVITY_THRESHOLD_MS = 25 * 60 * 1000; // 25 minutes

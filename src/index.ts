@@ -12,14 +12,14 @@ import swaggerUi from "swagger-ui-express";
 import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
-import { errorHandler } from "./middleware/errorHandler";
-import { notFoundHandler } from "./middleware/notFoundHandler";
-import { requestLogger } from "./middleware/requestLogger";
-import apiRoutes from "./routes/index";
-import { swaggerSpec } from "./config/swagger";
-import logger from "./lib/logger";
-import { startCronJobs } from "./lib/cron";
-import { initWebSocket } from "./services/websocket.service";
+import { errorHandler } from "./middleware/errorHandler.js";
+import { notFoundHandler } from "./middleware/notFoundHandler.js";
+import { requestLogger } from "./middleware/requestLogger.js";
+import apiRoutes from "./routes/index.js";
+import { swaggerSpec } from "./config/swagger.js";
+import logger from "./lib/logger.js";
+import { startCronJobs } from "./lib/cron.js";
+import { initWebSocket } from "./services/websocket.service.js";
 
 // Créer l'application Express
 const app = express();
@@ -158,13 +158,13 @@ app.get("/health", async (req, res) => {
     const simple = req.query.simple === "true";
     
     if (simple) {
-      const { simpleHealthCheck } = await import("./utils/health");
+      const { simpleHealthCheck } = await import("./utils/health.js");
       const result = simpleHealthCheck();
       return res.json(result);
     }
     
     // Sinon, on fait un check complet avec vérification de la DB
-    const { performHealthCheck } = await import("./utils/health");
+    const { performHealthCheck } = await import("./utils/health.js");
     const result = await performHealthCheck();
     
     // Retourner 503 si unhealthy, sinon 200

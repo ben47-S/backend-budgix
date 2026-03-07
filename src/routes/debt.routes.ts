@@ -19,16 +19,16 @@ import {
   updateDebtController,
   deleteDebtController,
   getDebtStatsController,
-} from "../controllers";
-import { requireAuth, requirePremium } from "../middleware/auth";
-import { validate } from "../middleware/validation";
-import { createResourceRateLimiter, generalRateLimiter } from "../middleware/rateLimit";
+} from "../controllers/index.js";
+import { requireAuth, requirePremium } from "../middleware/auth.js";
+import { validate } from "../middleware/validation.js";
+import { createResourceRateLimiter, generalRateLimiter } from "../middleware/rateLimit.js";
 import {
   createDebtSchema,
   updateDebtSchema,
   getDebtsSchema,
   debtIdSchema,
-} from "../validations/debt.validation";
+} from "../validations/debt.validation.js";
 
 const router: Router = ExpressRouter();
 

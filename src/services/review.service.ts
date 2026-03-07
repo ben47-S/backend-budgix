@@ -11,9 +11,9 @@
  * Note : Les suggestions d'amélioration sont gérées séparément dans improvement-suggestion.service.ts
  */
 
-import { prisma } from "../lib/prisma";
-import { createError } from "../middleware/errorHandler";
-import logger from "../lib/logger";
+import { prisma } from "../lib/prisma.js";
+import { createError } from "../middleware/errorHandler.js";
+import logger from "../lib/logger.js";
 
 /**
  * Interface pour créer un avis

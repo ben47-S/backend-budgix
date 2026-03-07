@@ -8,12 +8,12 @@
  * - Résumés hebdomadaires/mensuels
  */
 
-import { getActivePushTokens } from './pushToken.service';
-import { sendExpoPushNotification, checkPushTicketReceipts } from './expo-notification.service';
-import { emitToUser } from './websocket.service';
-import { prisma } from '../lib/prisma';
-import { createError } from '../middleware/errorHandler';
-import logger from '../lib/logger';
+import { getActivePushTokens } from './pushToken.service.js';
+import { sendExpoPushNotification, checkPushTicketReceipts } from './expo-notification.service.js';
+import { emitToUser } from './websocket.service.js';
+import { prisma } from '../lib/prisma.js';
+import { createError } from '../middleware/errorHandler.js';
+import logger from '../lib/logger.js';
 
 /**
  * Envoie une notification à un utilisateur

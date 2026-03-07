@@ -8,19 +8,19 @@
  */
 
 import type { Request, Response, NextFunction } from "express";
-import { createError } from "../middleware/errorHandler";
-import { createOTP } from "../services/otp.service";
-import { createEmailVerificationCode } from "../services/email-verification.service";
-import { updateUserPhone, updateUserEmail, getUserProfile, updateUserUsername } from "../services/profile.service";
-import { isValidPhone, normalizePhone } from "../utils/validation";
-import { isValidEmail, normalizeEmail } from "../services/email-verification.service";
-import { generateToken } from "../services/jwt.service";
+import { createError } from "../middleware/errorHandler.js";
+import { createOTP } from "../services/otp.service.js";
+import { createEmailVerificationCode } from "../services/email-verification.service.js";
+import { updateUserPhone, updateUserEmail, getUserProfile, updateUserUsername } from "../services/profile.service.js";
+import { isValidPhone, normalizePhone } from "../utils/validation.js";
+import { isValidEmail, normalizeEmail } from "../services/email-verification.service.js";
+import { generateToken } from "../services/jwt.service.js";
 import type {
   AddPhoneRequest,
   VerifyPhoneRequest,
   AddEmailRequest,
   VerifyEmailRequest,
-} from "../types";
+} from "../types/index.js";
 
 /**
  * Envoie un code OTP pour ajouter/mettre à jour le numéro de téléphone

@@ -7,7 +7,7 @@
  *   pnpm tsx src/scripts/set-admin-password.ts --id <userId> <password>
  */
 
-import { prisma } from "../lib/prisma";
+import { prisma } from "../lib/prisma.js";
 import bcrypt from "bcrypt";
 
 async function setAdminPassword() {

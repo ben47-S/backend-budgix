@@ -9,7 +9,7 @@
 
 import { Expo } from 'expo-server-sdk';
 import type { ExpoPushMessage, ExpoPushTicket } from 'expo-server-sdk';
-import logger from '../lib/logger';
+import logger from '../lib/logger.js';
 
 // Créer une instance Expo (réutilisable)
 const expo = new Expo({

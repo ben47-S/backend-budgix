@@ -8,16 +8,16 @@
 
 import type { Router } from "express";
 import { Router as ExpressRouter } from "express";
-import { sendOTP, verifyOTPController, logoutController, acceptConsentController, getConsentStatusController } from "../controllers";
-import { validate } from "../middleware/validation";
-import { authRateLimiter, generalRateLimiter } from "../middleware/rateLimit";
-import { requireAuth } from "../middleware/auth";
+import { sendOTP, verifyOTPController, logoutController, acceptConsentController, getConsentStatusController } from "../controllers/index.js";
+import { validate } from "../middleware/validation.js";
+import { authRateLimiter, generalRateLimiter } from "../middleware/rateLimit.js";
+import { requireAuth } from "../middleware/auth.js";
 import {
   sendOTPSchema,
   verifyOTPSchema,
   googleTestSchema,
   googleAuthSchema,
-} from "../validations/auth.validation";
+} from "../validations/auth.validation.js";
 
 const router: Router = ExpressRouter();
 
@@ -149,7 +149,7 @@ import {
   googleCallbackController,
   googleTestController,
   googleAuthController,
-} from "../controllers";
+} from "../controllers/index.js";
 
 /**
  * @swagger

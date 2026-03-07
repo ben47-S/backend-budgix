@@ -10,9 +10,9 @@ import type { Request, Response, NextFunction } from "express";
 import {
   authenticateWithGoogle,
   verifyGoogleIdToken,
-} from "../services/oauth.service";
-import { createError } from "../middleware/errorHandler";
-import type { GoogleProfile } from "../services/oauth.service";
+} from "../services/oauth.service.js";
+import { createError } from "../middleware/errorHandler.js";
+import type { GoogleProfile } from "../services/oauth.service.js";
 
 /**
  * Callback Google OAuth

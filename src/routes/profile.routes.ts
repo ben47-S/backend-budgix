@@ -18,17 +18,17 @@ import {
   verifyPhoneOTP,
   sendEmailVerification,
   verifyEmailCode,
-} from "../controllers";
-import { requireAuth } from "../middleware/auth";
-import { validate } from "../middleware/validation";
-import { profileRateLimiter, generalRateLimiter, createResourceRateLimiter } from "../middleware/rateLimit";
+} from "../controllers/index.js";
+import { requireAuth } from "../middleware/auth.js";
+import { validate } from "../middleware/validation.js";
+import { profileRateLimiter, generalRateLimiter, createResourceRateLimiter } from "../middleware/rateLimit.js";
 import {
   addPhoneSchema,
   verifyPhoneSchema,
   addEmailSchema,
   verifyEmailSchema,
   updateUsernameSchema,
-} from "../validations/profile.validation";
+} from "../validations/profile.validation.js";
 
 const router: Router = ExpressRouter();
 

@@ -1,9 +1,9 @@
 import type { Router, Request, Response } from "express"
 import { Router as ExpressRouter } from "express"
-import { requireAdmin } from "../middleware/auth"
-import { getLogs, getLogsStats } from "../services/log.service"
-import type { GetLogsParams } from "../services/log.service"
-import { LogLevel, LogScope } from "../generated/prisma/client"
+import { requireAdmin } from "../middleware/auth.js"
+import { getLogs, getLogsStats } from "../services/log.service.js"
+import type { GetLogsParams } from "../services/log.service.js"
+import { LogLevel, LogScope } from "../generated/prisma/client.js"
 
 const router: Router = ExpressRouter()
 

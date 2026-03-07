@@ -9,8 +9,7 @@
  *   pnpm tsx src/scripts/test-push-notification.ts "ExponentPushToken[...]" "Test" "Ceci est un message de test"
  */
 
-import { sendExpoPushNotification } from '../services/expo-notification.service';
-import logger from '../lib/logger';
+import { sendExpoPushNotification } from '../services/expo-notification.service.js';
 
 // Récupérer les arguments de la ligne de commande
 const args = process.argv.slice(2);

@@ -1,5 +1,5 @@
-import { prisma } from "../lib/prisma"
-import { LogLevel, LogScope } from "../generated/prisma/client"
+import { prisma } from "../lib/prisma.js"
+import { LogLevel, LogScope } from "../generated/prisma/client.js"
 
 /**
  * Tronque un ID pour n'afficher que les 8 premiers caractères

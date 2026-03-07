@@ -6,9 +6,9 @@
  */
 
 import type { Request, Response, NextFunction } from "express";
-import { createError } from "./errorHandler";
-import { verifyToken, extractTokenFromHeader, shouldRenewToken, generateToken } from "../services/jwt.service";
-import { prisma } from "../lib/prisma";
+import { createError } from "./errorHandler.js";
+import { verifyToken, extractTokenFromHeader, shouldRenewToken, generateToken } from "../services/jwt.service.js";
+import { prisma } from "../lib/prisma.js";
 
 // Étendre l'interface Request pour inclure l'utilisateur
 declare global {

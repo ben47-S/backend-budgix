@@ -23,9 +23,9 @@ import {
   updateImprovementSuggestionController,
   deleteImprovementSuggestionController,
   getImprovementSuggestionStatsController,
-} from "../controllers/improvement-suggestion.controller";
-import { requireAuth, requireAdmin } from "../middleware/auth";
-import { generalRateLimiter } from "../middleware/rateLimit";
+} from "../controllers/improvement-suggestion.controller.js";
+import { requireAuth, requireAdmin } from "../middleware/auth.js";
+import { generalRateLimiter } from "../middleware/rateLimit.js";
 
 const router: Router = ExpressRouter();
 

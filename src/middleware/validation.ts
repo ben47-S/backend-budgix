@@ -7,7 +7,7 @@
 
 import type { Request, Response, NextFunction } from "express";
 import { z, ZodError } from "zod";
-import { createError } from "./errorHandler";
+import { createError } from "./errorHandler.js";
 
 /**
  * Type pour les schémas de validation Zod

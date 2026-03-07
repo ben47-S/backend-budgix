@@ -5,7 +5,7 @@
  * pour une compatibilité maximale avec les frontends
  */
 
-import { formatDate } from './date';
+import { formatDate } from './date.js';
 
 /**
  * Formate une date ou retourne null si la date est null/undefined

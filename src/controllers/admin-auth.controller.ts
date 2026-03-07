@@ -11,7 +11,7 @@ import {
   authenticateAdmin,
   setAdminPassword,
   setAdminPasswordByEmail,
-} from "../services/admin-auth.service";
+} from "../services/admin-auth.service.js";
 
 /**
  * Authentifie un administrateur avec email + mot de passe

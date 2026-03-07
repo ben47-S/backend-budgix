@@ -7,9 +7,9 @@
  * - Désactive automatiquement les abonnements expirés
  */
 
-import { prisma } from "../lib/prisma";
-import { sendGroupedSubscriptionReminders, sendPremiumSubscriptionRenewalReminder } from "./notification.service";
-import logger from "../lib/logger";
+import { prisma } from "../lib/prisma.js";
+import { sendGroupedSubscriptionReminders, sendPremiumSubscriptionRenewalReminder } from "./notification.service.js";
+import logger from "../lib/logger.js";
 
 /**
  * Calcule le nombre de jours entre deux dates

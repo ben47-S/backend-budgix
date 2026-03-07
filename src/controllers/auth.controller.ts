@@ -7,16 +7,16 @@
  */
 
 import type { Request, Response, NextFunction } from "express";
-import { createOTP, verifyOTP } from "../services/otp.service";
-import { createUser, getUserByPhone } from "../services/auth.service";
-import { sendOTPSMS } from "../services/sms.service";
-import { isValidPhone, normalizePhone, isValidOTP } from "../utils/validation";
-import { createError } from "../middleware/errorHandler";
-import { generateToken } from "../services/jwt.service";
-import { getUserConsentStatus } from "../services/consent.service";
-import { logEvent } from "../services/log.service";
-import logger from "../lib/logger";
-import type { OtpRequest, OtpVerifyRequest } from "../types/index";
+import { createOTP, verifyOTP } from "../services/otp.service.js";
+import { createUser, getUserByPhone } from "../services/auth.service.js";
+import { sendOTPSMS } from "../services/sms.service.js";
+import { isValidPhone, normalizePhone, isValidOTP } from "../utils/validation.js";
+import { createError } from "../middleware/errorHandler.js";
+import { generateToken } from "../services/jwt.service.js";
+import { getUserConsentStatus } from "../services/consent.service.js";
+import { logEvent } from "../services/log.service.js";
+import logger from "../lib/logger.js";
+import type { OtpRequest, OtpVerifyRequest } from "../types/index.js";
 
 /**
  * Envoie un code OTP à un numéro de téléphone
@@ -214,7 +214,7 @@ export async function logoutController(
     // lors de la prochaine connexion (même utilisateur ou autre) via upsertPushToken
     if (userId) {
       try {
-        const { getActivePushTokens } = await import("../services/pushToken.service");
+        const { getActivePushTokens } = await import("../services/pushToken.service.js");
         
         // Logger les tokens qui restent (pour debug)
         const tokens = await getActivePushTokens(userId);
@@ -293,7 +293,7 @@ export async function acceptConsentController(
     }
 
     // Importer la fonction pour accepter les termes
-    const { acceptConsentTerms } = await import("../services/consent.service");
+    const { acceptConsentTerms } = await import("../services/consent.service.js");
 
     // Accepter les CGU et politiques
     const updatedUser = await acceptConsentTerms(
@@ -340,7 +340,7 @@ export async function getConsentStatusController(
     }
 
     // Importer la fonction pour récupérer le statut
-    const { getUserConsentStatus } = await import("../services/consent.service");
+    const { getUserConsentStatus } = await import("../services/consent.service.js");
 
     // Récupérer le statut de consentement
     const consentStatus = await getUserConsentStatus(userId);

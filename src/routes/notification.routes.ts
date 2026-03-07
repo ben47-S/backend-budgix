@@ -9,14 +9,14 @@
 
 import type { Router } from "express";
 import { Router as ExpressRouter } from "express";
-import { requireAuth } from "../middleware/auth";
-import { generalRateLimiter } from "../middleware/rateLimit";
-import { validate } from "../middleware/validation";
+import { requireAuth } from "../middleware/auth.js";
+import { generalRateLimiter } from "../middleware/rateLimit.js";
+import { validate } from "../middleware/validation.js";
 import {
   registerTokenSchema,
   updatePreferencesSchema,
   deleteTokenSchema,
-} from "../validations/notification.validation";
+} from "../validations/notification.validation.js";
 import {
   registerTokenController,
   getPreferencesController,
@@ -28,7 +28,7 @@ import {
   getUnreadNotificationsCountController,
   deleteNotificationController,
   deleteAllNotificationsController,
-} from "../controllers";
+} from "../controllers/index.js";
 
 const router: Router = ExpressRouter();
 

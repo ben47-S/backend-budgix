@@ -6,7 +6,7 @@
  */
 
 import type { Request, Response, NextFunction } from "express";
-import logger from "../lib/logger";
+import logger from "../lib/logger.js";
 
 /**
  * Middleware pour logger les requêtes HTTP

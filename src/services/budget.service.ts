@@ -8,11 +8,11 @@
  * - Envoyer des notifications push quand un budget est presque atteint
  */
 
-import { prisma } from "../lib/prisma";
-import { createError } from "../middleware/errorHandler";
-import { sendBudgetWarning, sendBudgetAlert, sendBudgetWarningWithCustomMessage } from "./notification.service";
-import logger from "../lib/logger";
-import type { BudgetType, BudgetStatus } from "../generated/prisma/client";
+import { prisma } from "../lib/prisma.js";
+import { createError } from "../middleware/errorHandler.js";
+import { sendBudgetWarning, sendBudgetAlert, sendBudgetWarningWithCustomMessage } from "./notification.service.js";
+import logger from "../lib/logger.js";
+import type { BudgetType, BudgetStatus } from "../generated/prisma/client.js";
 
 /**
  * Calcule le statut d'un budget en fonction de la période et des dépenses

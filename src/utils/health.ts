@@ -5,7 +5,7 @@
  * de l'application et de ses dépendances (base de données, etc.)
  */
 
-import { prisma } from "../lib/prisma";
+import { prisma } from "../lib/prisma.js";
 
 /**
  * Interface pour le résultat d'un health check

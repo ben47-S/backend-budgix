@@ -12,7 +12,7 @@
  * Documentation : https://github.com/Arolitec/letexto-v3-api-examples
  */
 
-import logger from "../lib/logger";
+import logger from "../lib/logger.js";
 
 // Configuration LeTexto depuis les variables d'environnement
 const LETEXTO_API_TOKEN = process.env.LETEXTO_API_TOKEN;

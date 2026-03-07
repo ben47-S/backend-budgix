@@ -5,17 +5,17 @@
  */
 
 // Utilitaires de validation
-export * from "./validation";
+export * from "./validation.js";
 
 // Utilitaires de dates
-export * from "./date";
-export * from "./date-formatter";
+export * from "./date.js";
+export * from "./date-formatter.js";
 
 // Utilitaires de formatage de prix
-export * from "./price-formatter";
+export * from "./price-formatter.js";
 
 // Utilitaires de health check
-export * from "./health";
+export * from "./health.js";
 
 // TODO: Ajouter les autres utilitaires
 // export * from "./format";

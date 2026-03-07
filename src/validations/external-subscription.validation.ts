@@ -6,7 +6,7 @@
  */
 
 import { z } from "zod";
-import { flexibleDateSchema } from "../utils/date-validation";
+import { flexibleDateSchema } from "../utils/date-validation.js";
 
 /**
  * Enum pour les cycles de facturation

@@ -11,13 +11,13 @@
  */
 
 import type { Request, Response, NextFunction } from "express";
-import { sendSMS, sendOTPSMS, getBalance, getMessageStatus } from "../services/sms.service";
-import { createOTP } from "../services/otp.service";
-import { sendVerificationEmail, verifyEmailConnection } from "../services/email.service";
-import { isValidPhone, normalizePhone } from "../utils/validation";
-import { isValidEmail } from "../services/email-verification.service";
-import { createError } from "../middleware/errorHandler";
-import logger from "../lib/logger";
+import { sendSMS, sendOTPSMS, getBalance, getMessageStatus } from "../services/sms.service.js";
+import { createOTP } from "../services/otp.service.js";
+import { sendVerificationEmail, verifyEmailConnection } from "../services/email.service.js";
+import { isValidPhone, normalizePhone } from "../utils/validation.js";
+import { isValidEmail } from "../services/email-verification.service.js";
+import { createError } from "../middleware/errorHandler.js";
+import logger from "../lib/logger.js";
 
 /**
  * Envoie un SMS de test personnalisé

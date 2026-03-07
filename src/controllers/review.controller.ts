@@ -20,9 +20,9 @@ import {
   updateReview,
   deleteReview,
   getReviewStats,
-} from "../services/review.service";
-import { createError } from "../middleware/errorHandler";
-import logger from "../lib/logger";
+} from "../services/review.service.js";
+import { createError } from "../middleware/errorHandler.js";
+import logger from "../lib/logger.js";
 
 /**
  * Crée un nouvel avis pour l'utilisateur authentifié

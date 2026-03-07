@@ -14,9 +14,9 @@ import {
   getTotalsSinceRegistration,
   getTopExpenseCategories,
   getPremiumStats,
-} from "../services/stats.service";
-import { createError } from "../middleware/errorHandler";
-import { getSpecificPeriodDates, parseDateRange } from "../utils/date";
+} from "../services/stats.service.js";
+import { createError } from "../middleware/errorHandler.js";
+import { getSpecificPeriodDates, parseDateRange } from "../utils/date.js";
 
 /**
  * Récupère toutes les statistiques de l'utilisateur depuis son inscription

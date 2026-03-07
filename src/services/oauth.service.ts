@@ -9,10 +9,10 @@
  */
 
 import { OAuth2Client } from "google-auth-library";
-import { prisma } from "../lib/prisma";
-import { createUser, getUserByEmail } from "./auth.service";
-import { generateToken } from "./jwt.service";
-import { createError } from "../middleware/errorHandler";
+import { prisma } from "../lib/prisma.js";
+import { createUser, getUserByEmail } from "./auth.service.js";
+import { generateToken } from "./jwt.service.js";
+import { createError } from "../middleware/errorHandler.js";
 
 // Client OAuth2 pour valider les tokens Google
 const googleClient = new OAuth2Client();

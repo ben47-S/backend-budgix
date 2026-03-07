@@ -7,10 +7,10 @@
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
-    "module": "ESNext",
+    "module": "nodenext",
     "target": "ES2023",
     "types": ["node"],
-    "moduleResolution": "bundler", // Permet les imports sans extension .js
+    "moduleResolution": "nodenext", // Permet les imports sans extension .js
     // For nodejs:
     // "lib": ["esnext"],
     // and npm install -D @types/node

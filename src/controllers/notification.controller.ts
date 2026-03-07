@@ -9,14 +9,14 @@
  */
 
 import type { Request, Response, NextFunction } from 'express';
-import { createError } from '../middleware/errorHandler';
-import logger from '../lib/logger';
+import { createError } from '../middleware/errorHandler.js';
+import logger from '../lib/logger.js';
 import {
   upsertPushToken,
   deletePushToken,
   updateNotificationPreferences,
   getNotificationPreferences,
-} from '../services/pushToken.service';
+} from '../services/pushToken.service.js';
 import {
   getUserNotifications,
   markNotificationAsRead,
@@ -24,7 +24,7 @@ import {
   getUnreadNotificationsCount,
   deleteNotification,
   deleteAllNotifications,
-} from '../services/notification.service';
+} from '../services/notification.service.js';
 
 /**
  * Enregistre ou met à jour un token de notification

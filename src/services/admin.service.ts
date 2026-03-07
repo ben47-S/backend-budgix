@@ -10,19 +10,19 @@
  * - La gestion des catégories globales
  */
 
-import { prisma } from "../lib/prisma";
-import { createError } from "../middleware/errorHandler";
-import { sendNotificationToUser } from "./notification.service";
-import { getActivePushTokens } from "./pushToken.service";
-import { emitToUser } from "./websocket.service";
-import logger from "../lib/logger";
-import { Prisma } from "../generated/prisma/client";
+import { prisma } from "../lib/prisma.js";
+import { createError } from "../middleware/errorHandler.js";
+import { sendNotificationToUser } from "./notification.service.js";
+import { getActivePushTokens } from "./pushToken.service.js";
+import { emitToUser } from "./websocket.service.js";
+import logger from "../lib/logger.js";
+import { Prisma } from "../generated/prisma/client.js";
 import {
   createOrUpdateSubscription,
   cancelSubscription,
   getUserSubscription,
   isSubscriptionActive
-} from "./subscription.service";
+} from "./subscription.service.js";
 
 /**
  * Interface pour les paramètres de pagination

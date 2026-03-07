@@ -6,7 +6,7 @@
  */
 
 import { z } from "zod";
-import { flexibleDateSchema } from "../utils/date-validation";
+import { flexibleDateSchema } from "../utils/date-validation.js";
 
 /**
  * Schéma pour les statistiques premium avec dates spécifiques

@@ -5,7 +5,7 @@
  * et la construction des dates de transactions
  */
 
-import type { PeriodFilter } from "../types/index";
+import type { PeriodFilter } from "../types/index.js";
 
 /**
  * Construit une date complète à partir d'une date et d'une heure optionnelle

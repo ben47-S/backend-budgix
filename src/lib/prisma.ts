@@ -1,5 +1,5 @@
 // packages/backend/client.ts (ou src/prisma.ts)
-import { PrismaClient } from "../generated/prisma/client"
+import { PrismaClient } from "../generated/prisma/client.js";
 import { PrismaPg } from "@prisma/adapter-pg"
 
 const adapter = new PrismaPg({

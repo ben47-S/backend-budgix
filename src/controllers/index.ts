@@ -9,43 +9,43 @@
  */
 
 // Contrôleurs d'authentification
-export * from "./auth.controller";
-export * from "./oauth.controller";
+export * from "./auth.controller.js";
+export * from "./oauth.controller.js";
 
 // Contrôleurs de catégories
-export * from "./category.controller";
+export * from "./category.controller.js";
 
 // Contrôleurs de transactions
-export * from "./transaction.controller";
+export * from "./transaction.controller.js";
 
 // Contrôleurs de statistiques
-export * from "./stats.controller";
+export * from "./stats.controller.js";
 
 // Contrôleurs de profil utilisateur
-export * from "./profile.controller";
+export * from "./profile.controller.js";
 
 // Contrôleurs d'abonnements premium
-export * from "./subscription.controller";
+export * from "./subscription.controller.js";
 
 // Contrôleurs de paiements d'abonnement
-export * from "./payment.controller";
+export * from "./payment.controller.js";
 
 // Contrôleurs de dettes (premium uniquement)
-export * from "./debt.controller";
+export * from "./debt.controller.js";
 
 // Contrôleurs de budgets (premium uniquement)
-export * from "./budget.controller";
+export * from "./budget.controller.js";
 
 // Contrôleurs de notifications push
-export * from "./notification.controller";
+export * from "./notification.controller.js";
 
 // Contrôleurs d'abonnements externes (premium uniquement)
-export * from "./external-subscription.controller";
+export * from "./external-subscription.controller.js";
 
 // Contrôleurs admin
-export * from "./admin.controller";
-export * from "./admin-auth.controller";
+export * from "./admin.controller.js";
+export * from "./admin-auth.controller.js";
 
 // Contrôleurs de discussions
-export * from "./discussion.controller";
+export * from "./discussion.controller.js";
 

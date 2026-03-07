@@ -2,7 +2,7 @@
  * Script de test pour vérifier que la configuration Swagger fonctionne
  */
 
-import { swaggerSpec } from "../src/config/swagger";
+import { swaggerSpec } from "../src/config/swagger.js";
 
 console.log("🔍 Vérification de la configuration Swagger...\n");
 

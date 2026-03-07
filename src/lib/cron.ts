@@ -6,9 +6,9 @@
  */
 
 import cron from "node-cron";
-import { checkAndSendRenewalReminders, checkAndSendPremiumRenewalReminders } from "../services/subscription-reminder.service";
-import { cleanupInactiveDiscussions } from "../services/discussion.service";
-import logger from "./logger";
+import { checkAndSendRenewalReminders, checkAndSendPremiumRenewalReminders } from "../services/subscription-reminder.service.js";
+import { cleanupInactiveDiscussions } from "../services/discussion.service.js";
+import logger from "./logger.js";
 
 /**
  * Démarre toutes les tâches cron

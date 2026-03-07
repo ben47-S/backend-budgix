@@ -9,9 +9,9 @@
  * - La suppression d'une suggestion
  */
 
-import { prisma } from "../lib/prisma";
-import { createError } from "../middleware/errorHandler";
-import logger from "../lib/logger";
+import { prisma } from "../lib/prisma.js";
+import { createError } from "../middleware/errorHandler.js";
+import logger from "../lib/logger.js";
 
 /**
  * Interface pour créer une suggestion d'amélioration

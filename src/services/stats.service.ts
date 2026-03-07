@@ -8,8 +8,8 @@
  *   - Non premium : top 2 dépenses seulement
  */
 
-import { prisma } from "../lib/prisma";
-import { createError } from "../middleware/errorHandler";
+import { prisma } from "../lib/prisma.js";
+import { createError } from "../middleware/errorHandler.js";
 
 /**
  * Récupère les statistiques complètes d'un utilisateur depuis son inscription

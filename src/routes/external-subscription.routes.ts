@@ -19,17 +19,17 @@ import {
   updateExternalSubscriptionController,
   deleteExternalSubscriptionController,
   renewExternalSubscriptionController,
-} from "../controllers";
-import { requireAuth, requirePremium } from "../middleware/auth";
-import { generalRateLimiter, createResourceRateLimiter } from "../middleware/rateLimit";
-import { validate } from "../middleware/validation";
+} from "../controllers/index.js";
+import { requireAuth, requirePremium } from "../middleware/auth.js";
+import { generalRateLimiter, createResourceRateLimiter } from "../middleware/rateLimit.js";
+import { validate } from "../middleware/validation.js";
 import {
   createExternalSubscriptionSchema,
   updateExternalSubscriptionSchema,
   getExternalSubscriptionsSchema,
   externalSubscriptionIdSchema,
   renewExternalSubscriptionSchema,
-} from "../validations/external-subscription.validation";
+} from "../validations/external-subscription.validation.js";
 
 const router: Router = ExpressRouter();
 

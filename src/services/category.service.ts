@@ -7,9 +7,9 @@
  * - La validation des catégories
  */
 
-import { prisma } from "../lib/prisma";
-import { createError } from "../middleware/errorHandler";
-import type { CategoryType } from "../generated/prisma/client";
+import { prisma } from "../lib/prisma.js";
+import { createError } from "../middleware/errorHandler.js";
+import type { CategoryType } from "../generated/prisma/client.js";
 
 /**
  * Récupère toutes les catégories disponibles pour un utilisateur

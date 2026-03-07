@@ -9,10 +9,10 @@
  * - Le filtrage par type et statut de paiement
  */
 
-import { prisma } from "../lib/prisma";
-import { createError } from "../middleware/errorHandler";
-import { getUserById } from "./auth.service";
-import type { DebtType } from "../generated/prisma/client";
+import { prisma } from "../lib/prisma.js";
+import { createError } from "../middleware/errorHandler.js";
+import { getUserById } from "./auth.service.js";
+import type { DebtType } from "../generated/prisma/client.js";
 
 /**
  * Crée une nouvelle dette

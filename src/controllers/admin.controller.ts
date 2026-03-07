@@ -22,9 +22,9 @@ import {
   getAllExternalSubscriptions,
   type UserFilters,
   type PaginationParams,
-} from "../services/admin.service";
-import { logEvent } from "../services/log.service";
-import { formatDatesToISO } from "../utils/date-formatter";
+} from "../services/admin.service.js";
+import { logEvent } from "../services/log.service.js";
+import { formatDatesToISO } from "../utils/date-formatter.js";
 
 /**
  * Récupère la liste des utilisateurs avec pagination et filtres

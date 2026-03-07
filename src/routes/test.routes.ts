@@ -12,9 +12,9 @@ import {
   testCheckSMSStatus,
   testSendEmail,
   testEmailConnection,
-} from "../controllers/test.controller";
-import { validate } from "../middleware/validation";
-import { testSendSMSSchema, testSendOTPSchema } from "../validations/test.validation";
+} from "../controllers/test.controller.js";
+import { validate } from "../middleware/validation.js";
+import { testSendSMSSchema, testSendOTPSchema } from "../validations/test.validation.js";
 
 const router: Router = ExpressRouter();
 

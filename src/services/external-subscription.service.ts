@@ -9,10 +9,10 @@
  * - La désactivation automatique des abonnements expirés
  */
 
-import { prisma } from "../lib/prisma";
-import { createError } from "../middleware/errorHandler";
-import { getUserById } from "./auth.service";
-import type { BillingCycle } from "../generated/prisma/client";
+import { prisma } from "../lib/prisma.js";
+import { createError } from "../middleware/errorHandler.js";
+import { getUserById } from "./auth.service.js";
+import type { BillingCycle } from "../generated/prisma/client.js";
 
 /**
  * Calcule la date du prochain renouvellement selon le cycle de facturation

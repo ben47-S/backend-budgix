@@ -14,11 +14,11 @@ import {
   getTotalsController,
   getTopCategoriesController,
   getPremiumStatsController,
-} from "../controllers";
-import { requireAuth, requirePremium } from "../middleware/auth";
-import { generalRateLimiter } from "../middleware/rateLimit";
-import { validate } from "../middleware/validation";
-import { getPremiumStatsSchema } from "../validations/stats.validation";
+} from "../controllers/index.js";
+import { requireAuth, requirePremium } from "../middleware/auth.js";
+import { generalRateLimiter } from "../middleware/rateLimit.js";
+import { validate } from "../middleware/validation.js";
+import { getPremiumStatsSchema } from "../validations/stats.validation.js";
 
 const router: Router = ExpressRouter();
 

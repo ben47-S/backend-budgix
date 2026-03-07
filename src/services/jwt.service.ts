@@ -9,7 +9,7 @@
  */
 
 import jwt from "jsonwebtoken";
-import { createError } from "../middleware/errorHandler";
+import { createError } from "../middleware/errorHandler.js";
 
 // Clé secrète pour signer les tokens (à mettre dans .env en production)
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key-change-in-production";

@@ -9,11 +9,11 @@
  * - Le hashage des codes avant stockage
  */
 
-import { prisma } from "../lib/prisma";
-import { createError } from "../middleware/errorHandler";
-import { generateOTP } from "./otp.service"; // Réutiliser la fonction de génération OTP
-import { sendVerificationEmail } from "./email.service"; // Service d'envoi d'email
-import logger from "../lib/logger";
+import { prisma } from "../lib/prisma.js";
+import { createError } from "../middleware/errorHandler.js";
+import { generateOTP } from "./otp.service.js"; // Réutiliser la fonction de génération OTP
+import { sendVerificationEmail } from "./email.service.js"; // Service d'envoi d'email
+import logger from "../lib/logger.js";
 import * as crypto from "crypto";
 
 /**

@@ -10,7 +10,7 @@
  */
 
 import type { Request, Response, NextFunction } from "express";
-import { createError } from "../middleware/errorHandler";
+import { createError } from "../middleware/errorHandler.js";
 import {
   createExternalSubscription,
   getExternalSubscriptions,
@@ -18,8 +18,8 @@ import {
   updateExternalSubscription,
   deleteExternalSubscription,
   renewExternalSubscription,
-} from "../services/external-subscription.service";
-import { formatDatesToISO } from "../utils/date-formatter";
+} from "../services/external-subscription.service.js";
+import { formatDatesToISO } from "../utils/date-formatter.js";
 
 /**
  * Récupère tous les abonnements externes de l'utilisateur

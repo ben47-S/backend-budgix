@@ -9,10 +9,10 @@
  * - La récupération des informations d'abonnement
  */
 
-import { prisma } from "../lib/prisma";
-import { createError } from "../middleware/errorHandler";
-import { getUserById } from "./auth.service";
-import type { SubscriptionPlan } from "../generated/prisma/client";
+import { prisma } from "../lib/prisma.js";
+import { createError } from "../middleware/errorHandler.js";
+import { getUserById } from "./auth.service.js";
+import type { SubscriptionPlan } from "../generated/prisma/client.js";
 
 // Prix de base des abonnements (en XOF - FCFA)
 export const MONTHLY_PRICE = 450; // Prix mensuel en XOF

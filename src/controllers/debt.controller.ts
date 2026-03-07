@@ -10,7 +10,7 @@
  */
 
 import type { Request, Response, NextFunction } from "express";
-import { createError } from "../middleware/errorHandler";
+import { createError } from "../middleware/errorHandler.js";
 import {
   createDebt,
   getDebts,
@@ -18,10 +18,10 @@ import {
   updateDebt,
   deleteDebt,
   getDebtStats,
-} from "../services/debt.service";
-import { formatDatesToISO } from "../utils/date-formatter";
-import type { CreateDebtRequest, UpdateDebtRequest } from "../types";
-import type { DebtType } from "../generated/prisma/client";
+} from "../services/debt.service.js";
+import { formatDatesToISO } from "../utils/date-formatter.js";
+import type { CreateDebtRequest, UpdateDebtRequest } from "../types/index.js";
+import type { DebtType } from "../generated/prisma/client.js";
 
 /**
  * Crée une nouvelle dette

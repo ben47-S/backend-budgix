@@ -7,9 +7,9 @@
  * - La génération de tokens JWT pour les admins
  */
 
-import { prisma } from "../lib/prisma";
-import { createError } from "../middleware/errorHandler";
-import { generateToken } from "./jwt.service";
+import { prisma } from "../lib/prisma.js";
+import { createError } from "../middleware/errorHandler.js";
+import { generateToken } from "./jwt.service.js";
 import bcrypt from "bcrypt";
 
 /**

@@ -13,15 +13,15 @@ import {
   setAdminPasswordController,
   setAdminPasswordByEmailController,
   verifyAdminTokenController,
-} from "../controllers/admin-auth.controller";
-import { requireAuth, requireAdmin } from "../middleware/auth";
-import { validate } from "../middleware/validation";
-import { generalRateLimiter } from "../middleware/rateLimit";
+} from "../controllers/admin-auth.controller.js";
+import { requireAuth, requireAdmin } from "../middleware/auth.js";
+import { validate } from "../middleware/validation.js";
+import { generalRateLimiter } from "../middleware/rateLimit.js";
 import {
   adminLoginSchema,
   setAdminPasswordSchema,
   setAdminPasswordByEmailSchema,
-} from "../validations/admin-auth.validation";
+} from "../validations/admin-auth.validation.js";
 
 const router: Router = ExpressRouter();
 

@@ -17,9 +17,9 @@ import {
   sendMessage,
   markDiscussionAsRead,
   closeDiscussion,
-} from "../services/discussion.service";
-import { createError } from "../middleware/errorHandler";
-import logger from "../lib/logger";
+} from "../services/discussion.service.js";
+import { createError } from "../middleware/errorHandler.js";
+import logger from "../lib/logger.js";
 
 /**
  * Crée une nouvelle discussion pour l'utilisateur authentifié

@@ -10,8 +10,8 @@
  */
 
 import "dotenv/config";
-import { prisma } from "../src/lib/prisma";
-import { createCategory, getCategories } from "../src/services/category.service";
+import { prisma } from "../src/lib/prisma.js";
+import { createCategory, getCategories } from "../src/services/category.service.js";
 
 const API_URL = process.env.API_URL || "http://localhost:3000";
 const TEST_PHONE = process.env.TEST_PHONE || "+2250123456789";

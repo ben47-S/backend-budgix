@@ -3,7 +3,7 @@
  */
 
 import { z } from "zod";
-import { flexibleDateSchema } from "../utils/date-validation";
+import { flexibleDateSchema } from "../utils/date-validation.js";
 
 export const initiatePaymentSchema = {
   body: z.object({

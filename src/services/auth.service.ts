@@ -7,8 +7,8 @@
  * - La gestion des sessions/tokens (à implémenter plus tard)
  */
 
-import { prisma } from "../lib/prisma";
-import { createError } from "../middleware/errorHandler";
+import { prisma } from "../lib/prisma.js";
+import { createError } from "../middleware/errorHandler.js";
 
 /**
  * Crée un nouvel utilisateur

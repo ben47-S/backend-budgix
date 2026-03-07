@@ -8,7 +8,7 @@
  */
 
 import type { Request, Response, NextFunction } from "express";
-import { createError } from "../middleware/errorHandler";
+import { createError } from "../middleware/errorHandler.js";
 import {
   createOrUpdateSubscription,
   getUserSubscription,
@@ -18,14 +18,14 @@ import {
   getSubscriptionProgress,
   MONTHLY_PRICE,
   ANNUAL_PRICE,
-} from "../services/subscription.service";
+} from "../services/subscription.service.js";
 import {
   formatSubscriptionPrice,
   formatSubscriptionPlan,
   calculateSavings,
-} from "../utils/price-formatter";
-import { formatDatesToISO } from "../utils/date-formatter";
-import type { CreateSubscriptionRequest } from "../types";
+} from "../utils/price-formatter.js";
+import { formatDatesToISO } from "../utils/date-formatter.js";
+import type { CreateSubscriptionRequest } from "../types/index.js";
 
 /**
  * Crée ou met à jour un abonnement pour l'utilisateur connecté

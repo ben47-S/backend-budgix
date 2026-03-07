@@ -14,16 +14,16 @@ import {
   createTransactionController,
   getTransactionSummaryController,
   deleteAllTransactionsController,
-} from "../controllers";
-import { requireAuth } from "../middleware/auth";
-import { validate } from "../middleware/validation";
-import { createResourceRateLimiter, generalRateLimiter } from "../middleware/rateLimit";
+} from "../controllers/index.js";
+import { requireAuth } from "../middleware/auth.js";
+import { validate } from "../middleware/validation.js";
+import { createResourceRateLimiter, generalRateLimiter } from "../middleware/rateLimit.js";
 import {
   createTransactionSchema,
   getTransactionsSchema,
   getTransactionSummarySchema,
   deleteAllTransactionsSchema,
-} from "../validations/transaction.validation";
+} from "../validations/transaction.validation.js";
 
 const router: Router = ExpressRouter();
 

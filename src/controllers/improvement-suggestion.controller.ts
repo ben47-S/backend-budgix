@@ -20,9 +20,9 @@ import {
   updateImprovementSuggestion,
   deleteImprovementSuggestion,
   getImprovementSuggestionStats,
-} from "../services/improvement-suggestion.service";
-import { createError } from "../middleware/errorHandler";
-import logger from "../lib/logger";
+} from "../services/improvement-suggestion.service.js";
+import { createError } from "../middleware/errorHandler.js";
+import logger from "../lib/logger.js";
 
 /**
  * Crée une nouvelle suggestion d'amélioration pour l'utilisateur authentifié

@@ -7,11 +7,11 @@
  * - La validation/rejet par l'admin
  */
 
-import { prisma } from "../lib/prisma";
-import { createError } from "../middleware/errorHandler";
-import { calculateSubscriptionPrice, createOrUpdateSubscription, renewOrCreateSubscription } from "./subscription.service";
-import { sendNotificationToUser } from "./notification.service";
-import type { SubscriptionPlan } from "../generated/prisma/client";
+import { prisma } from "../lib/prisma.js";
+import { createError } from "../middleware/errorHandler.js";
+import { calculateSubscriptionPrice, createOrUpdateSubscription, renewOrCreateSubscription } from "./subscription.service.js";
+import { sendNotificationToUser } from "./notification.service.js";
+import type { SubscriptionPlan } from "../generated/prisma/client.js";
 
 const prismaClient = prisma as any;
 

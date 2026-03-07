@@ -23,9 +23,9 @@ import {
   updateReviewController,
   deleteReviewController,
   getReviewStatsController,
-} from "../controllers/review.controller";
-import { requireAuth, requireAdmin } from "../middleware/auth";
-import { generalRateLimiter } from "../middleware/rateLimit";
+} from "../controllers/review.controller.js";
+import { requireAuth, requireAdmin } from "../middleware/auth.js";
+import { generalRateLimiter } from "../middleware/rateLimit.js";
 
 const router: Router = ExpressRouter();
 

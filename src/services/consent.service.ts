@@ -8,8 +8,8 @@
  * - Le traçage des versions acceptées
  */
 
-import { prisma } from "../lib/prisma";
-import { createError } from "../middleware/errorHandler";
+import { prisma } from "../lib/prisma.js";
+import { createError } from "../middleware/errorHandler.js";
 
 const CURRENT_TERMS_VERSION = "v1.0";
 const CURRENT_PRIVACY_VERSION = "v1.0";

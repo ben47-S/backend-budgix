@@ -27,10 +27,10 @@ import {
   approvePaymentController,
   rejectPaymentController,
   getAllExternalSubscriptionsController,
-} from "../controllers";
-import { requireAuth, requireAdmin } from "../middleware/auth";
-import { validate } from "../middleware/validation";
-import { generalRateLimiter } from "../middleware/rateLimit";
+} from "../controllers/index.js";
+import { requireAuth, requireAdmin } from "../middleware/auth.js";
+import { validate } from "../middleware/validation.js";
+import { generalRateLimiter } from "../middleware/rateLimit.js";
 import {
   getUsersSchema,
   updateUserSchema,
@@ -38,12 +38,12 @@ import {
   updateGlobalCategorySchema,
   sendNotificationToUserSchema,
   getAllExternalSubscriptionsSchema,
-} from "../validations/admin.validation";
+} from "../validations/admin.validation.js";
 import {
   approvePaymentSchema,
   rejectPaymentSchema,
   listPaymentsSchema,
-} from "../validations/payment.validation";
+} from "../validations/payment.validation.js";
 
 const router: Router = ExpressRouter();
 

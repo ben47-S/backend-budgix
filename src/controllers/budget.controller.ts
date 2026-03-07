@@ -8,7 +8,7 @@
  */
 
 import type { Request, Response, NextFunction } from "express";
-import { createError } from "../middleware/errorHandler";
+import { createError } from "../middleware/errorHandler.js";
 import {
   upsertBudgetForPeriod,
   getBudgetsOverviewForPeriod,
@@ -17,9 +17,9 @@ import {
   upsertMonthlyBudget,
   getMonthlyBudgets,
   getAllBudgets,
-} from "../services/budget.service";
-import { formatDatesToISO } from "../utils/date-formatter";
-import { parseDate } from "../utils/date";
+} from "../services/budget.service.js";
+import { formatDatesToISO } from "../utils/date-formatter.js";
+import { parseDate } from "../utils/date.js";
 
 /**
  * Crée ou met à jour un budget pour l'utilisateur connecté (premium)

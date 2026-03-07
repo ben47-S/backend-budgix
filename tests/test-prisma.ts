@@ -10,7 +10,7 @@
  */
 
 import "dotenv/config";
-import { prisma } from "../src/lib/prisma";
+import { prisma } from "../src/lib/prisma.js";
 
 async function testPrismaConnection() {
   console.log("🔍 Test de la connexion Prisma...\n");

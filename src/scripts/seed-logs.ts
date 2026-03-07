@@ -4,8 +4,8 @@
  * Usage: npx ts-node src/scripts/seed-logs.ts
  */
 
-import { logEvent } from "../services/log.service"
-import logger from "../lib/logger"
+import { logEvent } from "../services/log.service.js"
+import logger from "../lib/logger.js"
 
 async function seedLogs() {
   logger.info("Démarrage du seeding des logs de test...")

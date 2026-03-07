@@ -14,15 +14,15 @@ import {
   confirmPaymentController,
   getPaymentStatusController,
   getUserPendingPaymentController,
-} from "../controllers";
-import { requireAuth } from "../middleware/auth";
-import { validate } from "../middleware/validation";
-import { createResourceRateLimiter, generalRateLimiter } from "../middleware/rateLimit";
+} from "../controllers/index.js";
+import { requireAuth } from "../middleware/auth.js";
+import { validate } from "../middleware/validation.js";
+import { createResourceRateLimiter, generalRateLimiter } from "../middleware/rateLimit.js";
 import {
   initiatePaymentSchema,
   confirmPaymentSchema,
   paymentStatusSchema,
-} from "../validations/payment.validation";
+} from "../validations/payment.validation.js";
 
 const router: Router = ExpressRouter();
 

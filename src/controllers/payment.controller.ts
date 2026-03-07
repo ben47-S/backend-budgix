@@ -3,7 +3,7 @@
  */
 
 import type { Request, Response, NextFunction } from "express";
-import { createError } from "../middleware/errorHandler";
+import { createError } from "../middleware/errorHandler.js";
 import {
   initiatePayment,
   confirmPayment,
@@ -14,13 +14,13 @@ import {
   approvePayment,
   rejectPayment,
   buildWavePaymentUrl,
-} from "../services/payment.service";
-import { formatDatesToISO } from "../utils/date-formatter";
+} from "../services/payment.service.js";
+import { formatDatesToISO } from "../utils/date-formatter.js";
 import type {
   InitiatePaymentRequest,
   ConfirmPaymentRequest,
   RejectPaymentRequest,
-} from "../types";
+} from "../types/index.js";
 
 export async function initiatePaymentController(
   req: Request<{}, {}, InitiatePaymentRequest>,
