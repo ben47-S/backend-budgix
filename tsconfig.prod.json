@@ -7,7 +7,6 @@
     "module": "ESNext",
     "target": "ES2022",
     "moduleResolution": "bundler",
-    "strict": false,
     
     // Optimisations pour la production
     "sourceMap": true,
