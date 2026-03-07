@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsx watch src/index.ts",
-    "build": "npm run build:clean && npm run build:compile && npm run build:prisma",
+    "build": "npm run build:clean && npm run build:prisma && npm run build:compile",
     "build:clean": "rimraf dist",
     "build:compile": "tsc -p tsconfig.prod.json",
     "build:prisma": "prisma generate",
