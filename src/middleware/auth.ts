@@ -10,21 +10,6 @@ import { createError } from "./errorHandler.js";
 import { verifyToken, extractTokenFromHeader, shouldRenewToken, generateToken } from "../services/jwt.service.js";
 import { prisma } from "../lib/prisma.js";
 
-// Étendre l'interface Request pour inclure l'utilisateur
-declare global {
-  namespace Express {
-    interface Request {
-      userId?: string; // ID de l'utilisateur authentifié
-      user?: {
-        id: string;
-        phone?: string;
-        email?: string;
-        isPremium: boolean;
-        role?: string; // Rôle utilisateur (USER ou ADMIN)
-      };
-    }
-  }
-}
 
 /**
  * Middleware pour protéger les routes nécessitant une authentification
@@ -48,7 +33,7 @@ export function requireAuth(
 
     // Ajouter les informations utilisateur à la requête
     req.userId = decoded.userId;
-    
+
     // Construire l'objet user conditionnellement pour éviter undefined avec exactOptionalPropertyTypes
     req.user = {
       id: decoded.userId,
