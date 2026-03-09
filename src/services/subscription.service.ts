@@ -47,7 +47,7 @@ export function calculateEndDate(
   startDate: Date = new Date()
 ): Date {
   const endDate = new Date(startDate);
-  
+
   switch (plan) {
     case "MONTHLY":
       endDate.setMonth(endDate.getMonth() + 1);
@@ -58,7 +58,7 @@ export function calculateEndDate(
     default:
       throw createError("Plan d'abonnement invalide", 400, "INVALID_PLAN");
   }
-  
+
   return endDate;
 }
 
@@ -168,26 +168,20 @@ export async function renewOrCreateSubscription(
   let subscription;
 
   if (existingSubscription && isRenewal) {
-    // CAS RENOUVELLEMENT : Étendre la date de fin
+    // CAS RENOUVELLEMENT : 
+    // - Si l'abonnement est encore actif : startDate = ancienne endDate
+    // - Si l'abonnement est expiré : startDate = aujourd'hui
     const currentEndDate = existingSubscription.endDate || new Date();
-
-    // Si l'abonnement est déjà expiré, partir d'aujourd'hui
-    const baseDate = currentEndDate > new Date() ? currentEndDate : new Date();
-
-    const newEndDate = new Date(baseDate);
-    if (plan === 'MONTHLY') {
-      newEndDate.setMonth(newEndDate.getMonth() + 1);
-    } else if (plan === 'ANNUAL') {
-      newEndDate.setFullYear(newEndDate.getFullYear() + 1);
-    }
+    const startDate = currentEndDate > new Date() ? currentEndDate : new Date();
+    const endDate = calculateEndDate(plan, startDate);
 
     subscription = await prisma.subscription.update({
       where: { userId },
       data: {
         plan,
         price,
-        // startDate RESTE INCHANGÉ - on préserve la date de début originale
-        endDate: newEndDate,
+        startDate,
+        endDate,
       },
     });
   } else {
@@ -355,13 +349,13 @@ export async function getSubscriptionProgress(userId: string) {
 
   // Calculer la durée totale de l'abonnement en jours
   const totalDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
-  
+
   // Calculer les jours écoulés
   const daysElapsed = Math.floor((now.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
-  
+
   // Calculer les jours restants
   const daysRemaining = Math.ceil((endDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-  
+
   // Calculer le pourcentage de progression (0-100)
   let progressPercentage: number;
   if (now >= endDate) {
