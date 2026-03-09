@@ -2,52 +2,61 @@
  * Contrôleur OAuth - Gestion de l'authentification OAuth
  *
  * Gère les requêtes HTTP liées à l'authentification OAuth :
- * - Authentification via Google ID Token (mobile/web)
- * - Callback Google OAuth (web legacy)
+ * - Authentification via Google ID Token (mobile/web) **(déprécié)**
+ * - Callback Google OAuth via Passport + JWT
  */
 
 import type { Request, Response, NextFunction } from "express";
-import {
-  authenticateWithGoogle,
-  verifyGoogleIdToken,
-} from "../services/oauth.service.js";
 import { createError } from "../middleware/errorHandler.js";
-import type { GoogleProfile } from "../services/oauth.service.js";
+import { generateToken } from "../services/jwt.service.js";
+
+type GoogleAuthUser = {
+  id: string;
+  phone: string | null;
+  email: string | null;
+  username: string | null;
+  isPremium: boolean;
+  status: string;
+  role: string | null;
+  createdAt: Date;
+  isNewUser: boolean;
+};
 
 /**
- * Callback Google OAuth
- * Cette route est appelée par Google après l'authentification
- * 
+ * Callback Google OAuth via Passport + JWT
+ *
+ * Cette route est appelée par Google après l'authentification OAuth 2.0.
+ * Elle suppose que Passport a déjà authentifié l'utilisateur et placé
+ * un objet utilisateur applicatif dans req.user.
+ *
  * GET /api/auth/oauth/google/callback
- * Query params: code (fourni par Google)
  */
-export async function googleCallbackController(
+export async function googleCallbackJwtController(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   try {
-    // Le profil Google devrait être disponible dans req.user après la stratégie Passport
-    // Pour l'instant, on simule avec les données de la requête
-    // TODO: Intégrer avec Passport pour récupérer le vrai profil
-    
-    const profile = req.user as GoogleProfile | undefined;
+    const user = req.user as GoogleAuthUser | undefined;
 
-    if (!profile) {
+    if (!user) {
       throw createError(
-        "Profil Google non trouvé. Vérifiez la configuration OAuth.",
+        "Utilisateur Google non trouvé. Vérifiez la configuration OAuth.",
         400,
-        "OAUTH_PROFILE_NOT_FOUND"
+        "OAUTH_USER_NOT_FOUND"
       );
     }
 
-    // Authentifier ou créer l'utilisateur
-    const { user, token, isNewUser } = await authenticateWithGoogle(profile);
+    const token = generateToken({
+      userId: user.id,
+      phone: user.phone ?? undefined,
+      email: user.email ?? undefined,
+      isPremium: user.isPremium,
+      role: user.role ?? undefined,
+    });
 
-    // Rediriger vers le frontend avec le token
-    // En développement, on peut retourner le token directement
     const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
-    const redirectUrl = `${frontendUrl}/auth/callback?token=${token}&isNewUser=${isNewUser}`;
+    const redirectUrl = `${frontendUrl}/auth/callback?token=${token}&isNewUser=${user.isNewUser}`;
 
     res.redirect(redirectUrl);
   } catch (error) {
@@ -55,86 +64,4 @@ export async function googleCallbackController(
   }
 }
 
-/**
- * Route de test pour OAuth (à utiliser avec des données de test)
- *
- * POST /api/auth/oauth/google/test
- * Body: { email: string, displayName?: string }
- */
-export async function googleTestController(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
-  try {
-    const { email, displayName } = req.body;
-
-    if (!email) {
-      throw createError("Email requis", 400, "EMAIL_REQUIRED");
-    }
-
-    // Créer un profil de test
-    const testProfile: GoogleProfile = {
-      id: "test-google-id",
-      emails: [{ value: email, verified: true }],
-      displayName: displayName || undefined,
-    };
-
-    // Authentifier ou créer l'utilisateur
-    const { user, token, isNewUser } =
-      await authenticateWithGoogle(testProfile);
-
-    res.json({
-      success: true,
-      message: isNewUser
-        ? "Inscription réussie via Google"
-        : "Connexion réussie via Google",
-      data: {
-        user,
-        token,
-        isNewUser,
-      },
-    });
-  } catch (error) {
-    next(error);
-  }
-}
-
-/**
- * Authentification Google via ID Token
- * Utilisé par les applications mobiles et web modernes
- *
- * POST /api/auth/oauth/google
- * Body: { idToken: string }
- */
-export async function googleAuthController(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
-  try {
-    const { idToken } = req.body;
-
-    if (!idToken) {
-      throw createError("Token Google requis", 400, "ID_TOKEN_REQUIRED");
-    }
-
-    // Valider le token et authentifier l'utilisateur
-    const { user, token, isNewUser } = await verifyGoogleIdToken(idToken);
-
-    res.json({
-      success: true,
-      message: isNewUser
-        ? "Inscription réussie via Google"
-        : "Connexion réussie via Google",
-      data: {
-        user,
-        token,
-        isNewUser,
-      },
-    });
-  } catch (error) {
-    next(error);
-  }
-}
 

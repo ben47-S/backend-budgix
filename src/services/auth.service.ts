@@ -10,6 +10,17 @@
 import { prisma } from "../lib/prisma.js";
 import { createError } from "../middleware/errorHandler.js";
 
+const userSelect = {
+  id: true,
+  phone: true,
+  email: true,
+  username: true,
+  isPremium: true,
+  status: true,
+  role: true,
+  createdAt: true,
+} as const;
+
 /**
  * Crée un nouvel utilisateur
  * 
@@ -32,16 +43,7 @@ export async function createUser(phone: string) {
       phone,
       status: "PENDING_CONSENT", // Le nouvel user doit accepter les CGU/politiques
     },
-    select: {
-      id: true,
-      phone: true,
-      email: true,
-      username: true,
-      isPremium: true,
-      status: true,
-      role: true,
-      createdAt: true,
-    },
+    select: userSelect,
   });
 
   return user;
@@ -57,16 +59,7 @@ export async function createUser(phone: string) {
 export async function getUserByPhone(phone: string) {
   const user = await prisma.user.findUnique({
     where: { phone },
-    select: {
-      id: true,
-      phone: true,
-      email: true,
-      username: true,
-      isPremium: true,
-      status: true,
-      role: true,
-      createdAt: true,
-    },
+    select: userSelect,
   });
 
   if (!user) {
@@ -86,16 +79,7 @@ export async function getUserByPhone(phone: string) {
 export async function getUserByEmail(email: string) {
   const user = await prisma.user.findUnique({
     where: { email },
-    select: {
-      id: true,
-      phone: true,
-      email: true,
-      username: true,
-      isPremium: true,
-      status: true,
-      role: true,
-      createdAt: true,
-    },
+    select: userSelect,
   });
 
   if (!user) {
@@ -115,16 +99,7 @@ export async function getUserByEmail(email: string) {
 export async function getUserById(userId: string) {
   const user = await prisma.user.findUnique({
     where: { id: userId },
-    select: {
-      id: true,
-      phone: true,
-      email: true,
-      username: true,
-      status: true,
-      isPremium: true,
-      role: true,
-      createdAt: true,
-    },
+    select: userSelect,
   });
 
   if (!user) {

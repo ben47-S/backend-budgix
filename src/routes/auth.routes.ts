@@ -8,18 +8,16 @@
 
 import type { Router } from "express";
 import { Router as ExpressRouter } from "express";
+import passport from "passport";
 import { sendOTP, verifyOTPController, logoutController, acceptConsentController, getConsentStatusController } from "../controllers/index.js";
 import { validate } from "../middleware/validation.js";
 import { authRateLimiter, generalRateLimiter } from "../middleware/rateLimit.js";
 import { requireAuth } from "../middleware/auth.js";
-import {
-  sendOTPSchema,
-  verifyOTPSchema,
-  googleTestSchema,
-  googleAuthSchema,
-} from "../validations/auth.validation.js";
+import { sendOTPSchema, verifyOTPSchema } from "../validations/auth.validation.js";
 
 const router: Router = ExpressRouter();
+
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 
 /**
  * @swagger
@@ -145,11 +143,23 @@ router.post("/otp/send", authRateLimiter, validate(sendOTPSchema), sendOTP);
 router.post("/otp/verify", authRateLimiter, validate(verifyOTPSchema), verifyOTPController);
 
 // Routes OAuth
-import {
-  googleCallbackController,
-  googleTestController,
-  googleAuthController,
-} from "../controllers/index.js";
+import { googleCallbackJwtController } from "../controllers/index.js";
+
+/**
+ * @swagger
+ * /auth/google:
+ *   get:
+ *     summary: Démarrer l'authentification Google OAuth
+ *     description: Redirige l'utilisateur vers Google pour l'authentification OAuth 2.0. À utiliser pour la connexion via Google.
+ *     tags: [Authentication]
+ *     responses:
+ *       302:
+ *         description: Redirection vers Google pour l'authentification
+ */
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
 
 /**
  * @swagger
@@ -160,6 +170,7 @@ import {
  *       Authentifie un utilisateur avec un token Google ID obtenu via Google Sign-In.
  *       Cette route est utilisée par les applications mobiles et web modernes.
  *       Le token est validé côté serveur avec l'API Google.
+ *     deprecated: true
  *     tags: [Authentication]
  *     requestBody:
  *       required: true
@@ -211,97 +222,14 @@ import {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post(
-  "/oauth/google",
-  authRateLimiter,
-  validate(googleAuthSchema),
-  googleAuthController
+router.get(
+  "/oauth/google/callback",
+  passport.authenticate("google", {
+    session: false,
+    failureRedirect: `${FRONTEND_URL}/auth/error`,
+  }),
+  googleCallbackJwtController
 );
-
-/**
- * @swagger
- * /auth/oauth/google/callback:
- *   get:
- *     summary: Callback Google OAuth (legacy)
- *     description: Callback appelé par Google après authentification OAuth. Redirige vers le frontend avec le token JWT.
- *     tags: [Authentication]
- *     responses:
- *       200:
- *         description: Authentification Google réussie
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: "Inscription Google réussie"
- *                 data:
- *                   type: object
- *                   properties:
- *                     user:
- *                       $ref: '#/components/schemas/User'
- *                     token:
- *                       type: string
- *                     isNewUser:
- *                       type: boolean
- *       401:
- *         description: Erreur d'authentification Google
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- */
-router.get("/oauth/google/callback", googleCallbackController);
-
-/**
- * @swagger
- * /auth/oauth/google/test:
- *   post:
- *     summary: Test OAuth Google (développement uniquement)
- *     description: Route de test pour simuler l'authentification Google sans configuration OAuth complète. À utiliser uniquement en développement.
- *     tags: [Authentication]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - email
- *             properties:
- *               email:
- *                 type: string
- *                 example: "user@example.com"
- *               displayName:
- *                 type: string
- *                 example: "John Doe"
- *     responses:
- *       200:
- *         description: Authentification test réussie
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 message:
- *                   type: string
- *                 data:
- *                   type: object
- *                   properties:
- *                     user:
- *                       $ref: '#/components/schemas/User'
- *                     token:
- *                       type: string
- *                     isNewUser:
- *                       type: boolean
- */
-router.post("/oauth/google/test", validate(googleTestSchema), googleTestController);
 
 /**
  * @swagger

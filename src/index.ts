@@ -12,6 +12,7 @@ import swaggerUi from "swagger-ui-express";
 import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
+import passport from "passport";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { notFoundHandler } from "./middleware/notFoundHandler.js";
 import { requestLogger } from "./middleware/requestLogger.js";
@@ -20,9 +21,13 @@ import { swaggerSpec } from "./config/swagger.js";
 import logger from "./lib/logger.js";
 import { startCronJobs } from "./lib/cron.js";
 import { initWebSocket } from "./services/websocket.service.js";
+import { configurePassport } from "./config/passport.js";
 
 // Créer l'application Express
 const app = express();
+
+// Configurer Passport (stratégies, etc.)
+configurePassport(passport);
 
 // Configuration __dirname pour ESM
 const __filename = fileURLToPath(import.meta.url);
@@ -43,8 +48,8 @@ app.use(requestLogger);
 
 // CORS - Autoriser les requêtes depuis le frontend
 // Support de plusieurs origines pour le développement
-const allowedOrigins = process.env.FRONTEND_URL 
-  ? process.env.FRONTEND_URL.split(',').map(url => url.trim())
+const allowedOrigins = process.env.CORS_ORIGINS 
+  ? process.env.CORS_ORIGINS.split(',').map(url => url.trim())
   : ["http://localhost:5173", "http://localhost:3000", "http://localhost:3001", "https://olin-gravitational-waylon.ngrok-free.dev:3001"];
 
 app.use(
@@ -87,6 +92,9 @@ app.use((req, res, next) => {
 
 // Parser URL-encoded - Analyser les données de formulaire
 app.use(express.urlencoded({ extended: true }));
+
+// Initialiser Passport (sans gestion de session, JWT uniquement)
+app.use(passport.initialize());
 
 // ============================================
 // ROUTES

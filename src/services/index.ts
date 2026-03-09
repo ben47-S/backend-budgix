@@ -22,9 +22,6 @@ export * from "./stats.service.js";
 // Services JWT
 export * from "./jwt.service.js";
 
-// Services OAuth
-export * from "./oauth.service.js";
-
 // Services de vérification d'email
 export * from "./email-verification.service.js";
 

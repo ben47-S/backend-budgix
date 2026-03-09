@@ -18,12 +18,13 @@ const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN ?? "7d"; // 7 jours par défau
 const JWT_RENEWAL_THRESHOLD_DAYS = parseInt(process.env.JWT_RENEWAL_THRESHOLD_DAYS || "2", 10);
 
 // Interface pour le payload du token
+// Avec exactOptionalPropertyTypes, les propriétés optionnelles doivent accepter explicitement undefined
 export interface TokenPayload {
   userId: string;
-  phone?: string;
-  email?: string;
+  phone?: string | undefined;
+  email?: string | undefined;
   isPremium: boolean;
-  role?: string; // Rôle utilisateur (USER ou ADMIN)
+  role?: string | undefined; // Rôle utilisateur (USER ou ADMIN)
 }
 
 /**
