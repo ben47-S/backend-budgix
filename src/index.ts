@@ -50,7 +50,7 @@ app.use(requestLogger);
 // Support de plusieurs origines pour le développement
 const allowedOrigins = process.env.CORS_ORIGINS 
   ? process.env.CORS_ORIGINS.split(',').map(url => url.trim())
-  : ["http://localhost:5173", "http://localhost:3000", "http://localhost:3001", "https://olin-gravitational-waylon.ngrok-free.dev:3001"];
+  : ["http://localhost:5173", "http://localhost:3000", "http://localhost:3001", "https://admin-budgix.vercel.app"];
 
 app.use(
   cors({
