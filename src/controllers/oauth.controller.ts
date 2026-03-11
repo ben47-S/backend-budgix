@@ -56,7 +56,7 @@ export async function googleCallbackJwtController(
     });
 
     const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
-    const redirectUrl = `${frontendUrl}/callback?token=${token}&isNewUser=${user.isNewUser}`;
+    const redirectUrl = `${frontendUrl}/auth/callback?token=${token}&isNewUser=${user.isNewUser}`;
 
     res.redirect(redirectUrl);
   } catch (error) {
