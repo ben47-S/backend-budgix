@@ -110,10 +110,7 @@ export function configurePassport(passport: PassportStatic) {
         clientID,
         clientSecret,
         callbackURL,
-        authorizationParams: {
-          prompt: "select_account",
-        },
-      },
+      } as any,
       async (accessToken, refreshToken, profile, done) => {
         try {
           const user = await findOrCreateUserFromGoogleProfile(profile);
