@@ -110,6 +110,9 @@ export function configurePassport(passport: PassportStatic) {
         clientID,
         clientSecret,
         callbackURL,
+        authorizationParams: {
+          prompt: "select_account",
+        },
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
