@@ -7,6 +7,7 @@
 
 import cron from "node-cron";
 import { checkAndSendRenewalReminders, checkAndSendPremiumRenewalReminders } from "../services/subscription-reminder.service.js";
+import { checkAndSendDebtReminders } from "../services/debt-reminder.service.js";
 import { cleanupInactiveDiscussions } from "../services/discussion.service.js";
 import logger from "./logger.js";
 
@@ -40,6 +41,23 @@ export function startCronJobs() {
     timezone: "UTC",
   });
 
+  // Tâche quotidienne à 9h30 UTC pour vérifier les rappels de créances
+  // Format cron: "30 9 * * *" = chaque jour à 9h30 UTC
+  cron.schedule("30 9 * * *", async () => {
+    logger.info("🔔 Exécution de la tâche cron: rappels de créances");
+
+    try {
+      await checkAndSendDebtReminders();
+    } catch (error) {
+      logger.error("❌ Erreur lors de l'exécution de la tâche cron de rappels de créances", {
+        error: error instanceof Error ? error.message : "Erreur inconnue",
+        stack: error instanceof Error ? error.stack : undefined,
+      });
+    }
+  }, {
+    timezone: "UTC",
+  });
+
   // Tâche toutes les 5 minutes pour nettoyer les discussions inactives (25 minutes d'inactivité)
   // Format cron: "*/5 * * * *" = toutes les 5 minutes
   cron.schedule("*/5 * * * *", async () => {
@@ -61,6 +79,7 @@ export function startCronJobs() {
   logger.info("✅ Tâches cron initialisées");
   logger.info("  - Vérification des renouvellements externes: chaque jour à 9h00 UTC");
   logger.info("  - Vérification des renouvellements premium: chaque jour à 9h00 UTC");
+  logger.info("  - Vérification des rappels de créances: chaque jour à 9h30 UTC");
   logger.info("  - Nettoyage des discussions inactives: toutes les 5 minutes");
 }
 

@@ -144,17 +144,18 @@ model Subscription {
 }
 
 model Debt {
-  id            String    @id @default(cuid())
-  type          DebtType
-  contactName   String
-  amount        Decimal
-  isPaid        Boolean   @default(false)
-  notes         String?
-  repaymentDate DateTime?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  userId        String
-  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id              String    @id @default(cuid())
+  type            DebtType
+  contactName     String
+  amount          Decimal
+  isPaid          Boolean   @default(false)
+  notes           String?
+  repaymentDate   DateTime?
+  reminderSentAt DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  userId          String
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, isPaid])
   @@index([userId, type])
