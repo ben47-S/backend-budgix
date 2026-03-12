@@ -11,7 +11,7 @@ import type { Request, Response, NextFunction } from "express";
 import { createError } from "../middleware/errorHandler.js";
 import { createOTP } from "../services/otp.service.js";
 import { createEmailVerificationCode } from "../services/email-verification.service.js";
-import { updateUserPhone, updateUserEmail, getUserProfile, updateUserUsername } from "../services/profile.service.js";
+import { updateUserPhone, updateUserEmail, getUserProfile, updateUserUsername, updateUserNotificationReminder } from "../services/profile.service.js";
 import { isValidPhone, normalizePhone } from "../utils/validation.js";
 import { isValidEmail, normalizeEmail } from "../services/email-verification.service.js";
 import { generateToken } from "../services/jwt.service.js";
@@ -356,6 +356,92 @@ export async function updateProfile(
         user: updatedUser,
         token, // Nouveau token avec les informations mises à jour
       },
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * Récupère le statut du rappel de notification
+ * 
+ * GET /api/profile/notification-reminder
+ * Headers: Authorization: Bearer <token>
+ */
+export async function getNotificationReminderStatus(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const userId = req.userId;
+    if (!userId) {
+      throw createError("Authentification requise", 401, "UNAUTHORIZED");
+    }
+
+    const user = await getUserProfile(userId);
+
+    res.json({
+      success: true,
+      data: {
+        dismissedAt: user.notificationReminderDismissedAt,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * Dismiss le rappel de notification (l'utilisateur clique sur "Ignorer")
+ * 
+ * POST /api/profile/notification-reminder/dismiss
+ * Headers: Authorization: Bearer <token>
+ */
+export async function dismissNotificationReminder(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const userId = req.userId;
+    if (!userId) {
+      throw createError("Authentification requise", 401, "UNAUTHORIZED");
+    }
+
+    await updateUserNotificationReminder(userId, new Date());
+
+    res.json({
+      success: true,
+      message: "Rappel de notification différé",
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * Reset le rappel de notification (l'utilisateur active les notifications)
+ * 
+ * POST /api/profile/notification-reminder/reset
+ * Headers: Authorization: Bearer <token>
+ */
+export async function resetNotificationReminder(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const userId = req.userId;
+    if (!userId) {
+      throw createError("Authentification requise", 401, "UNAUTHORIZED");
+    }
+
+    await updateUserNotificationReminder(userId, null);
+
+    res.json({
+      success: true,
+      message: "Rappel de notification réinitialisé",
     });
   } catch (error) {
     next(error);

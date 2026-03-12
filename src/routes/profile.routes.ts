@@ -18,6 +18,9 @@ import {
   verifyPhoneOTP,
   sendEmailVerification,
   verifyEmailCode,
+  getNotificationReminderStatus,
+  dismissNotificationReminder,
+  resetNotificationReminder,
 } from "../controllers/index.js";
 import { requireAuth } from "../middleware/auth.js";
 import { validate } from "../middleware/validation.js";
@@ -276,6 +279,62 @@ router.post("/email/send", requireAuth, profileRateLimiter, validate(addEmailSch
  *         $ref: '#/components/responses/UnauthorizedError'
  */
 router.post("/email/verify", requireAuth, profileRateLimiter, validate(verifyEmailSchema), verifyEmailCode);
+
+/**
+ * @swagger
+ * /profile/notification-reminder:
+ *   get:
+ *     summary: Récupère le statut du rappel de notification
+ *     tags: [Profile]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Statut récupéré
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     dismissedAt:
+ *                       type: string
+ *                       format: date-time
+ *                       nullable: true
+ */
+router.get("/notification-reminder", requireAuth, getNotificationReminderStatus);
+
+/**
+ * @swagger
+ * /profile/notification-reminder/dismiss:
+ *   post:
+ *     summary: Dismiss le rappel de notification (l'utilisateur clique sur Ignorer)
+ *     tags: [Profile]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Rappel différé
+ */
+router.post("/notification-reminder/dismiss", requireAuth, dismissNotificationReminder);
+
+/**
+ * @swagger
+ * /profile/notification-reminder/reset:
+ *   post:
+ *     summary: Reset le rappel de notification (l'utilisateur active les notifications)
+ *     tags: [Profile]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Rappel réinitialisé
+ */
+router.post("/notification-reminder/reset", requireAuth, resetNotificationReminder);
 
 export default router;
 

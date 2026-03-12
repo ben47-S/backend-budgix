@@ -171,3 +171,19 @@ export async function updateUserUsername(userId: string, username: string) {
   return updatedUser;
 }
 
+/**
+ * Met à jour la date du dernier refus de rappel de notification
+ * 
+ * @param userId - ID de l'utilisateur
+ * @param dismissedAt - Date du refus (null pour reset)
+ * @returns L'utilisateur mis à jour
+ */
+export async function updateUserNotificationReminder(userId: string, dismissedAt: Date | null) {
+  const updatedUser = await prisma.user.update({
+    where: { id: userId },
+    data: { notificationReminderDismissedAt: dismissedAt },
+  });
+
+  return updatedUser;
+}
+

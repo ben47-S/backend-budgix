@@ -22,6 +22,7 @@ model User {
   privacyAcceptedAt      DateTime?
   termsVersion           String?
   privacyVersion         String?
+  notificationReminderDismissedAt DateTime?
   budgets                Budget[]
   categories             Category[]
   debts                  Debt[]
