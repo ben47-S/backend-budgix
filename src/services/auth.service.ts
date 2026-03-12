@@ -19,6 +19,7 @@ const userSelect = {
   status: true,
   role: true,
   createdAt: true,
+  notificationReminderDismissedAt: true,
 } as const;
 
 /**
