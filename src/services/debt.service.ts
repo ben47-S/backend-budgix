@@ -22,6 +22,7 @@ import type { DebtType } from "../generated/prisma/client.js";
  * @param contactName - Nom de la personne
  * @param amount - Montant de la dette
  * @param notes - Notes optionnelles
+ * @param repaymentDate - Date de remboursement optionnelle
  * @returns La dette créée
  */
 export async function createDebt(
@@ -29,7 +30,8 @@ export async function createDebt(
   type: DebtType,
   contactName: string,
   amount: number,
-  notes?: string
+  notes?: string,
+  repaymentDate?: string
 ) {
   // Vérifier que l'utilisateur existe et est premium
   const user = await getUserById(userId);
@@ -67,6 +69,7 @@ export async function createDebt(
       contactName: contactName.trim(),
       amount,
       notes: notes?.trim() || null,
+      repaymentDate: repaymentDate ? new Date(repaymentDate) : null,
     },
   });
 
@@ -173,6 +176,7 @@ export async function updateDebt(
     amount?: number;
     isPaid?: boolean;
     notes?: string;
+    repaymentDate?: string;
   }
 ) {
   // Vérifier que la dette existe et appartient à l'utilisateur
@@ -213,6 +217,10 @@ export async function updateDebt(
 
   if (updates.notes !== undefined) {
     data.notes = updates.notes.trim() || null;
+  }
+
+  if (updates.repaymentDate !== undefined) {
+    data.repaymentDate = updates.repaymentDate ? new Date(updates.repaymentDate) : null;
   }
 
   // Mettre à jour la dette

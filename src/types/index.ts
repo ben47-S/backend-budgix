@@ -88,6 +88,7 @@ export interface CreateDebtRequest {
   contactName: string;
   amount: number;
   notes?: string;
+  repaymentDate?: string;
 }
 
 export interface UpdateDebtRequest {
@@ -96,5 +97,6 @@ export interface UpdateDebtRequest {
   amount?: number;
   isPaid?: boolean;
   notes?: string;
+  repaymentDate?: string;
 }
 

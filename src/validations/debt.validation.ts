@@ -26,6 +26,11 @@ export const createDebtSchema = {
       .max(500, "Les notes ne peuvent pas dépasser 500 caractères")
       .optional()
       .nullable(),
+    repaymentDate: z
+      .string()
+      .datetime("La date de remboursement doit être au format ISO")
+      .optional()
+      .nullable(),
   }),
 };
 
@@ -53,6 +58,11 @@ export const updateDebtSchema = {
     notes: z
       .string()
       .max(500, "Les notes ne peuvent pas dépasser 500 caractères")
+      .optional()
+      .nullable(),
+    repaymentDate: z
+      .string()
+      .datetime("La date de remboursement doit être au format ISO")
       .optional()
       .nullable(),
   }),

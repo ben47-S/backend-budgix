@@ -41,7 +41,7 @@ export async function createDebtController(
       throw createError("Authentification requise", 401, "UNAUTHORIZED");
     }
 
-    const { type, contactName, amount, notes } = req.body;
+    const { type, contactName, amount, notes, repaymentDate } = req.body;
 
     // Valider le type
     if (!type || (type !== "OWED_TO_ME" && type !== "I_OWE")) {
@@ -52,7 +52,7 @@ export async function createDebtController(
       );
     }
 
-    const debt = await createDebt(userId, type, contactName, amount, notes);
+    const debt = await createDebt(userId, type, contactName, amount, notes, repaymentDate);
 
 res.status(201).json(formatDatesToISO({
       success: true,
