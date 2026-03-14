@@ -15,6 +15,7 @@ import { updateUserPhone, updateUserEmail, getUserProfile, updateUserUsername, u
 import { isValidPhone, normalizePhone } from "../utils/validation.js";
 import { isValidEmail, normalizeEmail } from "../services/email-verification.service.js";
 import { generateToken } from "../services/jwt.service.js";
+import { prisma } from "../lib/prisma.js";
 import type {
   AddPhoneRequest,
   VerifyPhoneRequest,
@@ -53,6 +54,19 @@ export async function sendPhoneOTP(
 
     // Normaliser le numéro de téléphone
     const normalizedPhone = normalizePhone(phone);
+
+    // Vérifier si le numéro est déjà utilisé par un autre utilisateur
+    const existingUserWithPhone = await prisma.user.findUnique({
+      where: { phone: normalizedPhone },
+    });
+
+    if (existingUserWithPhone && existingUserWithPhone.id !== userId) {
+      throw createError(
+        "Ce numéro de téléphone est déjà utilisé par un autre compte",
+        409,
+        "PHONE_ALREADY_EXISTS"
+      );
+    }
 
     // Vérifier si l'utilisateur a déjà ce numéro
     const user = await getUserProfile(userId);
@@ -180,6 +194,19 @@ export async function sendEmailVerification(
 
     // Normaliser l'email
     const normalizedEmail = normalizeEmail(email);
+
+    // Vérifier si l'email est déjà utilisé par un autre utilisateur
+    const existingUserWithEmail = await prisma.user.findUnique({
+      where: { email: normalizedEmail },
+    });
+
+    if (existingUserWithEmail && existingUserWithEmail.id !== userId) {
+      throw createError(
+        "Cet email est déjà utilisé par un autre compte",
+        409,
+        "EMAIL_ALREADY_EXISTS"
+      );
+    }
 
     // Vérifier si l'utilisateur a déjà cet email
     const user = await getUserProfile(userId);
