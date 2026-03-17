@@ -1,11 +1,19 @@
 import nodemailer from 'nodemailer';
 import logger from '../lib/logger.js';
 
+const emailHost = process.env.EMAIL_HOST || 'smtp.gmail.com';
+const emailPort = Number.parseInt(process.env.EMAIL_PORT || '587', 10);
+const emailSecureEnv = process.env.EMAIL_SECURE;
+const emailSecure =
+  emailSecureEnv !== undefined
+    ? emailSecureEnv === 'true'
+    : emailPort === 465;
+
 // Configuration du transporteur email
 const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST || 'smtp.gmail.com',
-  port: parseInt(process.env.EMAIL_PORT || '587'),
-  secure: false, // true pour 465, false pour les autres ports
+  host: emailHost,
+  port: emailPort,
+  secure: emailSecure, // true pour 465 (TLS implicite), false pour 587 (STARTTLS)
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASSWORD,
@@ -124,6 +132,9 @@ Cet email a été envoyé automatiquement, merci de ne pas y répondre.
     logger.error('Erreur lors de l\'envoi de l\'email de vérification', {
       error: error instanceof Error ? error.message : 'Unknown error',
       email,
+      host: emailHost,
+      port: emailPort,
+      secure: emailSecure,
     });
 
     // En développement, on affiche quand même le code
