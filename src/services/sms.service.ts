@@ -188,11 +188,18 @@ export async function sendOTPSMS(
 
   // Si LeTexto n'est pas configuré, juste logger
   if (!isLeTextoConfigured) {
-    logger.info(`[SMS Mock] OTP envoyé à ${phone}`, {
+    if (process.env.NODE_ENV === "development") {
+      logger.info(`[SMS Mock] OTP envoyé à ${phone}`, {
+        phone,
+        codeLength: code.length,
+      });
+      return true;
+    }
+
+    logger.error("LeTexto non configuré - SMS non envoyé", {
       phone,
-      codeLength: code.length,
     });
-    return true;
+    return false;
   }
 
   const messageId = await sendViaLeTexto(phone, message);
@@ -226,11 +233,19 @@ export async function sendSMS(
 
   // Si LeTexto n'est pas configuré, juste logger
   if (!isLeTextoConfigured) {
-    logger.info(`[SMS Mock] Message envoyé à ${phone}`, {
+    if (process.env.NODE_ENV === "development") {
+      logger.info(`[SMS Mock] Message envoyé à ${phone}`, {
+        phone,
+        messageLength: message.length,
+      });
+      return true;
+    }
+
+    logger.error("LeTexto non configuré - SMS non envoyé", {
       phone,
       messageLength: message.length,
     });
-    return true;
+    return false;
   }
 
   const messageId = await sendViaLeTexto(phone, message);

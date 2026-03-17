@@ -59,7 +59,14 @@ export async function sendOTP(
 
     // Envoyer le code OTP via SMS (Texto)
     // Le service SMS log aussi le code en développement
-    await sendOTPSMS(normalizedPhone, code);
+    const smsSent = await sendOTPSMS(normalizedPhone, code);
+    if (!smsSent) {
+      throw createError(
+        "Service SMS indisponible. Veuillez réessayer plus tard.",
+        503,
+        "SMS_SERVICE_UNAVAILABLE"
+      );
+    }
 
     res.json({
       success: true,

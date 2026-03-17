@@ -26,6 +26,12 @@ import { configurePassport } from "./config/passport.js";
 // Créer l'application Express
 const app = express();
 
+// Render (et souvent Cloudflare) ajoute `X-Forwarded-For`/`X-Forwarded-Proto`.
+// Sans `trust proxy`, express-rate-limit peut lever `ERR_ERL_UNEXPECTED_X_FORWARDED_FOR`
+// et `req.ip` ne reflète pas l'IP client.
+const trustProxyHops = Number.parseInt(process.env.TRUST_PROXY_HOPS ?? "", 10);
+app.set("trust proxy", Number.isFinite(trustProxyHops) ? trustProxyHops : 2);
+
 // Configurer Passport (stratégies, etc.)
 configurePassport(passport);
 

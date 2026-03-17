@@ -113,25 +113,16 @@ export async function createEmailVerificationCode(
   });
 
   // Envoyer l'email avec le code de vérification
-  try {
-    const emailSent = await sendVerificationEmail(normalizedEmail, code);
+  const emailSent = await sendVerificationEmail(normalizedEmail, code);
 
-    if (emailSent) {
-      logger.info(`Code de vérification email envoyé à ${normalizedEmail}`);
-    } else {
-      logger.warn(`Échec d'envoi du code de vérification à ${normalizedEmail}`);
-      // En développement, afficher le code dans les logs
-      if (process.env.NODE_ENV === "development") {
-        logger.info(`📧 Code de vérification pour ${normalizedEmail}: ${code}`);
-      }
-    }
-  } catch (error) {
-    logger.error("Erreur lors de l'envoi de l'email de vérification", {
-      error: error instanceof Error ? error.message : "Unknown error",
-      email: normalizedEmail,
-    });
-    // Ne pas bloquer le processus si l'email n'est pas envoyé
-    // Le code est quand même créé dans la DB
+  // En production, si l'email n'est pas envoyé, l'utilisateur ne pourra pas confirmer.
+  // On retourne donc une erreur claire au frontend.
+  if (!emailSent && process.env.NODE_ENV === "production") {
+    throw createError(
+      "Service email indisponible. Veuillez réessayer plus tard.",
+      503,
+      "EMAIL_SERVICE_UNAVAILABLE"
+    );
   }
 
   // Retourner le code en clair (pour le stockage en DB et potentiellement pour les tests)

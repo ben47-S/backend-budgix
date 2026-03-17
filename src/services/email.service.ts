@@ -10,6 +10,10 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASSWORD,
   },
+  // Éviter des requêtes bloquées trop longtemps en cas de mauvaise config SMTP.
+  connectionTimeout: 10_000,
+  greetingTimeout: 10_000,
+  socketTimeout: 20_000,
 });
 
 /**
@@ -30,7 +34,9 @@ export async function sendVerificationEmail(email: string, code: string): Promis
     // Vérifier si le service est configuré
     if (!isEmailServiceAvailable()) {
       logger.warn('Service email non configuré. Email non envoyé.');
-      logger.info(`[DEV] Code de vérification pour ${email}: ${code}`);
+      if (process.env.NODE_ENV === 'development') {
+        logger.info(`[DEV] Code de vérification pour ${email}: ${code}`);
+      }
       return false;
     }
 

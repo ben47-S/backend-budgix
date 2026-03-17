@@ -84,17 +84,23 @@ export async function sendPhoneOTP(
     // Créer et envoyer le code OTP (avec userId pour l'associer à cet utilisateur)
     const code = await createOTP(normalizedPhone, userId);
 
-    // TODO: Envoyer le code OTP par SMS (intégration avec un service SMS)
-    // Pour l'instant, on retourne le code (à retirer en production)
-    console.log(`📱 Code OTP pour ${normalizedPhone}: ${code}`);
+    // Envoyer le code OTP par SMS
+    const smsSent = await sendOTPSMS(normalizedPhone, code);
+    if (!smsSent) {
+      throw createError(
+        "Service SMS indisponible. Veuillez réessayer plus tard.",
+        503,
+        "SMS_SERVICE_UNAVAILABLE"
+      );
+    }
 
     res.json({
       success: true,
       message: "Code OTP envoyé avec succès",
       data: {
         phone: normalizedPhone,
-        // En production, ne pas retourner le code
-        ...(process.env.NODE_ENV && { code }),
+        // Retourner le code uniquement en développement pour faciliter les tests
+        ...(process.env.NODE_ENV === "development" && { code }),
       },
     });
   } catch (error) {
@@ -224,17 +230,13 @@ export async function sendEmailVerification(
     // Créer et envoyer le code de vérification
     const code = await createEmailVerificationCode(normalizedEmail, userId);
 
-    // TODO: Envoyer l'email avec le code (intégration avec un service d'email)
-    // Pour l'instant, on retourne le code (à retirer en production)
-    console.log(`📧 Code de vérification pour ${normalizedEmail}: ${code}`);
-
     res.json({
       success: true,
       message: "Code de vérification envoyé avec succès",
       data: {
         email: normalizedEmail,
-        // En production, ne pas retourner le code
-        ...(process.env.NODE_ENV && { code }),
+        // Retourner le code uniquement en développement pour faciliter les tests
+        ...(process.env.NODE_ENV === "development" && { code }),
       },
     });
   } catch (error) {
@@ -367,7 +369,14 @@ export async function sendDeleteAccountCode(
       }
 
       const code = await createOTP(user.phone, userId);
-      await sendOTPSMS(user.phone, code);
+      const smsSent = await sendOTPSMS(user.phone, code);
+      if (!smsSent) {
+        throw createError(
+          "Service SMS indisponible. Veuillez réessayer plus tard.",
+          503,
+          "SMS_SERVICE_UNAVAILABLE"
+        );
+      }
 
       res.json({
         success: true,
