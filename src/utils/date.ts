@@ -45,6 +45,13 @@ export function getPeriodDates(
   const endDate = new Date(referenceDate);
 
   switch (period) {
+    case "day": {
+      // Aujourd'hui (de 00:00:00 à 23:59:59)
+      startDate.setHours(0, 0, 0, 0);
+      endDate.setHours(23, 59, 59, 999);
+      break;
+    }
+
     case "week": {
       // Semaine calendaire (lundi à dimanche)
       const day = startDate.getDay();

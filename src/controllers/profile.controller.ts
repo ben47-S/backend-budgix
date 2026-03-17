@@ -9,18 +9,21 @@
 
 import type { Request, Response, NextFunction } from "express";
 import { createError } from "../middleware/errorHandler.js";
-import { createOTP } from "../services/otp.service.js";
+import { createOTP, verifyOTP } from "../services/otp.service.js";
 import { createEmailVerificationCode } from "../services/email-verification.service.js";
 import { updateUserPhone, updateUserEmail, getUserProfile, updateUserUsername, updateUserNotificationReminder } from "../services/profile.service.js";
 import { isValidPhone, normalizePhone } from "../utils/validation.js";
-import { isValidEmail, normalizeEmail } from "../services/email-verification.service.js";
+import { isValidEmail, normalizeEmail, verifyEmailCode as verifyEmailVerificationCode } from "../services/email-verification.service.js";
 import { generateToken } from "../services/jwt.service.js";
 import { prisma } from "../lib/prisma.js";
+import { sendOTPSMS } from "../services/sms.service.js";
 import type {
   AddPhoneRequest,
   VerifyPhoneRequest,
   AddEmailRequest,
   VerifyEmailRequest,
+  SendDeleteAccountCodeRequest,
+  ConfirmDeleteAccountRequest,
 } from "../types/index.js";
 
 /**
@@ -297,6 +300,152 @@ export async function verifyEmailCode(
         user: updatedUser,
         token, // Nouveau token avec les informations mises à jour
       },
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * Envoie un code de vérification pour la suppression de compte
+ *
+ * POST /api/profile/delete/send
+ * Headers: Authorization: Bearer <token>
+ * Body: { method: "email" | "phone" }
+ */
+export async function sendDeleteAccountCode(
+  req: Request<{}, {}, SendDeleteAccountCodeRequest>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const userId = req.userId;
+    if (!userId) {
+      throw createError("Authentification requise", 401, "UNAUTHORIZED");
+    }
+
+    const { method } = req.body;
+
+    const user = await getUserProfile(userId);
+
+    // Bloquer la suppression des administrateurs
+    if (user.role === "ADMIN") {
+      throw createError(
+        "Impossible de supprimer un administrateur",
+        403,
+        "ADMIN_DELETE_FORBIDDEN"
+      );
+    }
+
+    if (method === "email") {
+      if (!user.email) {
+        throw createError(
+          "Aucun email associé à votre compte",
+          400,
+          "EMAIL_NOT_SET"
+        );
+      }
+
+      const code = await createEmailVerificationCode(user.email, userId);
+
+      res.json({
+        success: true,
+        message: "Code de vérification envoyé avec succès",
+        // Retourner le code uniquement en développement pour faciliter les tests
+        ...(process.env.NODE_ENV === "development" && { code }),
+      });
+      return;
+    }
+
+    if (method === "phone") {
+      if (!user.phone) {
+        throw createError(
+          "Aucun numéro de téléphone associé à votre compte",
+          400,
+          "PHONE_NOT_SET"
+        );
+      }
+
+      const code = await createOTP(user.phone, userId);
+      await sendOTPSMS(user.phone, code);
+
+      res.json({
+        success: true,
+        message: "Code OTP envoyé avec succès",
+        ...(process.env.NODE_ENV === "development" && { code }),
+      });
+      return;
+    }
+
+    throw createError("Méthode invalide", 400, "INVALID_METHOD");
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * Confirme la suppression de compte via un code (email ou téléphone)
+ *
+ * POST /api/profile/delete/confirm
+ * Headers: Authorization: Bearer <token>
+ * Body: { method: "email" | "phone", code: "123456" }
+ */
+export async function confirmDeleteAccount(
+  req: Request<{}, {}, ConfirmDeleteAccountRequest>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const userId = req.userId;
+    if (!userId) {
+      throw createError("Authentification requise", 401, "UNAUTHORIZED");
+    }
+
+    const { method, code } = req.body;
+
+    const user = await getUserProfile(userId);
+
+    // Bloquer la suppression des administrateurs
+    if (user.role === "ADMIN") {
+      throw createError(
+        "Impossible de supprimer un administrateur",
+        403,
+        "ADMIN_DELETE_FORBIDDEN"
+      );
+    }
+
+    if (method === "email") {
+      if (!user.email) {
+        throw createError(
+          "Aucun email associé à votre compte",
+          400,
+          "EMAIL_NOT_SET"
+        );
+      }
+
+      await verifyEmailVerificationCode(user.email, code, userId);
+    } else if (method === "phone") {
+      if (!user.phone) {
+        throw createError(
+          "Aucun numéro de téléphone associé à votre compte",
+          400,
+          "PHONE_NOT_SET"
+        );
+      }
+
+      await verifyOTP(user.phone, code, userId);
+    } else {
+      throw createError("Méthode invalide", 400, "INVALID_METHOD");
+    }
+
+    // Supprimer l'utilisateur (cascade supprimera toutes les données associées)
+    await prisma.user.delete({
+      where: { id: userId },
+    });
+
+    res.json({
+      success: true,
+      message: "Compte supprimé avec succès",
     });
   } catch (error) {
     next(error);

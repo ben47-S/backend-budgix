@@ -61,6 +61,28 @@ export const verifyEmailSchema = {
 };
 
 /**
+ * Schéma pour envoyer un code de suppression de compte
+ */
+export const sendDeleteAccountCodeSchema = {
+  body: z.object({
+    method: z.enum(["email", "phone"]),
+  }),
+};
+
+/**
+ * Schéma pour confirmer la suppression de compte
+ */
+export const confirmDeleteAccountSchema = {
+  body: z.object({
+    method: z.enum(["email", "phone"]),
+    code: z
+      .string()
+      .length(6, "Le code doit contenir exactement 6 chiffres")
+      .regex(/^\d{6}$/, "Le code doit contenir uniquement des chiffres"),
+  }),
+};
+
+/**
  * Schéma pour mettre à jour le username
  */
 export const updateUsernameSchema = {

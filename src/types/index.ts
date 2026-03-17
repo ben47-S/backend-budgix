@@ -40,7 +40,7 @@ export interface CreateCategoryRequest {
 }
 
 // Types pour les filtres de période
-export type PeriodFilter = "week" | "month" | "year";
+export type PeriodFilter = "day" | "week" | "month" | "year";
 
 // Types pour la gestion du profil utilisateur
 export interface AddPhoneRequest {
@@ -58,6 +58,18 @@ export interface AddEmailRequest {
 
 export interface VerifyEmailRequest {
   email: string;
+  code: string;
+}
+
+// Types pour la suppression de compte (avec code de vérification)
+export type DeleteAccountMethod = "email" | "phone";
+
+export interface SendDeleteAccountCodeRequest {
+  method: DeleteAccountMethod;
+}
+
+export interface ConfirmDeleteAccountRequest {
+  method: DeleteAccountMethod;
   code: string;
 }
 

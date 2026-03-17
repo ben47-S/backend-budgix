@@ -18,6 +18,8 @@ import {
   verifyPhoneOTP,
   sendEmailVerification,
   verifyEmailCode,
+  sendDeleteAccountCode,
+  confirmDeleteAccount,
   getNotificationReminderStatus,
   dismissNotificationReminder,
   resetNotificationReminder,
@@ -30,6 +32,8 @@ import {
   verifyPhoneSchema,
   addEmailSchema,
   verifyEmailSchema,
+  sendDeleteAccountCodeSchema,
+  confirmDeleteAccountSchema,
   updateUsernameSchema,
 } from "../validations/profile.validation.js";
 
@@ -279,6 +283,86 @@ router.post("/email/send", requireAuth, profileRateLimiter, validate(addEmailSch
  *         $ref: '#/components/responses/UnauthorizedError'
  */
 router.post("/email/verify", requireAuth, profileRateLimiter, validate(verifyEmailSchema), verifyEmailCode);
+
+/**
+ * @swagger
+ * /profile/delete/send:
+ *   post:
+ *     summary: Envoyer un code de suppression de compte
+ *     description: Envoie un code de vérification (email ou SMS) pour supprimer le compte de l'utilisateur connecté.
+ *     tags: [Profile]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - method
+ *             properties:
+ *               method:
+ *                 type: string
+ *                 enum: [email, phone]
+ *                 example: "email"
+ *     responses:
+ *       200:
+ *         description: Code envoyé avec succès
+ *       400:
+ *         description: Méthode invalide ou contact manquant
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ */
+router.post(
+  "/delete/send",
+  requireAuth,
+  profileRateLimiter,
+  validate(sendDeleteAccountCodeSchema),
+  sendDeleteAccountCode
+);
+
+/**
+ * @swagger
+ * /profile/delete/confirm:
+ *   post:
+ *     summary: Confirmer la suppression de compte
+ *     description: Vérifie le code reçu (email ou SMS) et supprime définitivement le compte de l'utilisateur connecté.
+ *     tags: [Profile]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - method
+ *               - code
+ *             properties:
+ *               method:
+ *                 type: string
+ *                 enum: [email, phone]
+ *                 example: "email"
+ *               code:
+ *                 type: string
+ *                 example: "123456"
+ *     responses:
+ *       200:
+ *         description: Compte supprimé avec succès
+ *       400:
+ *         description: Code invalide/expiré ou contact manquant
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ */
+router.post(
+  "/delete/confirm",
+  requireAuth,
+  profileRateLimiter,
+  validate(confirmDeleteAccountSchema),
+  confirmDeleteAccount
+);
 
 /**
  * @swagger

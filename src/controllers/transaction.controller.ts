@@ -49,9 +49,9 @@ export async function getTransactionsController(
     const offset = req.query.offset ? parseInt(req.query.offset as string) : undefined;
 
     // Valider la période si fournie
-    if (period && !["week", "month", "year"].includes(period)) {
+    if (period && !["day", "week", "month", "year"].includes(period)) {
       throw createError(
-        "Période invalide. Valeurs acceptées : week, month, year",
+        "Période invalide. Valeurs acceptées : day, week, month, year",
         400,
         "INVALID_PERIOD"
       );
@@ -170,9 +170,9 @@ export async function getTransactionSummaryController(
     const period = req.query.period as PeriodFilter | undefined;
 
     // Valider la période si fournie
-    if (period && !["week", "month", "year"].includes(period)) {
+    if (period && !["day", "week", "month", "year"].includes(period)) {
       throw createError(
-        "Période invalide. Valeurs acceptées : week, month, year",
+        "Période invalide. Valeurs acceptées : day, week, month, year",
         400,
         "INVALID_PERIOD"
       );
