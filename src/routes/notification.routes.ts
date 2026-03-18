@@ -469,6 +469,45 @@ router.put(
 
 /**
  * @swagger
+ * /notifications/all:
+ *   delete:
+ *     summary: Supprimer toutes les notifications
+ *     description: Supprime toutes les notifications de l'utilisateur
+ *     tags: [Notifications]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Toutes les notifications supprimées avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "10 notification(s) supprimée(s)"
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     count:
+ *                       type: integer
+ *                       example: 10
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ */
+router.delete(
+  "/all",
+  requireAuth,
+  generalRateLimiter,
+  deleteAllNotificationsController
+);
+
+/**
+ * @swagger
  * /notifications/{id}:
  *   delete:
  *     summary: Supprimer une notification
@@ -507,45 +546,6 @@ router.delete(
   requireAuth,
   generalRateLimiter,
   deleteNotificationController
-);
-
-/**
- * @swagger
- * /notifications/all:
- *   delete:
- *     summary: Supprimer toutes les notifications
- *     description: Supprime toutes les notifications de l'utilisateur
- *     tags: [Notifications]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: Toutes les notifications supprimées avec succès
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: "10 notification(s) supprimée(s)"
- *                 data:
- *                   type: object
- *                   properties:
- *                     count:
- *                       type: integer
- *                       example: 10
- *       401:
- *         $ref: '#/components/responses/UnauthorizedError'
- */
-router.delete(
-  "/all",
-  requireAuth,
-  generalRateLimiter,
-  deleteAllNotificationsController
 );
 
 export default router;

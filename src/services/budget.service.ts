@@ -164,7 +164,7 @@ export async function getAllBudgets(
 
   // Récupérer les budgets
   const budgets = await prisma.budget.findMany(queryOptions);
-  
+
   // Calculer la progression pour chaque budget
   const budgetsWithProgress = await Promise.all(
     budgets.map(async (budget) => {
@@ -175,17 +175,22 @@ export async function getAllBudgets(
           lte: budget.periodEnd,
         },
       };
-      
+
       if (budget.categoryId) {
+        // Budget par catégorie : compter toutes les transactions de cette catégorie
         whereTransaction.categoryId = budget.categoryId;
+      } else {
+        // Budget global : compter uniquement les dépenses (montants négatifs)
+        whereTransaction.amount = { lt: 0 };
       }
-      
+
       const aggregation = await prisma.transaction.aggregate({
         _sum: { amount: true },
         where: whereTransaction,
       });
-      
-      const spentAmount = Number(aggregation._sum.amount ?? 0);
+
+      // Les dépenses sont négatives, on prend la valeur absolue
+      const spentAmount = Math.abs(Number(aggregation._sum.amount ?? 0));
       const limitAmount = Number(budget.amount);
       const remainingAmount = limitAmount - spentAmount;
       const progress = limitAmount > 0 ? Math.min(100, (spentAmount / limitAmount) * 100) : 0;
@@ -195,7 +200,7 @@ export async function getAllBudgets(
         spentAmount,
         limitAmount
       );
-      
+
       return {
         id: budget.id,
         type: budget.type,
@@ -216,7 +221,7 @@ export async function getAllBudgets(
       };
     })
   );
-  
+
   return budgetsWithProgress;
 }
 
@@ -294,17 +299,22 @@ export async function getMonthlyBudgets(
           lte: budget.periodEnd,
         },
       };
-      
+
       if (budget.categoryId) {
+        // Budget par catégorie : compter toutes les transactions de cette catégorie
         whereTransaction.categoryId = budget.categoryId;
+      } else {
+        // Budget global : compter uniquement les dépenses (montants négatifs)
+        whereTransaction.amount = { lt: 0 };
       }
-      
+
       const aggregation = await prisma.transaction.aggregate({
         _sum: { amount: true },
         where: whereTransaction,
       });
-      
-      const spentAmount = Number(aggregation._sum.amount ?? 0);
+
+      // Les dépenses sont négatives, on prend la valeur absolue
+      const spentAmount = Math.abs(Number(aggregation._sum.amount ?? 0));
       const limitAmount = Number(budget.amount);
       const remainingAmount = limitAmount - spentAmount;
       const progress = limitAmount > 0 ? Math.min(100, (spentAmount / limitAmount) * 100) : 0;
@@ -314,7 +324,7 @@ export async function getMonthlyBudgets(
         spentAmount,
         limitAmount
       );
-      
+
       return {
         id: budget.id,
         type: budget.type,
@@ -333,7 +343,7 @@ export async function getMonthlyBudgets(
       };
     })
   );
-  
+
   return budgetsWithProgress;
 }
 
@@ -559,9 +569,12 @@ export async function getBudgetsOverviewForPeriod(options: {
         },
       };
 
-      // Budget par catégorie
       if (budget.categoryId) {
+        // Budget par catégorie : compter toutes les transactions de cette catégorie
         where.categoryId = budget.categoryId;
+      } else {
+        // Budget global : compter uniquement les dépenses (montants négatifs)
+        where.amount = { lt: 0 };
       }
 
       // Somme des montants des transactions
@@ -570,7 +583,8 @@ export async function getBudgetsOverviewForPeriod(options: {
         where,
       });
 
-      const spentAmount = Number(aggregation._sum.amount ?? 0);
+      // Les dépenses sont négatives, on prend la valeur absolue
+      const spentAmount = Math.abs(Number(aggregation._sum.amount ?? 0));
       const limitAmount = Number(budget.amount);
       const remainingAmount = limitAmount - spentAmount;
       const progress =
@@ -942,9 +956,12 @@ async function checkBudgetAndScheduleNotification(options: {
     },
   };
 
-  // Budget par catégorie
   if (categoryId) {
+    // Budget par catégorie : compter toutes les transactions de cette catégorie
     where.categoryId = categoryId;
+  } else {
+    // Budget global : compter uniquement les dépenses (montants négatifs)
+    where.amount = { lt: 0 };
   }
 
   // Somme des montants des transactions
@@ -953,7 +970,8 @@ async function checkBudgetAndScheduleNotification(options: {
     where,
   });
 
-  const spentAmount = Number(aggregation._sum.amount ?? 0);
+  // Les dépenses sont négatives, on prend la valeur absolue
+  const spentAmount = Math.abs(Number(aggregation._sum.amount ?? 0));
   const percentage = limitAmount > 0 ? (spentAmount / limitAmount) * 100 : 0;
 
   // Déterminer le seuil de notification à envoyer
@@ -1133,7 +1151,8 @@ async function checkBudgetAndScheduleNotification(options: {
           where,
         });
 
-        const currentSpentAmount = Number(currentAggregation._sum.amount ?? 0);
+        // Les dépenses sont négatives, on prend la valeur absolue
+        const currentSpentAmount = Math.abs(Number(currentAggregation._sum.amount ?? 0));
         const currentPercentage = limitAmount > 0 ? (currentSpentAmount / limitAmount) * 100 : 0;
 
         // Vérifier que le pourcentage est toujours dans la plage appropriée
