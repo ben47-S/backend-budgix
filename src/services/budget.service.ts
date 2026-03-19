@@ -461,15 +461,6 @@ export async function upsertBudgetForPeriod(options: {
 
   // Vérifier la progression du budget et envoyer une notification si nécessaire
   // (avec un délai de 15 secondes)
-  logger.info('🔍 Démarrage de la vérification de notification pour le budget', {
-    budgetId: budget.id,
-    userId,
-    limitAmount: amount,
-    periodStart: periodStart.toISOString(),
-    periodEnd: periodEnd.toISOString(),
-    categoryId: categoryId ?? null,
-    isUpdate,
-  });
 
   checkBudgetAndScheduleNotification({
     budgetId: budget.id,
@@ -481,29 +472,59 @@ export async function upsertBudgetForPeriod(options: {
     categoryName: budget.category?.name ?? null,
   })
     .then(() => {
-      logger.debug('✅ Vérification de notification terminée (promesse résolue)', {
-        budgetId: budget.id,
-        userId,
-      });
+      // Notification check completed
     })
     .catch((error) => {
       // Ne pas faire échouer la création/mise à jour du budget si la notification échoue
-      logger.error("❌ Erreur lors de la vérification du budget pour notification", {
-        budgetId: budget.id,
-        userId,
+      logger.error("Erreur lors de la vérification du budget pour notification", {
         error: error instanceof Error ? error.message : 'Erreur inconnue',
-        stack: error instanceof Error ? error.stack : undefined,
       });
     });
 
-  logger.info("✅ Budget créé/mis à jour - vérification de notification lancée", {
-    budgetId: budget.id,
+  // Calculer immédiatement le montant dépensé pour renvoyer des données complètes
+  const whereTransaction: any = {
     userId,
-    isUpdate,
-    limitAmount: amount,
+    date: {
+      gte: periodStart,
+      lte: periodEnd,
+    },
+  };
+
+  if (categoryId) {
+    // Budget par catégorie : compter toutes les transactions de cette catégorie
+    whereTransaction.categoryId = categoryId;
+  } else {
+    // Budget global : compter uniquement les dépenses (montants négatifs)
+    whereTransaction.amount = { lt: 0 };
+  }
+
+  const aggregation = await prisma.transaction.aggregate({
+    _sum: { amount: true },
+    where: whereTransaction,
   });
 
-  return budget;
+  // Les dépenses sont négatives, on prend la valeur absolue
+  const spentAmount = Math.abs(Number(aggregation._sum.amount ?? 0));
+  const limitAmount = Number(budget.amount);
+  const remainingAmount = limitAmount - spentAmount;
+  const progress = limitAmount > 0 ? Math.min(100, (spentAmount / limitAmount) * 100) : 0;
+  const status = calculateBudgetStatus(
+    budget.periodStart,
+    budget.periodEnd,
+    spentAmount,
+    limitAmount
+  );
+
+  // Retourner le budget avec les données de progression calculées
+  return {
+    ...budget,
+    limitAmount,
+    spentAmount,
+    remainingAmount,
+    progressPercent: progress,
+    isOverLimit: spentAmount > limitAmount,
+    status,
+  };
 }
 
 /**
@@ -977,18 +998,6 @@ async function checkBudgetAndScheduleNotification(options: {
   // Déterminer le seuil de notification à envoyer
   const thresholdToNotify = await determineThresholdToNotify(percentage, budgetId);
 
-  // Logger la progression du budget
-  logger.info('📊 Vérification de la progression du budget', {
-    budgetId,
-    userId,
-    budgetName: categoryName || "Toutes catégories",
-    spentAmount,
-    limitAmount,
-    percentage: percentage.toFixed(2),
-    thresholdToNotify,
-    isOverLimit: spentAmount >= limitAmount,
-  });
-
   // Gérer trois seuils de notification :
   // 1. 80% : Notification d'avertissement (programmée avec délai)
   // 2. 95% : Notification d'avertissement critique (programmée avec délai)
@@ -996,25 +1005,6 @@ async function checkBudgetAndScheduleNotification(options: {
 
   if (thresholdToNotify === null) {
     // Aucun nouveau seuil à notifier
-    if (percentage < 80) {
-      logger.info('ℹ️ Budget pas encore à 80% - Aucune notification', {
-        budgetId,
-        userId,
-        budgetName: categoryName || "Toutes catégories",
-        spentAmount,
-        limitAmount,
-        percentage: percentage.toFixed(2),
-      });
-    } else {
-      logger.info('ℹ️ Tous les seuils atteints ont déjà été notifiés', {
-        budgetId,
-        userId,
-        budgetName: categoryName || "Toutes catégories",
-        spentAmount,
-        limitAmount,
-        percentage: percentage.toFixed(2),
-      });
-    }
     return;
   }
 
@@ -1056,17 +1046,9 @@ async function checkBudgetAndScheduleNotification(options: {
     if (result.sent) {
       // Marquer le seuil comme notifié
       await markThresholdAsNotified(budgetId, 100);
-
-      logger.info("✅ [SUCCESS] Notification d'alerte 100% envoyée", {
-        status: 'SUCCESS',
-        userId,
-        budgetId,
-        budgetName,
-        threshold: 100,
-        tokensCount: result.count,
-      });
+      logger.info("Notification d'alerte 100% envoyée");
     } else {
-      logger.error("❌ [ERROR] Notification d'alerte 100% NON envoyée", {
+      logger.error("Notification d'alerte 100% NON envoyée", {
         status: 'ERROR',
         userId,
         budgetId,
@@ -1213,27 +1195,12 @@ async function checkBudgetAndScheduleNotification(options: {
         if (result.sent) {
           // Marquer le seuil comme notifié
           await markThresholdAsNotified(budgetId, thresholdToNotify);
-
-          logger.info(`✅ [SUCCESS] Notification de ${thresholdToNotify}% envoyée`, {
-            userId,
-            budgetId,
-            budgetName,
-            threshold: thresholdToNotify,
-            tokensCount: result.count,
-          });
+          logger.info(`Notification de ${thresholdToNotify}% envoyée`);
         } else {
-          logger.error(`❌ [ERROR] Notification de ${thresholdToNotify}% NON envoyée`, {
-            userId,
-            budgetId,
-            budgetName,
-            threshold: thresholdToNotify,
-            reason: result.reason,
-          });
+          logger.error(`Notification de ${thresholdToNotify}% NON envoyée: ${result.reason}`);
         }
       } catch (error) {
-        logger.error("❌ Erreur lors de l'envoi de la notification programmée", {
-          budgetId,
-          userId,
+        logger.error("Erreur lors de l'envoi de la notification programmée", {
           threshold: thresholdToNotify,
           error: error instanceof Error ? error.message : 'Erreur inconnue',
         });

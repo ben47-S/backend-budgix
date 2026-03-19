@@ -85,13 +85,10 @@ app.use(
 // Parser JSON - Analyser les corps de requête JSON
 app.use(express.json());
 
-// Middleware de debug pour voir toutes les requêtes POST
+// Middleware de logging des requêtes (sans données sensibles)
 app.use((req, res, next) => {
   if (req.method === "POST" || req.method === "PUT" || req.method === "PATCH") {
-    logger.info(`[DEBUG] ${req.method} ${req.path}`, {
-      body: req.body,
-      headers: req.headers,
-    });
+    logger.info(`${req.method} ${req.path}`);
   }
   next();
 });
