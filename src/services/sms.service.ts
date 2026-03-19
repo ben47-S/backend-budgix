@@ -75,6 +75,17 @@ function maskToken(token: string | undefined): string {
 }
 
 /**
+ * Masque un numéro de téléphone pour les logs
+ * Garde les 4 premiers et 2 derniers chiffres
+ */
+function maskPhone(phone: string): string {
+  if (!phone) return "****";
+  const cleaned = phone.replace(/\D/g, '');
+  if (cleaned.length < 6) return "****";
+  return cleaned.slice(0, 4) + "****" + cleaned.slice(-2);
+}
+
+/**
  * Envoie un SMS via l'API LeTexto
  *
  * @param phone - Numéro de téléphone destinataire (format international: +225...)
@@ -111,7 +122,10 @@ async function sendViaLeTexto(
         "Content-Type": "application/json",
         Authorization: `Bearer ${maskToken(LETEXTO_API_TOKEN)}`,
       });
-      console.log("  Body:", requestBody);
+      console.log("  Body:", {
+        ...requestBody,
+        to: maskPhone(requestBody.to), // Masquer le numéro de téléphone
+      });
     }
 
     const response = await fetch(`${LETEXTO_API_URL}/messages/send`, {
@@ -181,9 +195,9 @@ export async function sendOTPSMS(
 ): Promise<boolean> {
   const message = `Votre code de verification Budgix est : ${code}. Ce code expire dans 5 minutes.`;
 
-  // Toujours logger le code en développement
+  // Toujours logger le code en développement (mais masquer le téléphone)
   if (process.env.NODE_ENV === "development") {
-    console.log(`📱 [SMS] Code OTP pour ${phone}: ${code}`);
+    console.log(`📱 [SMS] Code OTP pour ${maskPhone(phone)}: ${code}`);
   }
 
   // Si LeTexto n'est pas configuré, juste logger
@@ -226,9 +240,9 @@ export async function sendSMS(
   phone: string,
   message: string
 ): Promise<boolean> {
-  // Toujours logger en développement
+  // Toujours logger en développement (mais masquer le téléphone)
   if (process.env.NODE_ENV === "development") {
-    console.log(`📱 [SMS] Message pour ${phone}: ${message}`);
+    console.log(`📱 [SMS] Message pour ${maskPhone(phone)}: ${message}`);
   }
 
   // Si LeTexto n'est pas configuré, juste logger

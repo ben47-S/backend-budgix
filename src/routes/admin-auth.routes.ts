@@ -116,11 +116,14 @@ router.get("/verify", requireAuth, requireAdmin, generalRateLimiter, verifyAdmin
  *       403:
  *         description: Accès refusé - Cette route est réservée aux administrateurs
  */
-// Route de login admin avec logging détaillé
+// Route de login admin
 router.post("/login", (req, res, next) => {
-  console.log("[Admin Auth Route] Requête POST /login reçue");
-  console.log("[Admin Auth Route] Body:", req.body);
-  console.log("[Admin Auth Route] Headers:", req.headers);
+  if (process.env.NODE_ENV === "development") {
+    console.log("[Admin Auth Route] Requête POST /login reçue");
+    // Ne JAMAIS logger le mot de passe ou les headers complets
+    console.log("[Admin Auth Route] Email:", req.body?.email);
+    console.log("[Admin Auth Route] Password provided:", !!req.body?.password);
+  }
   next();
 }, generalRateLimiter, validate(adminLoginSchema), adminLoginController);
 

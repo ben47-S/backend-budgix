@@ -8,6 +8,7 @@
 import type { Request, Response, NextFunction } from "express";
 import { z, ZodError } from "zod";
 import { createError } from "./errorHandler.js";
+import { sanitizeForLog } from "../utils/log-sanitizer.js";
 
 /**
  * Type pour les schémas de validation Zod
@@ -28,16 +29,16 @@ type ValidationSchema = {
 export function validate(schema: ValidationSchema) {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      // Log pour déboguer
+      // Log pour déboguer - Ne JAMAIS logger passwords, tokens, etc.
       if (process.env.NODE_ENV === "development" && schema.body) {
-        console.log("[Validation] Body reçu:", req.body);
+        console.log("[Validation] Body reçu:", sanitizeForLog(req.body));
       }
-      
+
       // Valider chaque partie de la requête si le schéma est fourni
       if (schema.body) {
         req.body = await schema.body.parseAsync(req.body);
         if (process.env.NODE_ENV === "development") {
-          console.log("[Validation] Body validé:", req.body);
+          console.log("[Validation] Body validé:", sanitizeForLog(req.body));
         }
       }
 
