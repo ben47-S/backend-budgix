@@ -133,7 +133,7 @@ export function maskEmail(email: string): string {
 
   const [username, domain] = email.split('@');
 
-  if (username.length <= 2) {
+  if (!username || username.length <= 2) {
     return `**@${domain}`;
   }
 
