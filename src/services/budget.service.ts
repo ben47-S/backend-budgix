@@ -180,8 +180,11 @@ export async function getAllBudgets(
         // Budget par catégorie : compter toutes les transactions de cette catégorie
         whereTransaction.categoryId = budget.categoryId;
       } else {
-        // Budget global : compter uniquement les dépenses (montants négatifs)
-        whereTransaction.amount = { lt: 0 };
+        // Budget global : compter uniquement les dépenses (catégories de type EXPENSE)
+        // Note: Les montants sont toujours positifs, c'est le type de catégorie qui détermine si c'est une dépense
+        whereTransaction.category = {
+          type: "EXPENSE",
+        };
       }
 
       const aggregation = await prisma.transaction.aggregate({
@@ -189,8 +192,8 @@ export async function getAllBudgets(
         where: whereTransaction,
       });
 
-      // Les dépenses sont négatives, on prend la valeur absolue
-      const spentAmount = Math.abs(Number(aggregation._sum.amount ?? 0));
+      // Les montants sont toujours positifs
+      const spentAmount = Number(aggregation._sum.amount ?? 0);
       const limitAmount = Number(budget.amount);
       const remainingAmount = limitAmount - spentAmount;
       const progress = limitAmount > 0 ? Math.min(100, (spentAmount / limitAmount) * 100) : 0;
@@ -304,8 +307,11 @@ export async function getMonthlyBudgets(
         // Budget par catégorie : compter toutes les transactions de cette catégorie
         whereTransaction.categoryId = budget.categoryId;
       } else {
-        // Budget global : compter uniquement les dépenses (montants négatifs)
-        whereTransaction.amount = { lt: 0 };
+        // Budget global : compter uniquement les dépenses (catégories de type EXPENSE)
+        // Note: Les montants sont toujours positifs, c'est le type de catégorie qui détermine si c'est une dépense
+        whereTransaction.category = {
+          type: "EXPENSE",
+        };
       }
 
       const aggregation = await prisma.transaction.aggregate({
@@ -313,8 +319,8 @@ export async function getMonthlyBudgets(
         where: whereTransaction,
       });
 
-      // Les dépenses sont négatives, on prend la valeur absolue
-      const spentAmount = Math.abs(Number(aggregation._sum.amount ?? 0));
+      // Les montants sont toujours positifs
+      const spentAmount = Number(aggregation._sum.amount ?? 0);
       const limitAmount = Number(budget.amount);
       const remainingAmount = limitAmount - spentAmount;
       const progress = limitAmount > 0 ? Math.min(100, (spentAmount / limitAmount) * 100) : 0;
@@ -494,8 +500,11 @@ export async function upsertBudgetForPeriod(options: {
     // Budget par catégorie : compter toutes les transactions de cette catégorie
     whereTransaction.categoryId = categoryId;
   } else {
-    // Budget global : compter uniquement les dépenses (montants négatifs)
-    whereTransaction.amount = { lt: 0 };
+    // Budget global : compter uniquement les dépenses (catégories de type EXPENSE)
+    // Note: Les montants sont toujours positifs, c'est le type de catégorie qui détermine si c'est une dépense
+    whereTransaction.category = {
+      type: "EXPENSE",
+    };
   }
 
   const aggregation = await prisma.transaction.aggregate({
@@ -503,8 +512,8 @@ export async function upsertBudgetForPeriod(options: {
     where: whereTransaction,
   });
 
-  // Les dépenses sont négatives, on prend la valeur absolue
-  const spentAmount = Math.abs(Number(aggregation._sum.amount ?? 0));
+  // Les montants sont toujours positifs
+  const spentAmount = Number(aggregation._sum.amount ?? 0);
   const limitAmount = Number(budget.amount);
   const remainingAmount = limitAmount - spentAmount;
   const progress = limitAmount > 0 ? Math.min(100, (spentAmount / limitAmount) * 100) : 0;
@@ -956,8 +965,11 @@ async function checkBudgetAndScheduleNotification(options: {
     // Budget par catégorie : compter toutes les transactions de cette catégorie
     where.categoryId = categoryId;
   } else {
-    // Budget global : compter uniquement les dépenses (montants négatifs)
-    where.amount = { lt: 0 };
+    // Budget global : compter uniquement les dépenses (catégories de type EXPENSE)
+    // Note: Les montants sont toujours positifs, c'est le type de catégorie qui détermine si c'est une dépense
+    where.category = {
+      type: "EXPENSE",
+    };
   }
 
   // Somme des montants des transactions
@@ -966,8 +978,8 @@ async function checkBudgetAndScheduleNotification(options: {
     where,
   });
 
-  // Les dépenses sont négatives, on prend la valeur absolue
-  const spentAmount = Math.abs(Number(aggregation._sum.amount ?? 0));
+  // Les montants sont toujours positifs
+  const spentAmount = Number(aggregation._sum.amount ?? 0);
   const percentage = limitAmount > 0 ? (spentAmount / limitAmount) * 100 : 0;
 
   // Déterminer le seuil de notification à envoyer
