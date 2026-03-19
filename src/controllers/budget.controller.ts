@@ -18,6 +18,7 @@ import {
   getMonthlyBudgets,
   getAllBudgets,
 } from "../services/budget.service.js";
+import { emitToUser } from "../services/websocket.service.js";
 import { formatDatesToISO } from "../utils/date-formatter.js";
 import { parseDate } from "../utils/date.js";
 
@@ -52,6 +53,12 @@ export async function upsertBudgetController(
       periodEnd,
       categoryId: categoryId ?? null,
       type: type ?? "CUSTOM",
+    });
+
+    // Notifier le frontend via WebSocket
+    emitToUser(userId, "budget-updated", {
+      reason: "budget-upserted",
+      budgetId: budget.id,
     });
 
 res.status(201).json(formatDatesToISO({
@@ -98,6 +105,12 @@ export async function upsertMonthlyBudgetController(
       year: Number(year),
       month: Number(month),
       categoryId: categoryId ?? null,
+    });
+
+    // Notifier le frontend via WebSocket
+    emitToUser(userId, "budget-updated", {
+      reason: "budget-upserted",
+      budgetId: budget.id,
     });
 
 res.status(201).json(formatDatesToISO({
@@ -257,6 +270,12 @@ export async function deleteBudgetController(
     }
 
     await deleteBudgetById(userId, budgetId);
+
+    // Notifier le frontend via WebSocket
+    emitToUser(userId, "budget-updated", {
+      reason: "budget-deleted",
+      budgetId,
+    });
 
 res.json(formatDatesToISO({
       success: true,

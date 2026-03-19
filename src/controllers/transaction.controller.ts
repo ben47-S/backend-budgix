@@ -14,6 +14,8 @@ import {
   getTransactionSummary,
   deleteAllUserTransactions,
 } from "../services/transaction.service.js";
+import { checkBudgetsAfterTransaction } from "../services/budget.service.js";
+import { emitToUser } from "../services/websocket.service.js";
 import { createError } from "../middleware/errorHandler.js";
 import { logEvent } from "../services/log.service.js";
 import type { CreateTransactionRequest, PeriodFilter } from "../types/index.js";
@@ -121,6 +123,21 @@ export async function createTransactionController(
       time,
       note
     );
+
+    // Notifier le frontend via WebSocket que les budgets doivent être rechargés
+    emitToUser(userId, "budget-updated", {
+      reason: "transaction-created",
+      transactionId: transaction.id,
+      categoryId,
+      date: transaction.date,
+    });
+
+    // Vérifier les budgets en arrière-plan (sans attendre)
+    checkBudgetsAfterTransaction(userId, transaction.date, categoryId)
+      .catch((error) => {
+        // Ne pas faire échouer la création de transaction si la vérification des budgets échoue
+        console.error('Erreur lors de la vérification des budgets:', error);
+      });
 
     // Logger la création de la transaction
     logEvent({

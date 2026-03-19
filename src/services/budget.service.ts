@@ -703,12 +703,6 @@ export async function checkBudgetsAfterTransaction(
   transactionDate: Date,
   categoryId: string
 ) {
-  logger.info('🔍 Vérification des budgets après création de transaction', {
-    userId,
-    transactionDate: transactionDate.toISOString(),
-    categoryId,
-  });
-
   // Récupérer tous les budgets de l'utilisateur qui incluent cette date
   const budgets = await prisma.budget.findMany({
     where: {
@@ -730,12 +724,6 @@ export async function checkBudgetsAfterTransaction(
     },
   });
 
-  logger.info('📊 Budgets trouvés pour cette date', {
-    userId,
-    transactionDate: transactionDate.toISOString(),
-    budgetsCount: budgets.length,
-  });
-
   // Vérifier chaque budget
   for (const budget of budgets) {
     // Vérifier si ce budget concerne cette transaction
@@ -744,11 +732,6 @@ export async function checkBudgetsAfterTransaction(
     const isRelevant = !budget.categoryId || budget.categoryId === categoryId;
 
     if (!isRelevant) {
-      logger.debug('⏭️  Budget ignoré (catégorie différente)', {
-        budgetId: budget.id,
-        budgetCategoryId: budget.categoryId,
-        transactionCategoryId: categoryId,
-      });
       continue;
     }
 
@@ -763,19 +746,11 @@ export async function checkBudgetsAfterTransaction(
       categoryName: budget.category?.name ?? null,
     }).catch((error) => {
       // Ne pas faire échouer la création de transaction si la vérification de budget échoue
-      logger.error('❌ Erreur lors de la vérification du budget après transaction', {
-        budgetId: budget.id,
-        userId,
+      logger.error('Erreur lors de la vérification du budget après transaction', {
         error: error instanceof Error ? error.message : 'Erreur inconnue',
       });
     });
   }
-
-  logger.info('✅ Vérification des budgets terminée', {
-    userId,
-    transactionDate: transactionDate.toISOString(),
-    budgetsChecked: budgets.length,
-  });
 }
 
 /**
