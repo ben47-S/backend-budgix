@@ -143,7 +143,7 @@ return res.json(formatDatesToISO({
     const formattedPrice = formatSubscriptionPrice(priceNumber);
     const formattedPlan = formatSubscriptionPlan(subscription.plan);
 
-res.json(formatDatesToISO({
+    return res.json(formatDatesToISO({
       success: true,
       data: {
         subscription,
@@ -160,7 +160,7 @@ res.json(formatDatesToISO({
       },
     }));
   } catch (error) {
-    next(error);
+    return next(error);
   }
 }
 
@@ -197,7 +197,7 @@ return res.json(formatDatesToISO({
 
     const isActive = isSubscriptionActive(subscription);
 
-res.json(formatDatesToISO({
+    return res.json(formatDatesToISO({
       success: true,
       data: {
         isPremium,
@@ -206,7 +206,7 @@ res.json(formatDatesToISO({
       },
     }));
   } catch (error) {
-    next(error);
+    return next(error);
   }
 }
 

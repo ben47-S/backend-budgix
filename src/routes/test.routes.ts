@@ -29,7 +29,7 @@ router.use((req: Request, res: Response, next: NextFunction) => {
       },
     });
   }
-  next();
+  return next();
 });
 
 /**

@@ -177,13 +177,13 @@ app.get("/health", async (req, res) => {
     // Sinon, on fait un check complet avec vérification de la DB
     const { performHealthCheck } = await import("./utils/health.js");
     const result = await performHealthCheck();
-    
+
     // Retourner 503 si unhealthy, sinon 200
     const statusCode = result.status === "healthy" ? 200 : 503;
-    res.status(statusCode).json(result);
+    return res.status(statusCode).json(result);
   } catch (error: any) {
     // En cas d'erreur, retourner un statut unhealthy
-    res.status(503).json({
+    return res.status(503).json({
       status: "unhealthy",
       message: `Erreur lors du health check: ${error.message}`,
       timestamp: new Date().toISOString(),
