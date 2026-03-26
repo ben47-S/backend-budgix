@@ -1,6 +1,11 @@
 /**
- * Routes pour la gestion des dettes (fonctionnalité premium)
- * 
+ * Routes pour la gestion des dettes (fonctionnalité avec limitations pour utilisateurs gratuits)
+ *
+ * NOTE IMPORTANTE: Les vérifications premium se font au niveau SERVICE (debt.service.ts)
+ * via la fonction checkDebtLimit() qui permet:
+ * - Utilisateurs gratuits: 1 dette active par type (I_OWE ou OWED_TO_ME)
+ * - Utilisateurs premium: Dettes illimitées
+ *
  * Routes disponibles :
  * - POST /debts - Créer une nouvelle dette
  * - GET /debts - Récupérer toutes les dettes (avec filtres optionnels)
@@ -20,7 +25,7 @@ import {
   deleteDebtController,
   getDebtStatsController,
 } from "../controllers/index.js";
-import { requireAuth, requirePremium } from "../middleware/auth.js";
+import { requireAuth } from "../middleware/auth.js";
 import { validate } from "../middleware/validation.js";
 import { createResourceRateLimiter, generalRateLimiter } from "../middleware/rateLimit.js";
 import {
@@ -90,7 +95,7 @@ const router: Router = ExpressRouter();
  *       401:
  *         $ref: '#/components/responses/UnauthorizedError'
  */
-router.post("/", requireAuth, requirePremium, createResourceRateLimiter, validate(createDebtSchema), createDebtController);
+router.post("/", requireAuth, createResourceRateLimiter, validate(createDebtSchema), createDebtController);
 
 /**
  * @swagger
@@ -137,7 +142,7 @@ router.post("/", requireAuth, requirePremium, createResourceRateLimiter, validat
  *       401:
  *         $ref: '#/components/responses/UnauthorizedError'
  */
-router.get("/", requireAuth, requirePremium, generalRateLimiter, validate(getDebtsSchema), getDebtsController);
+router.get("/", requireAuth, generalRateLimiter, validate(getDebtsSchema), getDebtsController);
 
 /**
  * @swagger
@@ -189,7 +194,7 @@ router.get("/", requireAuth, requirePremium, generalRateLimiter, validate(getDeb
  *       401:
  *         $ref: '#/components/responses/UnauthorizedError'
  */
-router.get("/stats", requireAuth, requirePremium, generalRateLimiter, getDebtStatsController);
+router.get("/stats", requireAuth, generalRateLimiter, getDebtStatsController);
 
 /**
  * @swagger
@@ -229,7 +234,7 @@ router.get("/stats", requireAuth, requirePremium, generalRateLimiter, getDebtSta
  *       401:
  *         $ref: '#/components/responses/UnauthorizedError'
  */
-router.get("/:id", requireAuth, requirePremium, generalRateLimiter, validate(debtIdSchema), getDebtByIdController);
+router.get("/:id", requireAuth, generalRateLimiter, validate(debtIdSchema), getDebtByIdController);
 
 /**
  * @swagger
@@ -290,7 +295,7 @@ router.get("/:id", requireAuth, requirePremium, generalRateLimiter, validate(deb
  *       401:
  *         $ref: '#/components/responses/UnauthorizedError'
  */
-router.put("/:id", requireAuth, requirePremium, createResourceRateLimiter, validate(updateDebtSchema), updateDebtController);
+router.put("/:id", requireAuth, createResourceRateLimiter, validate(updateDebtSchema), updateDebtController);
 
 /**
  * @swagger
@@ -326,7 +331,7 @@ router.put("/:id", requireAuth, requirePremium, createResourceRateLimiter, valid
  *       401:
  *         $ref: '#/components/responses/UnauthorizedError'
  */
-router.delete("/:id", requireAuth, requirePremium, generalRateLimiter, validate(debtIdSchema), deleteDebtController);
+router.delete("/:id", requireAuth, generalRateLimiter, validate(debtIdSchema), deleteDebtController);
 
 export default router;
 

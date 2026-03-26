@@ -1,233 +1,218 @@
 /**
- * Service de gestion des paiements Wave pour l'abonnement premium
- * 
- * Gère :
- * - L'initiation d'un paiement
- * - La confirmation manuelle par l'utilisateur
- * - La validation/rejet par l'admin
+ * Service de gestion des demandes d'abonnement premium
+ *
+ * Système simplifié :
+ * - L'utilisateur crée une demande PENDING
+ * - L'admin approuve (APPROVED) ou rejette (REJECTED)
+ * - Pas de vérification Wave, gestion manuelle uniquement
  */
 
 import { prisma } from "../lib/prisma.js";
 import { createError } from "../middleware/errorHandler.js";
-import { calculateSubscriptionPrice, createOrUpdateSubscription, renewOrCreateSubscription } from "./subscription.service.js";
+import { renewOrCreateSubscription } from "./subscription.service.js";
 import { sendNotificationToUser } from "./notification.service.js";
+import { logEvent } from "./log.service.js";
 import type { SubscriptionPlan } from "../generated/prisma/client.js";
 
 const prismaClient = prisma as any;
 
-export async function initiatePayment(
-  userId: string,
-  plan: SubscriptionPlan,
-  isRenewal: boolean = false
-) {
-  const amount = calculateSubscriptionPrice(plan);
+/**
+ * Créer une demande premium
+ */
+export async function createPremiumRequest(userId: string, planType: SubscriptionPlan) {
+  const amount = planType === 'MONTHLY' ? 450 : 4200;
 
-  // Vérifier s'il existe un paiement PENDING_VERIFICATION en cours
-  const pendingVerification = await prismaClient.subscriptionPayment.findFirst({
-    where: {
-      userId,
-      status: "PENDING_VERIFICATION",
-    },
-    orderBy: { createdAt: "desc" },
+  // Vérifier si une demande pending existe déjà
+  const existingPending = await prismaClient.subscriptionPayment.findFirst({
+    where: { userId, status: 'PENDING' }
   });
 
-  // Si un paiement est en attente de vérification, mettre à jour le plan et isRenewal si différent
-  if (pendingVerification) {
-    if (pendingVerification.plan !== plan || pendingVerification.isRenewal !== isRenewal) {
-      const updatedPayment = await prismaClient.subscriptionPayment.update({
-        where: { id: pendingVerification.id },
-        data: {
-          plan,
-          amount,
-          isRenewal,
-        },
-      });
-      return updatedPayment;
-    }
-    return pendingVerification;
+  if (existingPending) {
+    throw createError('Vous avez déjà une demande en attente', 400, 'REQUEST_ALREADY_EXISTS');
   }
 
-  // Vérifier s'il existe un paiement PENDING expiré (plus de 24h)
-  const now = new Date();
-  const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-
-  const expiredPending = await prismaClient.subscriptionPayment.findFirst({
-    where: {
-      userId,
-      status: "PENDING",
-      createdAt: {
-        lt: twentyFourHoursAgo,
-      },
-    },
-    orderBy: { createdAt: "desc" },
-  });
-
-  // Si un paiement PENDING a expiré, le rejeter automatiquement
-  // SANS envoyer de notification au client (comportement intentionnel)
-  if (expiredPending) {
-    await prismaClient.subscriptionPayment.update({
-      where: { id: expiredPending.id },
-      data: {
-        status: "REJECTED",
-        rejectedAt: new Date(),
-        rejectionReason: "Paiement expiré (aucune confirmation dans les 24 heures)",
-      },
-    });
-  }
-
-  // Vérifier s'il existe un paiement PENDING valide (moins de 24h)
-  const validPending = await prismaClient.subscriptionPayment.findFirst({
-    where: {
-      userId,
-      status: "PENDING",
-      createdAt: {
-        gte: twentyFourHoursAgo,
-      },
-    },
-    orderBy: { createdAt: "desc" },
-  });
-
-  // Si un paiement PENDING valide existe, mettre à jour le plan et isRenewal si différent
-  if (validPending) {
-    if (validPending.plan !== plan || validPending.isRenewal !== isRenewal) {
-      const updatedPayment = await prismaClient.subscriptionPayment.update({
-        where: { id: validPending.id },
-        data: {
-          plan,
-          amount,
-          isRenewal,
-        },
-      });
-      return updatedPayment;
-    }
-    return validPending;
-  }
-
-  // Sinon, créer un nouveau paiement
-  const payment = await prismaClient.subscriptionPayment.create({
+  // Créer la demande
+  const request = await prismaClient.subscriptionPayment.create({
     data: {
       userId,
-      plan,
+      planType,
       amount,
-      status: "PENDING",
-      isRenewal,
-    },
+      status: 'PENDING',
+    }
   });
 
-  return payment;
+  // Log
+  await logEvent({
+    scope: 'BUSINESS',
+    level: 'INFO',
+    action: 'premium_request_created',
+    userId,
+    metadata: { requestId: request.id, planType, amount }
+  });
+
+  return request;
 }
 
-export function buildWavePaymentUrl(amountXOF: number): string {
-  const baseUrl = process.env.WAVE_PAYMENT_URL;
-  if (!baseUrl) {
-    throw createError(
-      "Configuration Wave manquante",
-      500,
-      "WAVE_CONFIG_ERROR"
-    );
-  }
-  return `${baseUrl}?amount=${amountXOF}`;
-}
-
-export async function confirmPayment(
-  userId: string,
-  paymentId: string,
-  waveTransactionId: string,
-  transferDate: Date
+/**
+ * Approuver une demande premium (admin)
+ */
+export async function approvePremiumRequest(
+  requestId: string,
+  adminId: string,
+  adminNotes?: string
 ) {
-  const payment = await prismaClient.subscriptionPayment.findUnique({
-    where: { id: paymentId },
+  const request = await prismaClient.subscriptionPayment.findUnique({
+    where: { id: requestId },
+    include: { user: true }
   });
 
-  if (!payment || payment.userId !== userId) {
-    throw createError("Paiement introuvable", 404, "PAYMENT_NOT_FOUND");
+  if (!request) {
+    throw createError('Demande introuvable', 404, 'REQUEST_NOT_FOUND');
   }
 
-  if (payment.status !== "PENDING") {
-    throw createError("Paiement déjà soumis ou traité", 400, "INVALID_PAYMENT_STATUS");
+  if (request.status !== 'PENDING') {
+    throw createError('Demande introuvable ou déjà traitée', 400, 'INVALID_REQUEST_STATUS');
   }
 
-  // Normaliser la date pour comparaison (comparer juste le jour, pas l'heure)
-  const startOfDay = new Date(transferDate);
-  startOfDay.setHours(0, 0, 0, 0);
+  // Transaction: Update request + activer premium + créer subscription
+  const result = await prismaClient.$transaction(async (tx: any) => {
+    // Update request
+    const updatedRequest = await tx.subscriptionPayment.update({
+      where: { id: requestId },
+      data: {
+        status: 'APPROVED',
+        approvedById: adminId,
+        adminNotes,
+        updatedAt: new Date()
+      }
+    });
 
-  const endOfDay = new Date(transferDate);
-  endOfDay.setHours(23, 59, 59, 999);
+    // Activer premium
+    await tx.user.update({
+      where: { id: request.userId },
+      data: { isPremium: true }
+    });
 
-  // Vérifier si c'est un ancien paiement APPROUVÉ (même ID Wave + même date de transfert)
-  // Seuls les paiements approuvés sont considérés comme "anciens paiements"
-  const existingApprovedPayment = await prismaClient.subscriptionPayment.findFirst({
-    where: {
-      waveTransactionId,
-      transferDate: {
-        gte: startOfDay,
-        lte: endOfDay,
-      },
-      status: "APPROVED", // Vérifier seulement les paiements approuvés
-      id: { not: paymentId },
-    },
+    // Créer subscription active
+    const startDate = new Date();
+    const endDate = new Date(startDate);
+    if (request.planType === 'MONTHLY') {
+      endDate.setMonth(endDate.getMonth() + 1);
+    } else {
+      endDate.setFullYear(endDate.getFullYear() + 1);
+    }
+
+    await tx.subscription.create({
+      data: {
+        userId: request.userId,
+        plan: request.planType,
+        price: request.amount,
+        startDate,
+        endDate,
+      }
+    });
+
+    return updatedRequest;
   });
 
-  if (existingApprovedPayment) {
-    throw createError(
-      "Ceci est un ancien paiement. Effectuez votre paiement et entrez les bonnes données.",
-      409,
-      "OLD_PAYMENT_DETECTED"
-    );
-  }
+  // Notification utilisateur
+  const planText = request.planType === 'MONTHLY' ? 'mensuel' : 'annuel';
+  await sendNotificationToUser(
+    request.userId,
+    'Demande approuvée',
+    `Votre demande d'abonnement premium ${planText} a été approuvée ✅`,
+    {
+      type: 'PAYMENT_APPROVED',
+      requestId: result.id,
+      planType: request.planType,
+    }
+  );
 
-  // Vérifier si l'ID Wave est déjà utilisé avec une date différente
-  const existingWaveTx = await prismaClient.subscriptionPayment.findFirst({
-    where: {
-      waveTransactionId,
-      id: { not: paymentId },
-    },
+  // Log
+  await logEvent({
+    scope: 'BUSINESS',
+    level: 'INFO',
+    action: 'premium_request_approved',
+    adminId,
+    targetId: request.userId,
+    metadata: { requestId, planType: request.planType }
   });
 
-  if (existingWaveTx) {
-    throw createError("Cet ID Wave est déjà utilisé", 409, "WAVE_TRANSACTION_EXISTS");
+  return result;
+}
+
+/**
+ * Rejeter une demande premium (admin)
+ */
+export async function rejectPremiumRequest(
+  requestId: string,
+  adminId: string,
+  adminNotes?: string
+) {
+  const request = await prismaClient.subscriptionPayment.findUnique({
+    where: { id: requestId }
+  });
+
+  if (!request) {
+    throw createError('Demande introuvable', 404, 'REQUEST_NOT_FOUND');
   }
 
-  const updated = await prismaClient.subscriptionPayment.update({
-    where: { id: paymentId },
+  if (request.status !== 'PENDING') {
+    throw createError('Demande introuvable ou déjà traitée', 400, 'INVALID_REQUEST_STATUS');
+  }
+
+  const updatedRequest = await prismaClient.subscriptionPayment.update({
+    where: { id: requestId },
     data: {
-      status: "PENDING_VERIFICATION",
-      waveTransactionId,
-      transferDate,
-    },
+      status: 'REJECTED',
+      approvedById: adminId,
+      adminNotes,
+      updatedAt: new Date()
+    }
   });
 
-  await notifyAdminsPaymentPending(updated.id, updated.amount, updated.plan, updated.userId);
+  // Notification utilisateur
+  await sendNotificationToUser(
+    request.userId,
+    'Demande refusée',
+    `Votre demande d'abonnement premium a été refusée${adminNotes ? ` : ${adminNotes}` : '.'}`,
+    {
+      type: 'PAYMENT_REJECTED',
+      requestId: updatedRequest.id,
+      planType: request.planType,
+      reason: adminNotes || 'Non spécifié',
+    }
+  );
 
-  return updated;
-}
-
-export async function getPaymentStatus(userId: string, paymentId: string) {
-  const payment = await prismaClient.subscriptionPayment.findUnique({
-    where: { id: paymentId },
+  // Log
+  await logEvent({
+    scope: 'BUSINESS',
+    level: 'INFO',
+    action: 'premium_request_rejected',
+    adminId,
+    targetId: request.userId,
+    metadata: { requestId, reason: adminNotes }
   });
 
-  if (!payment || payment.userId !== userId) {
-    throw createError("Paiement introuvable", 404, "PAYMENT_NOT_FOUND");
-  }
-
-  return payment;
+  return updatedRequest;
 }
 
-export async function getUserPendingPayment(userId: string) {
-  return prismaClient.subscriptionPayment.findFirst({
-    where: {
-      userId,
-      status: "PENDING_VERIFICATION",
-    },
-    orderBy: { createdAt: "desc" },
+/**
+ * Récupérer la demande pending d'un utilisateur
+ */
+export async function getUserPendingRequest(userId: string) {
+  return await prismaClient.subscriptionPayment.findFirst({
+    where: { userId, status: 'PENDING' },
+    orderBy: { createdAt: 'desc' }
   });
 }
 
-export async function listPendingPayments() {
-  return prismaClient.subscriptionPayment.findMany({
-    where: { status: "PENDING_VERIFICATION" },
-    orderBy: { createdAt: "asc" },
+/**
+ * Lister toutes les demandes pending (pour admin)
+ */
+export async function listPendingRequests() {
+  return await prismaClient.subscriptionPayment.findMany({
+    where: { status: 'PENDING' },
     include: {
       user: {
         select: {
@@ -235,14 +220,20 @@ export async function listPendingPayments() {
           username: true,
           phone: true,
           email: true,
-        },
-      },
+          isPremium: true
+        }
+      }
     },
+    orderBy: { createdAt: 'desc' }
   });
 }
 
-export interface ListPaymentsFilters {
-  status?: "PENDING_VERIFICATION" | "APPROVED" | "REJECTED";
+/**
+ * Lister toutes les demandes avec filtres (historique admin)
+ */
+export interface ListRequestsFilters {
+  status?: 'PENDING' | 'APPROVED' | 'REJECTED';
+  userId?: string;
   search?: string;
   minAmount?: number;
   maxAmount?: number;
@@ -252,9 +243,10 @@ export interface ListPaymentsFilters {
   limit?: number;
 }
 
-export async function listPayments(filters: ListPaymentsFilters) {
+export async function listAllRequests(filters: ListRequestsFilters) {
   const {
     status,
+    userId,
     search,
     minAmount,
     maxAmount,
@@ -271,6 +263,10 @@ export async function listPayments(filters: ListPaymentsFilters) {
     where.status = status;
   }
 
+  if (userId) {
+    where.userId = userId;
+  }
+
   if (minAmount !== undefined || maxAmount !== undefined) {
     where.amount = {};
     if (minAmount !== undefined) {
@@ -282,12 +278,12 @@ export async function listPayments(filters: ListPaymentsFilters) {
   }
 
   if (startDate || endDate) {
-    where.transferDate = {};
+    where.createdAt = {};
     if (startDate) {
-      where.transferDate.gte = new Date(startDate);
+      where.createdAt.gte = new Date(startDate);
     }
     if (endDate) {
-      where.transferDate.lte = new Date(endDate);
+      where.createdAt.lte = new Date(endDate);
     }
   }
 
@@ -314,8 +310,8 @@ export async function listPayments(filters: ListPaymentsFilters) {
     where: whereWithSearch,
   });
 
-  // Récupérer les paiements avec pagination
-  const payments = await prismaClient.subscriptionPayment.findMany({
+  // Récupérer les demandes avec pagination
+  const requests = await prismaClient.subscriptionPayment.findMany({
     where: whereWithSearch,
     include: {
       user: {
@@ -326,6 +322,12 @@ export async function listPayments(filters: ListPaymentsFilters) {
           email: true,
         },
       },
+      approvedBy: {
+        select: {
+          id: true,
+          username: true,
+        },
+      },
     },
     orderBy: { createdAt: "desc" },
     skip: (page - 1) * limit,
@@ -333,7 +335,7 @@ export async function listPayments(filters: ListPaymentsFilters) {
   });
 
   return {
-    payments,
+    requests,
     pagination: {
       page,
       limit,
@@ -343,169 +345,17 @@ export async function listPayments(filters: ListPaymentsFilters) {
   };
 }
 
-export async function approvePayment(
-  adminId: string,
-  paymentId: string,
-  customPlan?: SubscriptionPlan,
-  customMessage?: string
-) {
-  const payment = await prismaClient.subscriptionPayment.findUnique({
-    where: { id: paymentId },
+/**
+ * Récupérer le statut d'une demande (pour utilisateur)
+ */
+export async function getRequestStatus(userId: string, requestId: string) {
+  const request = await prismaClient.subscriptionPayment.findUnique({
+    where: { id: requestId },
   });
 
-  if (!payment) {
-    throw createError("Paiement introuvable", 404, "PAYMENT_NOT_FOUND");
+  if (!request || request.userId !== userId) {
+    throw createError("Demande introuvable", 404, "REQUEST_NOT_FOUND");
   }
 
-  if (payment.status !== "PENDING_VERIFICATION") {
-    throw createError("Paiement non éligible pour approbation", 400, "INVALID_PAYMENT_STATUS");
-  }
-
-  // Utiliser le plan personnalisé si fourni, sinon utiliser le plan du paiement
-  const finalPlan = customPlan || payment.plan;
-
-  const updatedPayment = await prismaClient.subscriptionPayment.update({
-    where: { id: paymentId },
-    data: {
-      status: "APPROVED",
-      approvedAt: new Date(),
-      approvedById: adminId,
-      rejectionReason: null,
-      rejectedAt: null,
-      rejectedById: null,
-    },
-  });
-
-  // Créer ou renouveler l'abonnement avec le plan final
-  const subscription = await renewOrCreateSubscription(
-    payment.userId,
-    finalPlan,
-    payment.isRenewal || false
-  );
-
-  // Utiliser le message personnalisé si fourni, sinon générer un message automatique
-  let notificationMessage: string;
-
-  if (customMessage) {
-    // Message personnalisé par l'admin
-    notificationMessage = customMessage;
-  } else {
-    // Message de notification adaptée selon le plan et le contexte
-    const planText = finalPlan === "MONTHLY" ? "mensuel" : "annuel";
-    const isRenewal = payment.isRenewal || false;
-
-    if (customPlan && customPlan !== payment.plan) {
-      notificationMessage = `Votre paiement a été approuvé. Votre abonnement premium ${planText} est activé ✅`;
-    } else if (isRenewal) {
-      notificationMessage = `Votre renouvellement a été approuvé. Votre abonnement premium ${planText} a été prolongé ✅`;
-    } else {
-      notificationMessage = "Votre paiement a été approuvé. Votre abonnement premium est activé ✅";
-    }
-  }
-
-  await sendNotificationToUser(
-    payment.userId,
-    "Paiement approuvé",
-    notificationMessage,
-    {
-      type: "PAYMENT_APPROVED",
-      paymentId: updatedPayment.id,
-      plan: finalPlan,
-    }
-  );
-
-  return { payment: updatedPayment, subscription };
-}
-
-export async function rejectPayment(adminId: string, paymentId: string, reason: string) {
-  const payment = await prismaClient.subscriptionPayment.findUnique({
-    where: { id: paymentId },
-  });
-
-  if (!payment) {
-    throw createError("Paiement introuvable", 404, "PAYMENT_NOT_FOUND");
-  }
-
-  if (payment.status !== "PENDING_VERIFICATION") {
-    throw createError("Paiement non éligible pour rejet", 400, "INVALID_PAYMENT_STATUS");
-  }
-
-  const updatedPayment = await prismaClient.subscriptionPayment.update({
-    where: { id: paymentId },
-    data: {
-      status: "REJECTED",
-      rejectedAt: new Date(),
-      rejectedById: adminId,
-      rejectionReason: reason,
-    },
-  });
-
-  await sendNotificationToUser(
-    payment.userId,
-    "Paiement refusé",
-    `Votre paiement a été refusé : ${reason}`,
-    {
-      type: "PAYMENT_REJECTED",
-      paymentId: updatedPayment.id,
-      plan: payment.plan,
-      reason,
-    }
-  );
-
-  return updatedPayment;
-}
-
-async function notifyAdminsPaymentPending(
-  paymentId: string,
-  amount: unknown,
-  plan: SubscriptionPlan,
-  userId: string
-) {
-  const admins = await prisma.user.findMany({
-    where: { role: "ADMIN" },
-    select: { id: true },
-  });
-
-  if (admins.length === 0) {
-    return;
-  }
-
-  const amountValue = typeof amount === "object" && amount !== null && "toString" in amount
-    ? (amount as { toString: () => string }).toString()
-    : String(amount);
-
-  await Promise.all(
-    admins.map(async (admin) => {
-      const result = await sendNotificationToUser(
-        admin.id,
-        "Paiement à valider",
-        "Un paiement Wave est en attente de validation.",
-        {
-          type: "PAYMENT_PENDING_VERIFICATION",
-          paymentId,
-          userId,
-          plan,
-          amount: amountValue,
-        }
-      );
-
-      if (!result.sent) {
-        await prisma.notification.create({
-          data: {
-            userId: admin.id,
-            type: "PAYMENT_PENDING_VERIFICATION" as any,
-            title: "Paiement à valider",
-            body: "Un paiement Wave est en attente de validation.",
-            data: {
-              paymentId,
-              userId,
-              plan,
-              amount: amountValue,
-            } as any,
-            read: false,
-          },
-        });
-      }
-    })
-  );
+  return request;
 }

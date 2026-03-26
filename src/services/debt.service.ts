@@ -15,6 +15,39 @@ import { getUserById } from "./auth.service.js";
 import type { DebtType } from "../generated/prisma/client.js";
 
 /**
+ * Vérifie la limite de dettes pour les utilisateurs gratuits
+ * Premium = illimité, Gratuit = 1 dette active par type
+ *
+ * @param userId - ID de l'utilisateur
+ * @param type - Type de dette (OWED_TO_ME ou I_OWE)
+ */
+async function checkDebtLimit(userId: string, type: DebtType): Promise<void> {
+  const user = await getUserById(userId);
+
+  // Premium = illimité
+  if (user.isPremium) return;
+
+  // Compter dettes actives (non payées) de ce type
+  const activeCount = await prisma.debt.count({
+    where: {
+      userId,
+      type,
+      isPaid: false
+    }
+  });
+
+  // Limite: 1 dette active par type pour utilisateurs gratuits
+  if (activeCount >= 1) {
+    const typeName = type === "I_OWE" ? "je dois" : "on me doit";
+    throw createError(
+      `Limite atteinte: vous ne pouvez avoir qu'une dette active du type "${typeName}". Réglez une dette existante pour en créer une nouvelle ou passez à Premium pour un accès illimité.`,
+      403,
+      "DEBT_LIMIT_REACHED"
+    );
+  }
+}
+
+/**
  * Crée une nouvelle dette
  * 
  * @param userId - ID de l'utilisateur
@@ -33,16 +66,8 @@ export async function createDebt(
   notes?: string,
   repaymentDate?: string
 ) {
-  // Vérifier que l'utilisateur existe et est premium
-  const user = await getUserById(userId);
-  
-  if (!user.isPremium) {
-    throw createError(
-      "Fonctionnalité premium - Abonnement requis",
-      403,
-      "PREMIUM_REQUIRED"
-    );
-  }
+  // Vérifier la limite de dettes pour les utilisateurs gratuits
+  await checkDebtLimit(userId, type);
 
   // Valider les données
   if (!contactName || contactName.trim().length === 0) {
@@ -89,17 +114,6 @@ export async function getDebts(
   type?: DebtType,
   isPaid?: boolean
 ) {
-  // Vérifier que l'utilisateur existe et est premium
-  const user = await getUserById(userId);
-  
-  if (!user.isPremium) {
-    throw createError(
-      "Fonctionnalité premium - Abonnement requis",
-      403,
-      "PREMIUM_REQUIRED"
-    );
-  }
-
   // Construire la condition where
   const where: any = { userId };
 
@@ -130,17 +144,6 @@ export async function getDebts(
  * @returns La dette trouvée
  */
 export async function getDebtById(debtId: string, userId: string) {
-  // Vérifier que l'utilisateur existe et est premium
-  const user = await getUserById(userId);
-  
-  if (!user.isPremium) {
-    throw createError(
-      "Fonctionnalité premium - Abonnement requis",
-      403,
-      "PREMIUM_REQUIRED"
-    );
-  }
-
   const debt = await prisma.debt.findFirst({
     where: {
       id: debtId,
@@ -255,17 +258,6 @@ export async function deleteDebt(debtId: string, userId: string) {
  * @returns Statistiques des dettes
  */
 export async function getDebtStats(userId: string) {
-  // Vérifier que l'utilisateur existe et est premium
-  const user = await getUserById(userId);
-  
-  if (!user.isPremium) {
-    throw createError(
-      "Fonctionnalité premium - Abonnement requis",
-      403,
-      "PREMIUM_REQUIRED"
-    );
-  }
-
   // Récupérer toutes les dettes
   const debts = await prisma.debt.findMany({
     where: { userId },

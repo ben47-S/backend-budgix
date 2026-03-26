@@ -1,6 +1,11 @@
 /**
- * Routes pour la gestion des abonnements externes (fonctionnalité premium)
- * 
+ * Routes pour la gestion des abonnements externes (fonctionnalité avec limitations pour utilisateurs gratuits)
+ *
+ * NOTE IMPORTANTE: Les vérifications premium se font au niveau SERVICE (external-subscription.service.ts)
+ * via la fonction checkExternalSubscriptionLimit() qui permet:
+ * - Utilisateurs gratuits: 1 abonnement externe actif maximum
+ * - Utilisateurs premium: Abonnements illimités
+ *
  * Routes disponibles :
  * - GET /external-subscriptions - Liste tous les abonnements avec filtres
  * - GET /external-subscriptions/:id - Détails d'un abonnement
@@ -20,7 +25,7 @@ import {
   deleteExternalSubscriptionController,
   renewExternalSubscriptionController,
 } from "../controllers/index.js";
-import { requireAuth, requirePremium } from "../middleware/auth.js";
+import { requireAuth } from "../middleware/auth.js";
 import { generalRateLimiter, createResourceRateLimiter } from "../middleware/rateLimit.js";
 import { validate } from "../middleware/validation.js";
 import {
@@ -71,7 +76,6 @@ const router: Router = ExpressRouter();
 router.get(
   "/",
   requireAuth,
-  requirePremium,
   generalRateLimiter,
   validate(getExternalSubscriptionsSchema),
   getExternalSubscriptionsController
@@ -106,7 +110,6 @@ router.get(
 router.get(
   "/:id",
   requireAuth,
-  requirePremium,
   generalRateLimiter,
   validate(externalSubscriptionIdSchema),
   getExternalSubscriptionController
@@ -169,7 +172,6 @@ router.get(
 router.post(
   "/",
   requireAuth,
-  requirePremium,
   createResourceRateLimiter,
   validate(createExternalSubscriptionSchema),
   createExternalSubscriptionController
@@ -230,7 +232,6 @@ router.post(
 router.put(
   "/:id",
   requireAuth,
-  requirePremium,
   createResourceRateLimiter,
   validate({
     params: externalSubscriptionIdSchema.params,
@@ -268,7 +269,6 @@ router.put(
 router.delete(
   "/:id",
   requireAuth,
-  requirePremium,
   createResourceRateLimiter,
   validate(externalSubscriptionIdSchema),
   deleteExternalSubscriptionController
@@ -313,7 +313,6 @@ router.delete(
 router.post(
   "/:id/renew",
   requireAuth,
-  requirePremium,
   createResourceRateLimiter,
   validate({
     params: externalSubscriptionIdSchema.params,

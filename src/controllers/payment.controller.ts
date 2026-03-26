@@ -1,29 +1,26 @@
 /**
- * Contrôleurs pour les paiements Wave d'abonnement premium
+ * Contrôleurs pour les demandes d'abonnement premium
+ * Système simplifié sans Wave
  */
 
 import type { Request, Response, NextFunction } from "express";
 import { createError } from "../middleware/errorHandler.js";
 import {
-  initiatePayment,
-  confirmPayment,
-  getPaymentStatus,
-  getUserPendingPayment,
-  listPendingPayments,
-  listPayments,
-  approvePayment,
-  rejectPayment,
-  buildWavePaymentUrl,
+  createPremiumRequest,
+  approvePremiumRequest,
+  rejectPremiumRequest,
+  getUserPendingRequest,
+  listPendingRequests,
+  listAllRequests,
+  getRequestStatus,
 } from "../services/payment.service.js";
 import { formatDatesToISO } from "../utils/date-formatter.js";
-import type {
-  InitiatePaymentRequest,
-  ConfirmPaymentRequest,
-  RejectPaymentRequest,
-} from "../types/index.js";
 
-export async function initiatePaymentController(
-  req: Request<{}, {}, InitiatePaymentRequest>,
+/**
+ * USER: Créer une demande premium
+ */
+export async function createRequestController(
+  req: Request<{}, {}, { planType: "MONTHLY" | "ANNUAL" }>,
   res: Response,
   next: NextFunction
 ) {
@@ -33,79 +30,24 @@ export async function initiatePaymentController(
       throw createError("Authentification requise", 401, "UNAUTHORIZED");
     }
 
-    const { plan, isRenewal } = req.body;
+    const { planType } = req.body;
 
-    const payment = await initiatePayment(userId, plan, isRenewal);
-    const waveUrl = buildWavePaymentUrl(Number(payment.amount));
+    const request = await createPremiumRequest(userId, planType);
 
-res.status(201).json(formatDatesToISO({
+    res.status(201).json(formatDatesToISO({
       success: true,
-      message: "Paiement initié",
-      data: {
-        payment,
-        waveUrl,
-      },
+      message: "Demande envoyée avec succès",
+      data: { request },
     }));
   } catch (error) {
     next(error);
   }
 }
 
-export async function confirmPaymentController(
-  req: Request<{}, {}, ConfirmPaymentRequest>,
-  res: Response,
-  next: NextFunction
-) {
-  try {
-    const userId = req.userId;
-    if (!userId) {
-      throw createError("Authentification requise", 401, "UNAUTHORIZED");
-    }
-
-    const { paymentId, waveTransactionId, transferDate } = req.body;
-
-    const payment = await confirmPayment(
-      userId,
-      paymentId,
-      waveTransactionId,
-      transferDate
-    );
-
-res.json(formatDatesToISO({
-      success: true,
-      message: "Paiement soumis pour vérification",
-      data: { payment },
-    }));
-  } catch (error) {
-    next(error);
-  }
-}
-
-export async function getPaymentStatusController(
-  req: Request<{ paymentId: string }>,
-  res: Response,
-  next: NextFunction
-) {
-  try {
-    const userId = req.userId;
-    if (!userId) {
-      throw createError("Authentification requise", 401, "UNAUTHORIZED");
-    }
-
-    const { paymentId } = req.params;
-
-    const payment = await getPaymentStatus(userId, paymentId);
-
-res.json(formatDatesToISO({
-      success: true,
-      data: { payment },
-    }));
-  } catch (error) {
-    next(error);
-  }
-}
-
-export async function getUserPendingPaymentController(
+/**
+ * USER: Voir sa demande en attente
+ */
+export async function getUserPendingRequestController(
   req: Request,
   res: Response,
   next: NextFunction
@@ -116,41 +58,75 @@ export async function getUserPendingPaymentController(
       throw createError("Authentification requise", 401, "UNAUTHORIZED");
     }
 
-    const payment = await getUserPendingPayment(userId);
+    const request = await getUserPendingRequest(userId);
 
-res.json(formatDatesToISO({
+    res.json(formatDatesToISO({
       success: true,
-      data: { payment: payment || null },
+      data: { request: request || null },
     }));
   } catch (error) {
     next(error);
   }
 }
 
-export async function listPendingPaymentsController(
+/**
+ * USER: Récupérer le statut d'une demande
+ */
+export async function getRequestStatusController(
+  req: Request<{ requestId: string }>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const userId = req.userId;
+    if (!userId) {
+      throw createError("Authentification requise", 401, "UNAUTHORIZED");
+    }
+
+    const { requestId } = req.params;
+
+    const request = await getRequestStatus(userId, requestId);
+
+    res.json(formatDatesToISO({
+      success: true,
+      data: { request },
+    }));
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * ADMIN: Lister demandes en attente
+ */
+export async function listPendingRequestsController(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   try {
-    const payments = await listPendingPayments();
+    const requests = await listPendingRequests();
 
-res.json(formatDatesToISO({
+    res.json(formatDatesToISO({
       success: true,
-      data: { payments },
+      data: { requests },
     }));
   } catch (error) {
     next(error);
   }
 }
 
-export async function listPaymentsController(
+/**
+ * ADMIN: Lister toutes les demandes avec filtres (historique)
+ */
+export async function listAllRequestsController(
   req: Request<
     {},
     {},
     {},
     {
       status?: string;
+      userId?: string;
       search?: string;
       minAmount?: string;
       maxAmount?: string;
@@ -164,12 +140,15 @@ export async function listPaymentsController(
   next: NextFunction
 ) {
   try {
-    const { status, search, minAmount, maxAmount, startDate, endDate, page, limit } = req.query;
+    const { status, userId, search, minAmount, maxAmount, startDate, endDate, page, limit } = req.query;
 
     const filters: any = {};
 
     if (status) {
       filters.status = status;
+    }
+    if (userId) {
+      filters.userId = userId;
     }
     if (search) {
       filters.search = search;
@@ -193,9 +172,9 @@ export async function listPaymentsController(
       filters.limit = Number(limit);
     }
 
-    const result = await listPayments(filters);
+    const result = await listAllRequests(filters);
 
-res.json(formatDatesToISO({
+    res.json(formatDatesToISO({
       success: true,
       data: result,
     }));
@@ -204,8 +183,11 @@ res.json(formatDatesToISO({
   }
 }
 
-export async function approvePaymentController(
-  req: Request<{ paymentId: string }, {}, { plan?: "MONTHLY" | "ANNUAL"; message?: string }>,
+/**
+ * ADMIN: Approuver une demande
+ */
+export async function approveRequestController(
+  req: Request<{ requestId: string }, {}, { adminNotes?: string }>,
   res: Response,
   next: NextFunction
 ) {
@@ -215,23 +197,26 @@ export async function approvePaymentController(
       throw createError("Authentification requise", 401, "UNAUTHORIZED");
     }
 
-    const { paymentId } = req.params;
-    const { plan, message } = req.body || {};
+    const { requestId } = req.params;
+    const { adminNotes } = req.body || {};
 
-    const result = await approvePayment(adminId, paymentId, plan, message);
+    const result = await approvePremiumRequest(requestId, adminId, adminNotes);
 
-res.json(formatDatesToISO({
+    res.json(formatDatesToISO({
       success: true,
-      message: "Paiement approuvé",
-      data: result,
+      message: "Demande approuvée avec succès",
+      data: { request: result },
     }));
   } catch (error) {
     next(error);
   }
 }
 
-export async function rejectPaymentController(
-  req: Request<{ paymentId: string }, {}, RejectPaymentRequest>,
+/**
+ * ADMIN: Rejeter une demande
+ */
+export async function rejectRequestController(
+  req: Request<{ requestId: string }, {}, { adminNotes?: string }>,
   res: Response,
   next: NextFunction
 ) {
@@ -241,15 +226,15 @@ export async function rejectPaymentController(
       throw createError("Authentification requise", 401, "UNAUTHORIZED");
     }
 
-    const { paymentId } = req.params;
-    const { reason } = req.body;
+    const { requestId } = req.params;
+    const { adminNotes } = req.body;
 
-    const payment = await rejectPayment(adminId, paymentId, reason);
+    const request = await rejectPremiumRequest(requestId, adminId, adminNotes);
 
-res.json(formatDatesToISO({
+    res.json(formatDatesToISO({
       success: true,
-      message: "Paiement refusé",
-      data: { payment },
+      message: "Demande rejetée",
+      data: { request },
     }));
   } catch (error) {
     next(error);

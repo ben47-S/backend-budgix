@@ -12,6 +12,7 @@ import logger from "../lib/logger.js";
 export interface AppError extends Error {
   statusCode?: number;
   code?: string;
+  metadata?: Record<string, any>;
 }
 
 /**
@@ -47,6 +48,8 @@ export function errorHandler(
     error: {
       message,
       code: err.code,
+      // Inclure les métadonnées si disponibles
+      ...(err.metadata && { metadata: err.metadata }),
       // Inclure les erreurs de validation détaillées si disponibles
       ...((err as any).validationErrors && {
         validationErrors: (err as any).validationErrors,
@@ -75,12 +78,16 @@ export function errorHandler(
 export function createError(
   message: string,
   statusCode: number = 500,
-  code?: string
+  code?: string,
+  metadata?: Record<string, any>
 ): AppError {
   const error: AppError = new Error(message);
   error.statusCode = statusCode;
   if (code !== undefined) {
     error.code = code;
+  }
+  if (metadata !== undefined) {
+    error.metadata = metadata;
   }
   return error;
 }

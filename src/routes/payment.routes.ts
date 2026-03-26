@@ -1,36 +1,35 @@
 /**
- * Routes pour les paiements Wave d'abonnement premium
- * 
+ * Routes pour les demandes d'abonnement premium (utilisateur)
+ * Système simplifié sans Wave
+ *
  * Routes disponibles :
- * - POST /payments/initiate
- * - POST /payments/confirm
- * - GET /payments/status/:paymentId
+ * - POST /payments/requests - Créer une demande premium
+ * - GET /payments/requests/pending - Voir sa demande en attente
+ * - GET /payments/requests/:requestId/status - Statut d'une demande
  */
 
 import type { Router } from "express";
 import { Router as ExpressRouter } from "express";
 import {
-  initiatePaymentController,
-  confirmPaymentController,
-  getPaymentStatusController,
-  getUserPendingPaymentController,
-} from "../controllers/index.js";
+  createRequestController,
+  getUserPendingRequestController,
+  getRequestStatusController,
+} from "../controllers/payment.controller.js";
 import { requireAuth } from "../middleware/auth.js";
 import { validate } from "../middleware/validation.js";
 import { createResourceRateLimiter, generalRateLimiter } from "../middleware/rateLimit.js";
 import {
-  initiatePaymentSchema,
-  confirmPaymentSchema,
-  paymentStatusSchema,
+  createRequestSchema,
+  requestStatusSchema,
 } from "../validations/payment.validation.js";
 
 const router: Router = ExpressRouter();
 
 /**
  * @swagger
- * /payments/initiate:
+ * /payments/requests:
  *   post:
- *     summary: Initier un paiement Wave
+ *     summary: Créer une demande d'abonnement premium
  *     tags: [Payments]
  *     security:
  *       - bearerAuth: []
@@ -41,107 +40,71 @@ const router: Router = ExpressRouter();
  *           schema:
  *             type: object
  *             required:
- *               - plan
+ *               - planType
  *             properties:
- *               plan:
+ *               planType:
  *                 type: string
  *                 enum: [MONTHLY, ANNUAL]
+ *                 description: Type d'abonnement (Mensuel ou Annuel)
  *     responses:
  *       201:
- *         description: Paiement initié
+ *         description: Demande créée avec succès
+ *       400:
+ *         description: Demande déjà en attente
  */
 router.post(
-  "/initiate",
+  "/requests",
   requireAuth,
   createResourceRateLimiter,
-  validate(initiatePaymentSchema),
-  initiatePaymentController
+  validate(createRequestSchema),
+  createRequestController
 );
 
 /**
  * @swagger
- * /payments/confirm:
- *   post:
- *     summary: Confirmer un paiement Wave
+ * /payments/requests/pending:
+ *   get:
+ *     summary: Récupère la demande en attente de l'utilisateur
  *     tags: [Payments]
  *     security:
  *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - paymentId
- *               - waveTransactionId
- *               - senderName
- *               - transferDate
- *             properties:
- *               paymentId:
- *                 type: string
- *               waveTransactionId:
- *                 type: string
- *               senderName:
- *                 type: string
- *               transferDate:
- *                 type: string
- *                 format: date-time
  *     responses:
  *       200:
- *         description: Paiement soumis pour vérification
+ *         description: Demande en attente (null si aucune)
  */
-router.post(
-  "/confirm",
+router.get(
+  "/requests/pending",
   requireAuth,
-  createResourceRateLimiter,
-  validate(confirmPaymentSchema),
-  confirmPaymentController
+  generalRateLimiter,
+  getUserPendingRequestController
 );
 
 /**
  * @swagger
- * /payments/status/{paymentId}:
+ * /payments/requests/{requestId}/status:
  *   get:
- *     summary: Statut d'un paiement
+ *     summary: Statut d'une demande
  *     tags: [Payments]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: paymentId
+ *         name: requestId
  *         required: true
  *         schema:
  *           type: string
  *     responses:
  *       200:
- *         description: Statut du paiement
+ *         description: Statut de la demande
+ *       404:
+ *         description: Demande introuvable
  */
 router.get(
-  "/status/:paymentId",
+  "/requests/:requestId/status",
   requireAuth,
   generalRateLimiter,
-  validate(paymentStatusSchema),
-  getPaymentStatusController
-);
-
-/**
- * @swagger
- * /payments/pending:
- *   get:
- *     summary: Récupère le paiement en attente de l'utilisateur
- *     tags: [Payments]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: Paiement en attente (null si aucun)
- */
-router.get(
-  "/pending",
-  requireAuth,
-  generalRateLimiter,
-  getUserPendingPaymentController
+  validate(requestStatusSchema),
+  getRequestStatusController
 );
 
 export default router;

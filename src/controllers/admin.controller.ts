@@ -421,3 +421,43 @@ export async function getAllExternalSubscriptionsController(
   }
 }
 
+/**
+ * Récupère tous les abonnements premium avec pagination et filtres
+ *
+ * GET /api/admin/subscriptions
+ * Query params: page, limit, search, plan, isActive
+ */
+export async function getAllSubscriptionsController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const filters: any = {
+      page: req.query.page ? parseInt(req.query.page as string, 10) : 1,
+      limit: req.query.limit ? parseInt(req.query.limit as string, 10) : 20,
+    };
+
+    if (req.query.search) {
+      filters.search = req.query.search as string;
+    }
+    if (req.query.plan) {
+      filters.plan = req.query.plan as "MONTHLY" | "ANNUAL";
+    }
+    if (req.query.isActive !== undefined) {
+      filters.isActive = req.query.isActive === "true";
+    }
+
+    const { getAllSubscriptions } = await import("../services/subscription.service.js");
+    const result = await getAllSubscriptions(filters);
+
+    res.json(formatDatesToISO({
+      success: true,
+      message: "Abonnements récupérés avec succès",
+      data: result,
+    }));
+  } catch (error) {
+    next(error);
+  }
+}
+

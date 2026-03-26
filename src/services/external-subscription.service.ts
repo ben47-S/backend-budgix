@@ -15,6 +15,36 @@ import { getUserById } from "./auth.service.js";
 import type { BillingCycle } from "../generated/prisma/client.js";
 
 /**
+ * Vérifie la limite d'abonnements externes pour les utilisateurs gratuits
+ * Premium = illimité, Gratuit = 1 abonnement actif
+ *
+ * @param userId - ID de l'utilisateur
+ */
+async function checkExternalSubscriptionLimit(userId: string): Promise<void> {
+  const user = await getUserById(userId);
+
+  // Premium = illimité
+  if (user.isPremium) return;
+
+  // Compter abonnements actifs
+  const activeCount = await prisma.externalSubscription.count({
+    where: {
+      userId,
+      isActive: true
+    }
+  });
+
+  // Limite: 1 abonnement actif pour utilisateurs gratuits
+  if (activeCount >= 1) {
+    throw createError(
+      "Limite atteinte: vous ne pouvez avoir qu'un abonnement externe actif. Supprimez-en un pour en créer un nouveau ou passez à Premium pour un accès illimité.",
+      403,
+      "SUBSCRIPTION_LIMIT_REACHED"
+    );
+  }
+}
+
+/**
  * Calcule la date du prochain renouvellement selon le cycle de facturation
  * 
  * @param startDate - Date de début
@@ -75,16 +105,8 @@ export async function createExternalSubscription(
     notes?: string | null;
   }
 ) {
-  // Vérifier que l'utilisateur existe et est premium
-  const user = await getUserById(userId);
-  
-  if (!user.isPremium) {
-    throw createError(
-      "Fonctionnalité premium - Abonnement requis",
-      403,
-      "PREMIUM_REQUIRED"
-    );
-  }
+  // Vérifier la limite d'abonnements pour les utilisateurs gratuits
+  await checkExternalSubscriptionLimit(userId);
 
   const { name, amount, startDate, billingCycle, customDays, categoryId, notes } = data;
 
@@ -177,17 +199,6 @@ export async function updateExternalSubscription(
     isActive?: boolean;
   }
 ) {
-  // Vérifier que l'utilisateur existe et est premium
-  const user = await getUserById(userId);
-  
-  if (!user.isPremium) {
-    throw createError(
-      "Fonctionnalité premium - Abonnement requis",
-      403,
-      "PREMIUM_REQUIRED"
-    );
-  }
-
   // Vérifier que l'abonnement existe et appartient à l'utilisateur
   const existing = await prisma.externalSubscription.findFirst({
     where: {

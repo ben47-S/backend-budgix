@@ -381,3 +381,89 @@ export async function getSubscriptionProgress(userId: string) {
   };
 }
 
+/**
+ * Récupère tous les abonnements (pour admin)
+ *
+ * @param filters - Filtres optionnels
+ * @returns Liste des abonnements avec pagination
+ */
+export interface GetAllSubscriptionsFilters {
+  search?: string;
+  plan?: SubscriptionPlan;
+  isActive?: boolean;
+  page?: number;
+  limit?: number;
+}
+
+export async function getAllSubscriptions(filters: GetAllSubscriptionsFilters = {}) {
+  const {
+    search,
+    plan,
+    isActive,
+    page = 1,
+    limit = 20,
+  } = filters;
+
+  const where: any = {};
+
+  // Filtrer par plan
+  if (plan) {
+    where.plan = plan;
+  }
+
+  // Filtrer par statut actif/expiré
+  if (isActive !== undefined) {
+    if (isActive) {
+      where.endDate = { gt: new Date() };
+    } else {
+      where.OR = [
+        { endDate: { lte: new Date() } },
+        { endDate: null },
+      ];
+    }
+  }
+
+  // Recherche par username, email ou phone
+  if (search) {
+    where.user = {
+      OR: [
+        { username: { contains: search, mode: "insensitive" } },
+        { email: { contains: search, mode: "insensitive" } },
+        { phone: { contains: search, mode: "insensitive" } },
+      ],
+    };
+  }
+
+  // Compter le total
+  const total = await prisma.subscription.count({ where });
+
+  // Récupérer les abonnements avec pagination
+  const subscriptions = await prisma.subscription.findMany({
+    where,
+    include: {
+      user: {
+        select: {
+          id: true,
+          username: true,
+          email: true,
+          phone: true,
+          isPremium: true,
+        },
+      },
+    },
+    orderBy: { startDate: "desc" },
+    skip: (page - 1) * limit,
+    take: limit,
+  });
+
+  return {
+    subscriptions,
+    pagination: {
+      page,
+      limit,
+      total,
+      pages: Math.ceil(total / limit),
+    },
+  };
+}
+

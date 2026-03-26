@@ -15,43 +15,96 @@ import logger from "../lib/logger.js";
 import type { BudgetType, BudgetStatus } from "../generated/prisma/client.js";
 
 /**
+ * Vérifie la limite de budgets pour les utilisateurs gratuits
+ *
+ * @param userId - ID de l'utilisateur
+ * @param budgetType - Type de budget (MONTHLY ou CUSTOM)
+ * @param existingBudgetId - ID du budget existant (si mise à jour), pour l'exclure du comptage
+ * @throws Erreur si la limite est atteinte
+ */
+async function checkBudgetLimit(userId: string, budgetType: BudgetType, existingBudgetId?: string): Promise<void> {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { isPremium: true }
+  });
+
+  if (!user) throw createError("Utilisateur non trouvé", 404, "USER_NOT_FOUND");
+  if (user.isPremium) return; // Premium = illimité
+
+  // Compter budgets actifs de ce type (période non expirée)
+  const now = new Date();
+  const whereClause: any = {
+    userId,
+    type: budgetType,
+    periodEnd: { gte: now }
+  };
+
+  // Exclure le budget existant si on est en train de le mettre à jour
+  if (existingBudgetId) {
+    whereClause.id = { not: existingBudgetId };
+  }
+
+  const activeCount = await prisma.budget.count({
+    where: whereClause
+  });
+
+  if (activeCount >= 1) {
+    const typeName = budgetType === "MONTHLY" ? "mensuel" : "personnalisé";
+    throw createError(
+      `Limite atteinte: 1 budget ${typeName} actif maximum.`,
+      403,
+      "BUDGET_LIMIT_REACHED",
+      { type: budgetType, limit: 1, current: activeCount }
+    );
+  }
+}
+
+/**
  * Calcule le statut d'un budget en fonction de la période et des dépenses
- * 
+ *
  * @param periodStart - Date de début de la période
  * @param periodEnd - Date de fin de la période
  * @param spentAmount - Montant dépensé
  * @param limitAmount - Montant limite du budget
- * @returns Le statut du budget (DÉPASSÉ, EN_COURS, À_VENIR)
+ * @returns Le statut du budget et le pourcentage de temps écoulé
  */
 export function calculateBudgetStatus(
   periodStart: Date,
   periodEnd: Date,
   spentAmount: number,
   limitAmount: number
-): BudgetStatus {
+): { status: BudgetStatus; timeProgress: number } {
   const now = new Date();
   const nowDateOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const startDateOnly = new Date(periodStart.getFullYear(), periodStart.getMonth(), periodStart.getDate());
   const endDateOnly = new Date(periodEnd.getFullYear(), periodEnd.getMonth(), periodEnd.getDate());
   
+  // Calculer le pourcentage de temps écoulé
+  const totalDuration = endDateOnly.getTime() - startDateOnly.getTime();
+  const elapsed = nowDateOnly.getTime() - startDateOnly.getTime();
+  let timeProgress = 0;
+  if (totalDuration > 0) {
+    timeProgress = Math.min(100, Math.max(0, (elapsed / totalDuration) * 100));
+  }
+  
   // Période à venir
   if (nowDateOnly < startDateOnly) {
-    return "A_VENIR";
+    return { status: "A_VENIR", timeProgress: 0 };
   }
   
   // Période passée
   if (nowDateOnly > endDateOnly) {
-    return "DEPASSE";
+    return { status: "DEPASSE", timeProgress: 100 };
   }
   
   // Période en cours
   // Si dépenses > limite, alors dépassé
   if (spentAmount > limitAmount) {
-    return "DEPASSE";
+    return { status: "DEPASSE", timeProgress };
   }
   
   // Sinon, en cours
-  return "EN_COURS";
+  return { status: "EN_COURS", timeProgress };
 }
 
 /**
@@ -197,7 +250,7 @@ export async function getAllBudgets(
       const limitAmount = Number(budget.amount);
       const remainingAmount = limitAmount - spentAmount;
       const progress = limitAmount > 0 ? Math.min(100, (spentAmount / limitAmount) * 100) : 0;
-      const status = calculateBudgetStatus(
+      const statusResult = calculateBudgetStatus(
         budget.periodStart,
         budget.periodEnd,
         spentAmount,
@@ -213,9 +266,9 @@ export async function getAllBudgets(
         spentAmount,
         remainingAmount,
         progressPercent: progress,
+        timeProgressPercent: statusResult.timeProgress,
         isOverLimit: spentAmount > limitAmount,
-        status,
-        periodStart: budget.periodStart,
+        status: statusResult.status,
         periodEnd: budget.periodEnd,
         ...(budget.type === "MONTHLY" && {
           year: budget.periodStart.getFullYear(),
@@ -324,7 +377,7 @@ export async function getMonthlyBudgets(
       const limitAmount = Number(budget.amount);
       const remainingAmount = limitAmount - spentAmount;
       const progress = limitAmount > 0 ? Math.min(100, (spentAmount / limitAmount) * 100) : 0;
-      const status = calculateBudgetStatus(
+      const statusResult = calculateBudgetStatus(
         budget.periodStart,
         budget.periodEnd,
         spentAmount,
@@ -341,8 +394,8 @@ export async function getMonthlyBudgets(
         remainingAmount,
         progressPercent: progress,
         isOverLimit: spentAmount > limitAmount,
-        status,
-        periodStart: budget.periodStart,
+        status: statusResult.status,
+        timeProgressPercent: statusResult.timeProgress,
         periodEnd: budget.periodEnd,
         year: budget.periodStart.getFullYear(),
         month: budget.periodStart.getMonth(),
@@ -379,24 +432,6 @@ export async function upsertBudgetForPeriod(options: {
     );
   }
 
-  // Vérifier que l'utilisateur existe
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { id: true, isPremium: true },
-  });
-
-  if (!user) {
-    throw createError("Utilisateur non trouvé", 404, "USER_NOT_FOUND");
-  }
-
-  if (!user.isPremium) {
-    throw createError(
-      "Fonctionnalité premium - Abonnement requis",
-      403,
-      "PREMIUM_REQUIRED"
-    );
-  }
-
   // Vérifier la catégorie si fournie
   if (categoryId) {
     const category = await prisma.category.findFirst({
@@ -421,6 +456,10 @@ export async function upsertBudgetForPeriod(options: {
       type,
     },
   });
+
+  // Vérifier la limite de budgets pour utilisateurs gratuits
+  // Si on met à jour un budget existant, on exclut ce budget du comptage
+  await checkBudgetLimit(userId, type, existing?.id);
 
   let budget;
   let isUpdate = false;
@@ -517,7 +556,7 @@ export async function upsertBudgetForPeriod(options: {
   const limitAmount = Number(budget.amount);
   const remainingAmount = limitAmount - spentAmount;
   const progress = limitAmount > 0 ? Math.min(100, (spentAmount / limitAmount) * 100) : 0;
-  const status = calculateBudgetStatus(
+  const statusResult = calculateBudgetStatus(
     budget.periodStart,
     budget.periodEnd,
     spentAmount,
@@ -531,8 +570,9 @@ export async function upsertBudgetForPeriod(options: {
     spentAmount,
     remainingAmount,
     progressPercent: progress,
+    timeProgressPercent: statusResult.timeProgress,
     isOverLimit: spentAmount > limitAmount,
-    status,
+    status: statusResult.status,
   };
 }
 
@@ -603,8 +643,11 @@ export async function getBudgetsOverviewForPeriod(options: {
         // Budget par catégorie : compter toutes les transactions de cette catégorie
         where.categoryId = budget.categoryId;
       } else {
-        // Budget global : compter uniquement les dépenses (montants négatifs)
-        where.amount = { lt: 0 };
+        // Budget global : compter uniquement les dépenses (catégories de type EXPENSE)
+        // Note: Les montants sont toujours positifs, c'est le type de catégorie qui détermine si c'est une dépense
+        where.category = {
+          type: "EXPENSE",
+        };
       }
 
       // Somme des montants des transactions
@@ -613,13 +656,13 @@ export async function getBudgetsOverviewForPeriod(options: {
         where,
       });
 
-      // Les dépenses sont négatives, on prend la valeur absolue
-      const spentAmount = Math.abs(Number(aggregation._sum.amount ?? 0));
+      // Les montants sont toujours positifs
+      const spentAmount = Number(aggregation._sum.amount ?? 0);
       const limitAmount = Number(budget.amount);
       const remainingAmount = limitAmount - spentAmount;
       const progress =
         limitAmount > 0 ? Math.min(100, (spentAmount / limitAmount) * 100) : 0;
-      const status = calculateBudgetStatus(
+      const statusResult = calculateBudgetStatus(
         budget.periodStart,
         budget.periodEnd,
         spentAmount,
@@ -636,7 +679,8 @@ export async function getBudgetsOverviewForPeriod(options: {
         remainingAmount,
         progressPercent: progress,
         isOverLimit: spentAmount > limitAmount,
-        status,
+        status: statusResult.status,
+        timeProgressPercent: statusResult.timeProgress,
         periodStart: budget.periodStart,
         periodEnd: budget.periodEnd,
       };
@@ -647,29 +691,21 @@ export async function getBudgetsOverviewForPeriod(options: {
 }
 
 /**
- * Supprime un budget pour un utilisateur donné.
- *
- * Vérifie que :
- * - L'utilisateur existe et est premium
+ * Supprime un budget par son ID
+ * 
+ * Préconditions:
+ * - L'utilisateur existe
  * - Le budget existe et appartient à l'utilisateur
  */
 export async function deleteBudgetById(userId: string, budgetId: string) {
-  // Vérifier que l'utilisateur existe et est premium
+  // Vérifier que l'utilisateur existe
   const user = await prisma.user.findUnique({
     where: { id: userId },
-    select: { id: true, isPremium: true },
+    select: { id: true },
   });
 
   if (!user) {
     throw createError("Utilisateur non trouvé", 404, "USER_NOT_FOUND");
-  }
-
-  if (!user.isPremium) {
-    throw createError(
-      "Fonctionnalité premium - Abonnement requis",
-      403,
-      "PREMIUM_REQUIRED"
-    );
   }
 
   // Vérifier que le budget existe et appartient à l'utilisateur

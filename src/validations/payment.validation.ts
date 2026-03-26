@@ -1,55 +1,73 @@
 /**
- * Schémas de validation Zod pour les paiements Wave
+ * Schémas de validation Zod pour les demandes d'abonnement premium
+ * Système simplifié sans Wave
  */
 
 import { z } from "zod";
-import { flexibleDateSchema } from "../utils/date-validation.js";
 
-export const initiatePaymentSchema = {
+/**
+ * Validation pour la création d'une demande premium
+ */
+export const createRequestSchema = {
   body: z.object({
-    plan: z.enum(["MONTHLY", "ANNUAL"], {
-      message: "Le plan doit être MONTHLY ou ANNUAL",
+    planType: z.enum(["MONTHLY", "ANNUAL"], {
+      message: "Le type de plan doit être MONTHLY ou ANNUAL",
     }),
-    isRenewal: z.boolean().optional(),
   }),
 };
 
-export const confirmPaymentSchema = {
-  body: z.object({
-    paymentId: z.string().min(1, "paymentId requis"),
-    waveTransactionId: z.string().min(1, "L'ID Wave est requis").trim(),
-    transferDate: flexibleDateSchema,
-  }),
-};
-
-export const paymentStatusSchema = {
+/**
+ * Validation pour récupérer le statut d'une demande
+ */
+export const requestStatusSchema = {
   params: z.object({
-    paymentId: z.string().min(1, "paymentId requis"),
+    requestId: z.string().min(1, "requestId requis"),
   }),
 };
 
-export const approvePaymentSchema = {
+/**
+ * Validation pour approuver une demande (admin)
+ */
+export const approveRequestSchema = {
   params: z.object({
-    paymentId: z.string().min(1, "paymentId requis"),
+    requestId: z.string().min(1, "requestId requis"),
   }),
-  body: z.object({
-    plan: z.enum(["MONTHLY", "ANNUAL"], {
-      message: "Le plan doit être MONTHLY ou ANNUAL",
-    }).optional(),
-  }).optional(),
+  body: z
+    .object({
+      adminNotes: z
+        .string()
+        .max(500, "Les notes ne peuvent pas dépasser 500 caractères")
+        .trim()
+        .optional(),
+    })
+    .optional(),
 };
 
-export const rejectPaymentSchema = {
+/**
+ * Validation pour rejeter une demande (admin)
+ */
+export const rejectRequestSchema = {
   params: z.object({
-    paymentId: z.string().min(1, "paymentId requis"),
+    requestId: z.string().min(1, "requestId requis"),
   }),
-  body: z.object({
-    reason: z.string().min(1, "La raison est requise").max(200, "La raison ne peut pas dépasser 200 caractères").trim(),
-  }),
+  body: z
+    .object({
+      adminNotes: z
+        .string()
+        .max(500, "Les notes ne peuvent pas dépasser 500 caractères")
+        .trim()
+        .optional(),
+    })
+    .optional(),
 };
-export const listPaymentsSchema = {
+
+/**
+ * Validation pour lister les demandes avec filtres (admin)
+ */
+export const listRequestsSchema = {
   query: z.object({
-    status: z.enum(["PENDING_VERIFICATION", "APPROVED", "REJECTED"]).optional(),
+    status: z.enum(["PENDING", "APPROVED", "REJECTED"]).optional(),
+    userId: z.string().optional(),
     search: z.string().optional(),
     minAmount: z.coerce.number().min(0).optional(),
     maxAmount: z.coerce.number().min(0).optional(),

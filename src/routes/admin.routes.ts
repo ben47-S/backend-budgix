@@ -22,12 +22,15 @@ import {
   updateGlobalCategoryController,
   deleteGlobalCategoryController,
   sendNotificationToUserController,
-  listPendingPaymentsController,
-  listPaymentsController,
-  approvePaymentController,
-  rejectPaymentController,
   getAllExternalSubscriptionsController,
+  getAllSubscriptionsController,
 } from "../controllers/index.js";
+import {
+  listPendingRequestsController,
+  listAllRequestsController,
+  approveRequestController,
+  rejectRequestController,
+} from "../controllers/payment.controller.js";
 import { requireAuth, requireAdmin } from "../middleware/auth.js";
 import { validate } from "../middleware/validation.js";
 import { generalRateLimiter } from "../middleware/rateLimit.js";
@@ -40,9 +43,9 @@ import {
   getAllExternalSubscriptionsSchema,
 } from "../validations/admin.validation.js";
 import {
-  approvePaymentSchema,
-  rejectPaymentSchema,
-  listPaymentsSchema,
+  approveRequestSchema,
+  rejectRequestSchema,
+  listRequestsSchema,
 } from "../validations/payment.validation.js";
 
 const router: Router = ExpressRouter();
@@ -189,9 +192,9 @@ router.delete("/users/:userId", generalRateLimiter, deleteUserController);
 
 /**
  * @swagger
- * /admin/payments:
+ * /admin/requests:
  *   get:
- *     summary: Liste des paiements avec filtres et pagination
+ *     summary: Liste des demandes d'abonnement avec filtres et pagination
  *     tags: [Admin]
  *     security:
  *       - bearerAuth: []
@@ -244,40 +247,40 @@ router.delete("/users/:userId", generalRateLimiter, deleteUserController);
  *         description: Nombre d'éléments par page
  *     responses:
  *       200:
- *         description: Liste des paiements avec pagination
+ *         description: Liste des demandes avec pagination
  */
-router.get("/payments", generalRateLimiter, validate(listPaymentsSchema), listPaymentsController);
+router.get("/requests", generalRateLimiter, validate(listRequestsSchema), listAllRequestsController);
 
 /**
  * @swagger
- * /admin/payments/pending:
+ * /admin/requests/pending:
  *   get:
- *     summary: Liste des paiements en attente de validation
+ *     summary: Liste des demandes en attente d'approbation
  *     tags: [Admin]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Liste des paiements en attente
+ *         description: Liste des demandes en attente
  */
-router.get("/payments/pending", generalRateLimiter, listPendingPaymentsController);
+router.get("/requests/pending", generalRateLimiter, listPendingRequestsController);
 
 /**
  * @swagger
- * /admin/payments/{paymentId}/approve:
+ * /admin/requests/{requestId}/approve:
  *   post:
- *     summary: Approuver un paiement
- *     description: Approuve un paiement et active l'abonnement premium. L'admin peut choisir le plan à activer ou laisser le plan par défaut du paiement.
+ *     summary: Approuver une demande d'abonnement
+ *     description: Approuve une demande et active l'abonnement premium de l'utilisateur
  *     tags: [Admin]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: paymentId
+ *         name: requestId
  *         required: true
  *         schema:
  *           type: string
- *         description: ID du paiement à approuver
+ *         description: ID de la demande à approuver
  *     requestBody:
  *       required: false
  *       content:
@@ -285,71 +288,56 @@ router.get("/payments/pending", generalRateLimiter, listPendingPaymentsControlle
  *           schema:
  *             type: object
  *             properties:
- *               plan:
+ *               adminNotes:
  *                 type: string
- *                 enum: [MONTHLY, ANNUAL]
- *                 description: Plan à activer (optionnel). Si non fourni, utilise le plan du paiement.
- *           examples:
- *             default:
- *               summary: Approuver avec plan par défaut
- *               value: {}
- *             monthly:
- *               summary: Forcer plan mensuel
- *               value:
- *                 plan: "MONTHLY"
- *             annual:
- *               summary: Forcer plan annuel
- *               value:
- *                 plan: "ANNUAL"
+ *                 description: Notes de l'administrateur (optionnel)
  *     responses:
  *       200:
- *         description: Paiement approuvé et abonnement activé
+ *         description: Demande approuvée et abonnement activé
  *       400:
- *         description: Paiement non éligible pour approbation
+ *         description: Demande non éligible pour approbation
  *       404:
- *         description: Paiement introuvable
+ *         description: Demande introuvable
  */
 router.post(
-  "/payments/:paymentId/approve",
+  "/requests/:requestId/approve",
   generalRateLimiter,
-  validate(approvePaymentSchema),
-  approvePaymentController
+  validate(approveRequestSchema),
+  approveRequestController
 );
 
 /**
  * @swagger
- * /admin/payments/{paymentId}/reject:
+ * /admin/requests/{requestId}/reject:
  *   post:
- *     summary: Rejeter un paiement
+ *     summary: Rejeter une demande premium
  *     tags: [Admin]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: paymentId
+ *         name: requestId
  *         required: true
  *         schema:
  *           type: string
  *     requestBody:
- *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
- *             required:
- *               - reason
  *             properties:
- *               reason:
+ *               adminNotes:
  *                 type: string
+ *                 description: Notes de l'admin (optionnel)
  *     responses:
  *       200:
- *         description: Paiement rejeté
+ *         description: Demande rejetée
  */
 router.post(
-  "/payments/:paymentId/reject",
+  "/requests/:requestId/reject",
   generalRateLimiter,
-  validate(rejectPaymentSchema),
-  rejectPaymentController
+  validate(rejectRequestSchema),
+  rejectRequestController
 );
 
 /**
@@ -636,6 +624,61 @@ router.get(
   generalRateLimiter,
   validate(getAllExternalSubscriptionsSchema),
   getAllExternalSubscriptionsController
+);
+
+/**
+ * @swagger
+ * /admin/subscriptions:
+ *   get:
+ *     summary: Liste de tous les abonnements premium
+ *     description: Récupère la liste de tous les abonnements premium de tous les utilisateurs avec pagination et filtres (admin uniquement)
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *         description: Numéro de page
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 1000
+ *           default: 20
+ *         description: Nombre d'éléments par page
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Recherche par username, email ou phone
+ *       - in: query
+ *         name: plan
+ *         schema:
+ *           type: string
+ *           enum: [MONTHLY, ANNUAL]
+ *         description: Filtrer par plan
+ *       - in: query
+ *         name: isActive
+ *         schema:
+ *           type: boolean
+ *         description: Filtrer par statut actif/expiré
+ *     responses:
+ *       200:
+ *         description: Liste des abonnements premium récupérée avec succès
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       403:
+ *         description: Accès refusé - Droits administrateur requis
+ */
+router.get(
+  "/subscriptions",
+  generalRateLimiter,
+  getAllSubscriptionsController
 );
 
 export default router;

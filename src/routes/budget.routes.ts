@@ -1,7 +1,12 @@
 /**
- * Routes de gestion des budgets (fonctionnalité premium)
+ * Routes de gestion des budgets (fonctionnalité avec limitations pour utilisateurs gratuits)
  *
- * Permet aux utilisateurs premium de :
+ * NOTE IMPORTANTE: Les vérifications premium se font au niveau SERVICE (budget.service.ts)
+ * via la fonction checkBudgetLimit() qui permet:
+ * - Utilisateurs gratuits: 1 budget actif par type (MONTHLY ou CUSTOM)
+ * - Utilisateurs premium: Budgets illimités
+ *
+ * Permet de :
  * - Définir des budgets (globaux ou par catégorie) sur une période donnée
  * - Récupérer la progression des budgets pour alimenter les rapports
  * - Supprimer un budget créé précédemment
@@ -9,7 +14,7 @@
 
 import type { Router } from "express";
 import { Router as ExpressRouter } from "express";
-import { requireAuth, requirePremium } from "../middleware/auth.js";
+import { requireAuth } from "../middleware/auth.js";
 import { generalRateLimiter } from "../middleware/rateLimit.js";
 import { validate } from "../middleware/validation.js";
 import {
@@ -233,7 +238,6 @@ const router: Router = ExpressRouter();
 router.get(
   "/",
   requireAuth,
-  requirePremium,
   generalRateLimiter,
   getAllBudgetsController
 );
@@ -241,7 +245,6 @@ router.get(
 router.post(
   "/",
   requireAuth,
-  requirePremium,
   generalRateLimiter,
   validate(upsertBudgetSchema),
   upsertBudgetController
@@ -337,7 +340,6 @@ router.post(
 router.get(
   "/overview",
   requireAuth,
-  requirePremium,
   generalRateLimiter,
   validate(getBudgetsOverviewSchema),
   getBudgetsOverviewController
@@ -410,7 +412,6 @@ router.get(
 router.delete(
   "/:id",
   requireAuth,
-  requirePremium,
   generalRateLimiter,
   validate(deleteBudgetSchema),
   deleteBudgetController
@@ -470,7 +471,6 @@ router.delete(
 router.post(
   "/check",
   requireAuth,
-  requirePremium,
   generalRateLimiter,
   checkBudgetsController
 );
@@ -527,7 +527,6 @@ router.post(
 router.post(
   "/monthly",
   requireAuth,
-  requirePremium,
   generalRateLimiter,
   validate(upsertMonthlyBudgetSchema),
   upsertMonthlyBudgetController
@@ -636,7 +635,6 @@ router.post(
 router.get(
   "/monthly",
   requireAuth,
-  requirePremium,
   generalRateLimiter,
   validate(getMonthlyBudgetsSchema),
   getMonthlyBudgetsController

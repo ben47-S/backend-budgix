@@ -8,65 +8,54 @@ datasource db {
 }
 
 model User {
-  id                     String                  @id @default(cuid())
-  username               String?                 @unique
-  phone                  String?                 @unique
-  email                  String?                 @unique
-  password               String?
-  isPremium              Boolean                 @default(false)
-  role                   UserRole                @default(USER)
-  createdAt              DateTime                @default(now())
-  updatedAt              DateTime                @updatedAt
-  status                 UserStatus              @default(PENDING_CONSENT)
-  termsAcceptedAt        DateTime?
-  privacyAcceptedAt      DateTime?
-  termsVersion           String?
-  privacyVersion         String?
-  notificationReminderDismissedAt DateTime?
-  budgets                Budget[]
-  categories             Category[]
-  debts                  Debt[]
-  discussions            Discussion[]
-  emailVerificationCodes EmailVerificationCode[]
-  externalSubscriptions  ExternalSubscription[]
-  improvementSuggestions ImprovementSuggestion[]
-  notifications          Notification[]
-  otpCodes               OtpCode[]
-  pushTokens             PushToken[]
-  reviews                Review?
-  subscription           Subscription?
-  approvedPayments       SubscriptionPayment[]   @relation("PaymentApprovedBy")
-  rejectedPayments       SubscriptionPayment[]   @relation("PaymentRejectedBy")
-  subscriptionPayments   SubscriptionPayment[]
-  transactions           Transaction[]
+  id                                                         String                  @id @default(cuid())
+  username                                                   String?                 @unique
+  phone                                                      String?                 @unique
+  email                                                      String?                 @unique
+  password                                                   String?
+  isPremium                                                  Boolean                 @default(false)
+  role                                                       UserRole                @default(USER)
+  createdAt                                                  DateTime                @default(now())
+  updatedAt                                                  DateTime                @updatedAt
+  status                                                     UserStatus              @default(PENDING_CONSENT)
+  termsAcceptedAt                                            DateTime?
+  privacyAcceptedAt                                          DateTime?
+  termsVersion                                               String?
+  privacyVersion                                             String?
+  notificationReminderDismissedAt                            DateTime?
+  budgets                                                    Budget[]
+  categories                                                 Category[]
+  debts                                                      Debt[]
+  discussions                                                Discussion[]
+  emailVerificationCodes                                     EmailVerificationCode[]
+  externalSubscriptions                                      ExternalSubscription[]
+  improvementSuggestions                                     ImprovementSuggestion[]
+  notifications                                              Notification[]
+  otpCodes                                                   OtpCode[]
+  pushTokens                                                 PushToken[]
+  reviews                                                    Review?
+  subscription                                               Subscription?
+  approvedPayments                                           SubscriptionPayment[]   @relation("PaymentApprovedBy")
+  subscriptionPayments                                       SubscriptionPayment[]
+  transactions                                               Transaction[]
 }
 
 /// Modèle pour gérer les paiements d'abonnement premium
 model SubscriptionPayment {
-  id                String           @id @default(cuid())
-  userId            String
-  plan              SubscriptionPlan
-  amount            Decimal
-  status            PaymentStatus    @default(PENDING)
-  waveTransactionId String?
-  senderName        String?
-  transferDate      DateTime?
-  rejectionReason   String?
-  approvedAt        DateTime?
-  rejectedAt        DateTime?
-  approvedById      String?
-  rejectedById      String?
-  createdAt         DateTime         @default(now())
-  updatedAt         DateTime         @updatedAt
-  isRenewal         Boolean          @default(false)
-  approvedBy        User?            @relation("PaymentApprovedBy", fields: [approvedById], references: [id])
-  rejectedBy        User?            @relation("PaymentRejectedBy", fields: [rejectedById], references: [id])
-  user              User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id           String           @id @default(cuid())
+  userId       String
+  planType     SubscriptionPlan
+  amount       Int
+  status       PaymentStatus    @default(PENDING)
+  adminNotes   String?
+  approvedById String?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  approvedBy   User?            @relation("PaymentApprovedBy", fields: [approvedById], references: [id])
+  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([status])
-  @@index([createdAt])
-  @@index([waveTransactionId])
 }
 
 model OtpCode {
@@ -131,31 +120,32 @@ model Transaction {
 }
 
 model Subscription {
-  id        String           @id @default(cuid())
-  plan      SubscriptionPlan
-  price     Decimal
-  startDate DateTime         @default(now())
-  endDate   DateTime?
-  updatedAt DateTime         @updatedAt
-  userId    String           @unique
-  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id         String           @id @default(cuid())
+  plan       SubscriptionPlan
+  price      Decimal
+  startDate  DateTime         @default(now())
+  endDate    DateTime?
+  autoRenew  Boolean          @default(false)
+  updatedAt  DateTime         @updatedAt
+  userId     String           @unique
+  user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, endDate])
 }
 
 model Debt {
-  id              String    @id @default(cuid())
-  type            DebtType
-  contactName     String
-  amount          Decimal
-  isPaid          Boolean   @default(false)
-  notes           String?
-  repaymentDate   DateTime?
+  id             String    @id @default(cuid())
+  type           DebtType
+  contactName    String
+  amount         Decimal
+  isPaid         Boolean   @default(false)
+  notes          String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  userId         String
+  repaymentDate  DateTime?
   reminderSentAt DateTime?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  userId          String
-  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, isPaid])
   @@index([userId, type])
@@ -163,17 +153,17 @@ model Debt {
 
 /// Modèle pour gérer les budgets (fonctionnalité premium)
 model Budget {
-  id          String     @id @default(cuid())
-  amount      Decimal
-  type        BudgetType @default(CUSTOM)
-  periodStart DateTime
-  periodEnd   DateTime
-  userId      String
-  categoryId  String?
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  category    Category?  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                     String                        @id @default(cuid())
+  amount                 Decimal
+  type                   BudgetType                    @default(CUSTOM)
+  periodStart            DateTime
+  periodEnd              DateTime
+  userId                 String
+  categoryId             String?
+  createdAt              DateTime                      @default(now())
+  updatedAt              DateTime                      @updatedAt
+  category               Category?                     @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  user                   User                          @relation(fields: [userId], references: [id], onDelete: Cascade)
   notificationThresholds BudgetNotificationThreshold[]
 
   @@index([userId, periodStart, periodEnd])
@@ -184,12 +174,12 @@ model Budget {
 
 /// Modèle pour tracker les seuils de notification de budget déjà envoyés
 model BudgetNotificationThreshold {
-  id          String   @id @default(cuid())
-  budgetId    String
-  threshold   Int      // 80, 95, ou 100
-  notifiedAt  DateTime @default(now())
-  createdAt   DateTime @default(now())
-  budget      Budget   @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+  id         String   @id @default(cuid())
+  budgetId   String
+  threshold  Int
+  notifiedAt DateTime @default(now())
+  createdAt  DateTime @default(now())
+  budget     Budget   @relation(fields: [budgetId], references: [id], onDelete: Cascade)
 
   @@unique([budgetId, threshold])
   @@index([budgetId])
@@ -384,7 +374,6 @@ enum NotificationType {
   TRANSACTION_REMINDER
   WEEKLY_SUMMARY
   SUBSCRIPTION_RENEWAL_REMINDER
-  PAYMENT_PENDING_VERIFICATION
   PAYMENT_APPROVED
   PAYMENT_REJECTED
   PREMIUM_SUBSCRIPTION_EXPIRATION_REMINDER
@@ -393,7 +382,6 @@ enum NotificationType {
 
 enum PaymentStatus {
   PENDING
-  PENDING_VERIFICATION
   APPROVED
   REJECTED
 }
