@@ -2,11 +2,11 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     // Configuration pour la production
-    "rootDir": "./src", 
+    "rootDir": "./src",
     "outDir": "./dist",
-    "module": "ESNext",
+    "module": "node16",
     "target": "ES2022",
-    "moduleResolution": "bundler",
+    "moduleResolution": "node16",
     
     // Optimisations pour la production
     "sourceMap": true,
