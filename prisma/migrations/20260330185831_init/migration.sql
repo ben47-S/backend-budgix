@@ -11,10 +11,16 @@ CREATE TYPE "SubscriptionPlan" AS ENUM ('MONTHLY', 'ANNUAL');
 CREATE TYPE "DebtType" AS ENUM ('OWED_TO_ME', 'I_OWE');
 
 -- CreateEnum
-CREATE TYPE "NotificationType" AS ENUM ('BUDGET_WARNING', 'BUDGET_ALERT', 'TRANSACTION_REMINDER', 'WEEKLY_SUMMARY', 'SUBSCRIPTION_RENEWAL_REMINDER', 'PAYMENT_PENDING_VERIFICATION', 'PAYMENT_APPROVED', 'PAYMENT_REJECTED');
+CREATE TYPE "LogLevel" AS ENUM ('INFO', 'WARN', 'ERROR');
 
 -- CreateEnum
-CREATE TYPE "PaymentStatus" AS ENUM ('PENDING', 'PENDING_VERIFICATION', 'APPROVED', 'REJECTED');
+CREATE TYPE "LogScope" AS ENUM ('USER', 'BUSINESS', 'SECURITY', 'ADMIN', 'SYSTEM');
+
+-- CreateEnum
+CREATE TYPE "NotificationType" AS ENUM ('BUDGET_WARNING', 'BUDGET_ALERT', 'TRANSACTION_REMINDER', 'WEEKLY_SUMMARY', 'SUBSCRIPTION_RENEWAL_REMINDER', 'PAYMENT_APPROVED', 'PAYMENT_REJECTED', 'PREMIUM_SUBSCRIPTION_EXPIRATION_REMINDER', 'DEBT_REMINDER');
+
+-- CreateEnum
+CREATE TYPE "PaymentStatus" AS ENUM ('PENDING', 'APPROVED', 'REJECTED');
 
 -- CreateEnum
 CREATE TYPE "BillingCycle" AS ENUM ('MONTHLY', 'QUARTERLY', 'ANNUAL', 'CUSTOM');
@@ -50,6 +56,7 @@ CREATE TABLE "User" (
     "privacyAcceptedAt" TIMESTAMP(3),
     "termsVersion" TEXT,
     "privacyVersion" TEXT,
+    "notificationReminderDismissedAt" TIMESTAMP(3),
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -58,17 +65,11 @@ CREATE TABLE "User" (
 CREATE TABLE "SubscriptionPayment" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
-    "plan" "SubscriptionPlan" NOT NULL,
-    "amount" DECIMAL(65,30) NOT NULL,
+    "planType" "SubscriptionPlan" NOT NULL,
+    "amount" INTEGER NOT NULL,
     "status" "PaymentStatus" NOT NULL DEFAULT 'PENDING',
-    "waveTransactionId" TEXT,
-    "senderName" TEXT,
-    "transferDate" TIMESTAMP(3),
-    "rejectionReason" TEXT,
-    "approvedAt" TIMESTAMP(3),
-    "rejectedAt" TIMESTAMP(3),
+    "adminNotes" TEXT,
     "approvedById" TEXT,
-    "rejectedById" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -134,6 +135,7 @@ CREATE TABLE "Subscription" (
     "price" DECIMAL(65,30) NOT NULL,
     "startDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "endDate" TIMESTAMP(3),
+    "autoRenew" BOOLEAN NOT NULL DEFAULT false,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "userId" TEXT NOT NULL,
 
@@ -151,6 +153,8 @@ CREATE TABLE "Debt" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "userId" TEXT NOT NULL,
+    "repaymentDate" TIMESTAMP(3),
+    "reminderSentAt" TIMESTAMP(3),
 
     CONSTRAINT "Debt_pkey" PRIMARY KEY ("id")
 );
@@ -168,6 +172,17 @@ CREATE TABLE "Budget" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Budget_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "BudgetNotificationThreshold" (
+    "id" TEXT NOT NULL,
+    "budgetId" TEXT NOT NULL,
+    "threshold" INTEGER NOT NULL,
+    "notifiedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "BudgetNotificationThreshold_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -270,6 +285,23 @@ CREATE TABLE "ImprovementSuggestion" (
     CONSTRAINT "ImprovementSuggestion_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "Log" (
+    "id" TEXT NOT NULL,
+    "level" "LogLevel" NOT NULL DEFAULT 'INFO',
+    "scope" "LogScope" NOT NULL DEFAULT 'USER',
+    "action" TEXT NOT NULL,
+    "userId" TEXT,
+    "adminId" TEXT,
+    "targetId" TEXT,
+    "ip" TEXT,
+    "userAgent" TEXT,
+    "metadata" JSONB,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Log_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
@@ -284,12 +316,6 @@ CREATE INDEX "SubscriptionPayment_userId_idx" ON "SubscriptionPayment"("userId")
 
 -- CreateIndex
 CREATE INDEX "SubscriptionPayment_status_idx" ON "SubscriptionPayment"("status");
-
--- CreateIndex
-CREATE INDEX "SubscriptionPayment_createdAt_idx" ON "SubscriptionPayment"("createdAt");
-
--- CreateIndex
-CREATE INDEX "SubscriptionPayment_waveTransactionId_idx" ON "SubscriptionPayment"("waveTransactionId");
 
 -- CreateIndex
 CREATE INDEX "OtpCode_phone_expiresAt_idx" ON "OtpCode"("phone", "expiresAt");
@@ -341,6 +367,15 @@ CREATE INDEX "Budget_userId_type_idx" ON "Budget"("userId", "type");
 
 -- CreateIndex
 CREATE INDEX "Budget_userId_type_periodStart_periodEnd_idx" ON "Budget"("userId", "type", "periodStart", "periodEnd");
+
+-- CreateIndex
+CREATE INDEX "BudgetNotificationThreshold_budgetId_idx" ON "BudgetNotificationThreshold"("budgetId");
+
+-- CreateIndex
+CREATE INDEX "BudgetNotificationThreshold_budgetId_threshold_idx" ON "BudgetNotificationThreshold"("budgetId", "threshold");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "BudgetNotificationThreshold_budgetId_threshold_key" ON "BudgetNotificationThreshold"("budgetId", "threshold");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "PushToken_token_key" ON "PushToken"("token");
@@ -414,14 +449,26 @@ CREATE INDEX "ImprovementSuggestion_createdAt_idx" ON "ImprovementSuggestion"("c
 -- CreateIndex
 CREATE INDEX "ImprovementSuggestion_userId_createdAt_idx" ON "ImprovementSuggestion"("userId", "createdAt");
 
--- AddForeignKey
-ALTER TABLE "SubscriptionPayment" ADD CONSTRAINT "SubscriptionPayment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+-- CreateIndex
+CREATE INDEX "Log_userId_idx" ON "Log"("userId");
+
+-- CreateIndex
+CREATE INDEX "Log_adminId_idx" ON "Log"("adminId");
+
+-- CreateIndex
+CREATE INDEX "Log_scope_idx" ON "Log"("scope");
+
+-- CreateIndex
+CREATE INDEX "Log_action_idx" ON "Log"("action");
+
+-- CreateIndex
+CREATE INDEX "Log_createdAt_idx" ON "Log"("createdAt");
 
 -- AddForeignKey
 ALTER TABLE "SubscriptionPayment" ADD CONSTRAINT "SubscriptionPayment_approvedById_fkey" FOREIGN KEY ("approvedById") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "SubscriptionPayment" ADD CONSTRAINT "SubscriptionPayment_rejectedById_fkey" FOREIGN KEY ("rejectedById") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "SubscriptionPayment" ADD CONSTRAINT "SubscriptionPayment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "OtpCode" ADD CONSTRAINT "OtpCode_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -433,10 +480,10 @@ ALTER TABLE "EmailVerificationCode" ADD CONSTRAINT "EmailVerificationCode_userId
 ALTER TABLE "Category" ADD CONSTRAINT "Category_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Subscription" ADD CONSTRAINT "Subscription_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -445,10 +492,13 @@ ALTER TABLE "Subscription" ADD CONSTRAINT "Subscription_userId_fkey" FOREIGN KEY
 ALTER TABLE "Debt" ADD CONSTRAINT "Debt_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Budget" ADD CONSTRAINT "Budget_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Budget" ADD CONSTRAINT "Budget_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Budget" ADD CONSTRAINT "Budget_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "BudgetNotificationThreshold" ADD CONSTRAINT "BudgetNotificationThreshold_budgetId_fkey" FOREIGN KEY ("budgetId") REFERENCES "Budget"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "PushToken" ADD CONSTRAINT "PushToken_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -457,10 +507,10 @@ ALTER TABLE "PushToken" ADD CONSTRAINT "PushToken_userId_fkey" FOREIGN KEY ("use
 ALTER TABLE "Notification" ADD CONSTRAINT "Notification_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ExternalSubscription" ADD CONSTRAINT "ExternalSubscription_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "ExternalSubscription" ADD CONSTRAINT "ExternalSubscription_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ExternalSubscription" ADD CONSTRAINT "ExternalSubscription_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "ExternalSubscription" ADD CONSTRAINT "ExternalSubscription_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Discussion" ADD CONSTRAINT "Discussion_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
